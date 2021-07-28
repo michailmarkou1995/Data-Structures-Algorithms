@@ -1,0 +1,72 @@
+﻿Grandpa Duck,male,
+Grandpa Duck,father,Louis Von Drake Duck
+Grandpa Duck,father,Fanny Goose Duck
+Grandpa Duck,father,Quackmore Duck
+Grandpa Duck,father,Hortense Duck McDuck
+Grandpa Duck,father,Jira Gander McDuck
+Grandpa Duck,father,Scrooge McDuck
+Grandpa Duck,husband,Grandma Duck
+Grandma Duck,female,
+Grandma Duck,wife,Grandpa Duck
+Grandma Duck,mother,Louis Von Drake Duck
+Grandma Duck,mother,Fanny Goose Duck
+Grandma Duck,mother,Quackmore Duck
+Grandma Duck,mother,Hortense Duck McDuck
+Grandma Duck,mother,Jira Gander McDuck
+Grandma Duck,mother,Scrooge McDuck
+Louis Von Drake Duck,female,
+Louis Von Drake Duck,wife,Ludwig Von Drake
+Ludwig Von Drake,male,
+Ludwig Von Drake,husband,Louis Von Drake Duck
+Fanny Goose Duck,female,
+Fanny Goose Duck,wife,Poopy Goose
+Poopy Goose,male,
+Poopy Goose,husband,Fanny Goose Duck
+Fanny Goose Duck,mother,Gus Goose
+Poopy Goose,father,Gus Goose
+Gus Goose,male,
+Quackmore Duck,male,
+Quackmore Duck,husband,Hortense Duck McDuck
+Hortense Duck McDuck,wife,Quackmore Duck
+Quackmore Duck,father,Donald Fauntleroy Duck
+Quackmore Duck,father,Dumbella Duck Duck
+Hortense Duck McDuck,mother,Donald Fauntleroy Duck
+Hortense Duck McDuck,mother,Dumbella Duck Duck
+Donald Fauntleroy Duck,male,
+Dumbella Duck Duck,female,
+Dumbella Duck Duck,wife,Dux Duck
+Dux Duck,male,
+Dux Duck,husband,Dumbella Duck Duck
+Dumbella Duck Duck,mother,Huey Duck
+Dumbella Duck Duck,mother,Dewey Duck
+Dumbella Duck Duck,mother,Louie Duck
+Dux Duck,father,Huey Duck
+Dux Duck,father,Dewey Duck
+Dux Duck,father,Louie Duck
+Huey Duck,male,
+Dewey Duck,male,
+Louie Duck,male,
+Hortense Duck McDuck,mother,Dux Duck
+Hortense Duck McDuck,mother,Daisy Duck
+Hortense Duck McDuck,mother,Helena spouch Duck
+Quackmore Duck,father,Dux Duck
+Quackmore Duck,father,Daisy Duck
+Quackmore Duck,father,Helena spouch Duck
+Daisy Duck,female,
+Helena spouch Duck,female,
+Helena spouch Duck,wife,Pepe
+Pepe,husband,Helena spouch Duck
+Pepe,male,
+Helena spouch Duck,mother,April
+Helena spouch Duck,mother,May
+Helena spouch Duck,mother,June
+Pepe,father,April
+Pepe,father,May
+Pepe,father,June
+Jira Gander McDuck,female,
+Jira Gander McDuck,wife,Julious Gander
+Jira Gander McDuck,mother,Gladstone Gander
+Julious Gander,male,
+Julious Gander,husband,Jira Gander McDuck
+Julious Gander,father,Gladstone Gander
+Gladstone Gander,male,

@@ -1,7 +1,11 @@
 package org.family.famillytree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Generation {
     private String name, gender, related, child;
+    public static List<Generation> getObj = new ArrayList<>();
 
     public Generation(String allStringsName, String allStringsGender) {
         this.setName(allStringsName);
@@ -12,6 +16,10 @@ public class Generation {
         this.setName(allStringsName);
         this.related = allStringsRelated;
         this.child = Child;
+        getObj.add(this);
+    }
+
+    public Generation() {
     }
 
     public String getName() {

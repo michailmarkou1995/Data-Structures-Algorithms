@@ -1,20 +1,12 @@
+import java.io.*;
 import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 
 public class Csv {
 
 
-    public static void main(String[] args) throws FileNotFoundException, IOException  {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
 
         //String SEPARATOR = ",";
         BufferedReader reader = new BufferedReader(
@@ -52,15 +44,16 @@ public class Csv {
         //     .sorted(HashMap.Entry.<String, String>comparingByKey())
         //   .forEach(System.out::println);
 
-        final  String outputFilePath = "ordered.txt";
+        final String outputFilePath = "ordered.txt";
         File file = new File(outputFilePath);
 
-        BufferedWriter bf = null;;
+        BufferedWriter bf = null;
+        ;
 
-        try{
+        try {
 
             //create new BufferedWriter for the output file
-            bf = new BufferedWriter( new FileWriter(file) );
+            bf = new BufferedWriter(new FileWriter(file));
             map.entrySet()
                     .stream()
                     .sorted(HashMap.Entry.<String, String>comparingByKey())
@@ -68,10 +61,10 @@ public class Csv {
 
 
             //iterate map entries
-            for(HashMap.Entry<String, String> entry : map.entrySet()){
+            for (HashMap.Entry<String, String> entry : map.entrySet()) {
 
                 //put key and value separated by a colon
-                bf.write( entry.getKey() + ":" + entry.getValue() );
+                bf.write(entry.getKey() + ":" + entry.getValue());
 
                 //new line
                 bf.newLine();
@@ -79,14 +72,15 @@ public class Csv {
 
             bf.flush();
 
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally{
+        } finally {
 
-            try{
+            try {
                 //always close the writer
                 bf.close();
-            }catch(Exception e){}
+            } catch (Exception e) {
+            }
         }
     }
 }

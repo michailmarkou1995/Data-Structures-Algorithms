@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Generation {
     public static List<Generation> getObj = new ArrayList<>();
-    private String name, gender, related, child;
+    private String name, gender, related, child, wife, husband;
 
     public Generation(String allStringsName, String allStringsGender) {
         this.setName(allStringsName);
@@ -17,6 +17,13 @@ public class Generation {
         this.related = allStringsRelated;
         this.child = Child;
         getObj.add(this);
+    }
+
+    public Generation(String allStringsName, String Wife, String Husband, String allStringsRelated) {
+        this.setName(allStringsName);
+        this.related = allStringsRelated;
+        this.wife = Wife;
+        this.husband = Husband;
     }
 
     public Generation() {
@@ -52,6 +59,30 @@ public class Generation {
 
     public void setChild(String child) {
         this.child = child;
+    }
+
+    public static List<Generation> getGetObj() {
+        return getObj;
+    }
+
+    public static void setGetObj(List<Generation> getObj) {
+        Generation.getObj = getObj;
+    }
+
+    public String getWife() {
+        return wife;
+    }
+
+    public void setWife(String wife) {
+        this.wife = wife;
+    }
+
+    public String getHusband() {
+        return husband;
+    }
+
+    public void setHusband(String husband) {
+        this.husband = husband;
     }
 
     @Override

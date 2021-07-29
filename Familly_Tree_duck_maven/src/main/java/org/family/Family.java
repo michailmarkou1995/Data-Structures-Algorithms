@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-//dux dumbella, grandma grandpa, julious jira, quackmore fanny, fanny poopy, louis ludwig
 /*
 .\dot.exe -Tsvg .\toGraphviz.dotbak
  1) TO-DO make menu 3, 4 with 3? uses enter a name and see local tree like a short story father-grandfather + children
@@ -28,12 +27,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Family {
 
-    public static String N1, N2;
+    public static String N1, N2, father1="a", father2="b", mother1, mother2;
     public static boolean blood_hus = false, blood_wife = false;
     //Creating an Arraylist that stores objects <Person>
     static List<Generation> myList = new ArrayList<Generation>();
     static List<Generation> myList1 = new ArrayList<Generation>();
     static HashMap<String, Generation> myList2 = new HashMap<String, Generation>();
+    static HashMap<String, Generation> myList3 = new HashMap<String, Generation>();
+    static HashMap<String, Generation> myList4= new HashMap<String, Generation>();
     static HashMap<String, String> hashNamesObj = new LinkedHashMap<String, String>();
     static ArrayList<String> arr = new ArrayList<String>();
     static List<List<String>> records1 = new ArrayList<>();
@@ -41,7 +42,7 @@ public class Family {
     static HashMap<String, String> childs = new HashMap<String, String>();
     //StringBuffer
     static String they_are, they_have = "", root_p = null, husband, wife, last_name_husband, last_name_wife;
-    static boolean related_as_same_root = false, not_children_of_parent = false, isSiblings1 = false, isSiblings2 = false, not_related_as_same_root = false, incest = false, add_they_have = false;
+    static boolean related_as_same_root = false, not_children_of_parent = false, isSiblings1 = false, isSiblings2 = false, isIsSiblings1Far=false, isIsSiblings2Far=false, incest = false, add_they_have = false;
     static Generation gen = new Generation();
 
     //This function reads the csv file and stores its content on an Arraylist, printing the result
@@ -156,17 +157,34 @@ public class Family {
 
         // Check if two Inputs have same parents
         for (Generation g : Generation.getObj) {
-            String[] names_childs_equals = g.getChild().toLowerCase().split(" ");
-            for (String names_childs_equal : names_childs_equals) {
-                if (N1.equals(names_childs_equal)) {
+            String[] names_children_equals = g.getChild().toLowerCase().split(" ");
+            String names_father_equals = g.getName();
+            for (String names_children_equal : names_children_equals) {
+                if (N1.equals(names_children_equal)) {
                     isSiblings1 = true;
+                    father1=names_father_equals;
                 }
-                if (N2.equals(names_childs_equal))
+                if (N2.equals(names_children_equal)){
                     isSiblings2 = true;
+                    father2=names_father_equals;
+                }
+
+                //make in memory Data structure file with relations of wife or husband e.g. this has this as wife
+                if (!father1.equals(father2) && (isSiblings1 && isSiblings2)){
+                    myList3.entrySet().forEach(entry->{
+                        if (entry.getValue().getName().equals(father1) && entry.getValue().getHusband().equals(father2)
+                                || entry.getValue().getName().equals(father2) && entry.getValue().getHusband().equals(father1)) {
+//                            isSiblings1=false;
+//                            isSiblings2=false;
+                            isIsSiblings1Far=true;
+                            isIsSiblings2Far=true;
+                        }
+                    });
+                }
             }
         }
 
-        // if they are something (2 inputs) meaning 3 cols how many childs have List?
+        // if they are something (2 inputs) meaning 3 cols how many children have List?
         if (input == 3) {
             if (add_they_have) {
                 AtomicInteger count = new AtomicInteger();
@@ -188,18 +206,15 @@ public class Family {
         }
 
         if (!incest) {
-            if (isSiblings1 && isSiblings2)
-                System.out.println("\nSiblings in arms");
-            else if (!they_have.isEmpty())
-                System.out.println("\n" + they_are + " (not related) " + they_have);
-            else if (they_have.isEmpty())
-                System.out.println("\n" + they_are + " (not related)");
-            else
-                System.out.println("\nnot related");
-        } else if (incest) {
-            System.out.println("\n" + they_are + " (related) " + they_have);
+            if(!(isIsSiblings1Far && isIsSiblings2Far)) {
+                if (isSiblings1 && isSiblings2)
+                    System.out.println("\nFar Siblings in arms");
+                else if (!they_have.isEmpty())
+                    System.out.println("\n" + they_are + " (not related) " + they_have);
+                else System.out.println("\n" + they_are + " (not related)");
+            } else System.out.println("\nSiblings in arms");
         } else {
-            System.out.println("\nnot related");
+            System.out.println("\n" + they_are + " (related) " + they_have);
         }
     }
 
@@ -227,6 +242,10 @@ public class Family {
             }
             // only if they have 3 csv columns
             if (allStrings.length == 3) {
+
+                // Arrange as Who has wife or husband name list
+                if ((allStrings[1].equals("wife")))
+                    myList3.put(String.valueOf(new Random().nextInt()), new Generation(allStrings[0], allStrings[1], allStrings[2], "null"));
 
                 // check father or mother both have in common for Create ".dot" File .. DB simulation with Hashmap uses PK
                 // as new Random and Values the object to access itself

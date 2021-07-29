@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Generation {
-    private String name, gender, related, child;
     public static List<Generation> getObj = new ArrayList<>();
+    private String name, gender, related, child;
 
     public Generation(String allStringsName, String allStringsGender) {
         this.setName(allStringsName);

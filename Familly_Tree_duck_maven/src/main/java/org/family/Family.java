@@ -1,5 +1,6 @@
 package org.family;
 
+import org.apache.commons.lang3.StringUtils;
 import org.family.famillytree.Generation;
 
 import java.io.BufferedReader;
@@ -32,29 +33,29 @@ public class Family {
     private static final Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
     public static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname;
     public static boolean blood_hus = false, blood_wife = false;
+    public static List<String> all_names = new ArrayList<>();
     //Creating an Arraylist that stores objects <Person>
-    static List<Generation> name_sorted_List = new ArrayList<Generation>();
-    static List<Generation> myList1 = new ArrayList<Generation>();
-    static HashMap<String, Generation> who_is_father_mother_List = new HashMap<String, Generation>();
-    static HashMap<String, Generation> who_is_husband_wife_List = new HashMap<String, Generation>();
+    static List<Generation> name_sorted_List = new ArrayList<>();
+    static HashMap<String, Generation> who_is_father_mother_List = new HashMap<>();
+    static HashMap<String, Generation> who_is_husband_wife_List = new HashMap<>();
     static List<List<String>> records1 = new ArrayList<>();
-    static HashMap<String, String> childs = new HashMap<String, String>();
+    static HashMap<String, String> childs = new HashMap<>();
     //StringBuffer
     static String they_are, they_have = "", husband, wife;
     static boolean not_children_of_parent = false, isSiblings1 = false, isSiblings2 = false,
             isIsSiblings1Far = false, isIsSiblings2Far = false,
-            incest = false, add_they_have = false, isParent_of_parent = false;
+            incest = false, add_they_have = false;
     static Generation gen = new Generation();
     static AtomicInteger timesCsv = new AtomicInteger();
-    static boolean isTop_root_parent1=false, isTop_root_parent2=false, name_N1p1_not_set=false, name_N1p2_not_set=false
-            , name_N2p1_not_set=false, name_N2p2_not_set=false, isBlood_mix1=false, isBlood_mix2=false, take_once=false
-            ,exist_in_list=false;
-    static String new_N1_p1, new_N1_p2, new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child, N2_initials_child;
-    public static List<String> all_names = new ArrayList<>();
+    static boolean isTop_root_parent1 = false, isTop_root_parent2 = false, name_N1p1_not_set = false,
+            name_N1p2_not_set = false, name_N2p1_not_set = false, name_N2p2_not_set = false, isBlood_mix1 = false,
+            isBlood_mix2 = false, take_once = false, exist_in_list = false;
+    static String new_N1_p1, new_N1_p2, new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child,
+            N2_initials_child;
 
     //This function reads the csv file and stores its content on an Arraylist, printing the result
     public static void readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase) {
-        String line = "";
+        String line;
         final String csvSplitBy = ",";
         String FName1 = "", FName2 = "";
         if (FName1_originalCase == null && FName2_originalCase == null) {
@@ -74,7 +75,6 @@ public class Family {
                 String[] allStrings = line.split(csvSplitBy);
                 input_checking_scenario_Loop(input, FName1_originalCase, FName2_originalCase, allStrings);
             }
-            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,14 +82,12 @@ public class Family {
 
     //this function sorts the Arraylist alphabetically and then exports a sorted csv file
     private static void sortcsv() {
-        name_sorted_List.sort(new Comparator<Generation>() {
-
-            //compares series of pairs of elements and based on result of compare it sees if elements from that pair should be swapped or not
-            public int compare(Generation o1, Generation o2) {
-                // compare two instance of `Score` and return `int` as result.
-                return ~o2.getName().compareTo(o1.getName());
-                // use ~ to reverse order
-            }
+        //compares series of pairs of elements and based on result of compare
+// it sees if elements from that pair should be swapped or not
+        name_sorted_List.sort((o1, o2) -> {
+            // compare two instance of `Score` and return `int` as result.
+            return ~o2.getName().compareTo(o1.getName());
+            // use ~ to reverse order
         });
         //loop that prints the sorted result
         for (Generation generation : name_sorted_List) {
@@ -115,11 +113,11 @@ public class Family {
 
     private static void searchNameRelations(String csvFile, int input) {
         System.out.println("\n***Find Relationships***");
-        System.out.print("Enter 1st First Names character (as unique ID) \nName: ");
+        System.out.print("Enter 1st First Names character (as unique ID) \nName: (e.g. grandpa) ");
         try (Scanner name1 = new Scanner(System.in)) {
             String Personname1 = name1.nextLine();
             Scanner name2 = new Scanner(System.in);
-            System.out.print("Enter 2nd First Names character (as unique ID)\nName: ");
+            System.out.print("Enter 2nd First Names character (as unique ID)\nName: (e.g. dumbella) ");
             String Personname2 = name2.nextLine();
             readcsv(csvFile, input, Personname1, Personname2);
             case_scenario_checking(input);
@@ -175,11 +173,7 @@ public class Family {
                     isSiblings2 = true;
                     parent2 = names_father_equals;
                 }
-/*
-                if (isParent_of_parent){
-recursive func find parent of parent apo domi same as .dot?
-                }
-*/
+
                 // makes in memory Data structure file with relations of wife or husband e.g. this has this as wife
                 // so its diff parents and they are far siblings(not the parent included as root)
                 if (!parent1.equals(parent2) && (isSiblings1 && isSiblings2)) {
@@ -191,22 +185,12 @@ recursive func find parent of parent apo domi same as .dot?
                         }
                     });
                 }
-//                if ((isSiblings1==false && isSiblings2==false) && !isIsSiblings1Far && !isIsSiblings2Far){
-//                    System.out.println("test Far child");
-//                }
             }
         }
-      /*not in lopp here remove it! below*/ // if ((isSiblings1==false || isSiblings2==false) && !isIsSiblings1Far && !isIsSiblings2Far){
-            //System.out.println("test Far child");
-            find_shared_root(N1, N2);
-//            who_is_father_mother_List.entrySet().forEach(entry -> {
-//                System.out.println(entry.getValue());
-//            });//dinis may kai grandpa ine far child ara grandpa check if has father(no) then continue check MAY's father which is pepe
-            //that means blood mix far child ara check mother || check && mother aparaitita Helena poia ine i mitera tis Helena? hortense -> grandma
-            //check both parents always at same time with 2 recursion loops? pws implement to oti o father den exi father allo?
-      /* above*/ // }
 
-        // if they are something (2 inputs) meaning 3 cols how many children have List?
+        // finds from 2 Inputs relation between another Recursion of Tree backwards (including root)
+        find_shared_root(N1, N2);
+
         if (input == 3) {
             if (add_they_have) {
                 AtomicInteger count = new AtomicInteger();
@@ -226,157 +210,131 @@ recursive func find parent of parent apo domi same as .dot?
                 }
             }
         }
-        var temp_exist_1=false;
-        var temp_exist_2=false;
-        for (int i = 0; i < all_names.size(); i++){
-            if (N1.equals(all_names.get(i)))
-                temp_exist_1=true;
-            if (N2.equals(all_names.get(i)))
-                temp_exist_2=true;
+        var temp_exist_1 = false;
+        var temp_exist_2 = false;
+        for (String all_name : all_names) {
+            if (N1.equals(all_name))
+                temp_exist_1 = true;
+            if (N2.equals(all_name))
+                temp_exist_2 = true;
 
             if (temp_exist_1 && temp_exist_2)
-                exist_in_list=true;
+                exist_in_list = true;
         }
-        //dumbella quackmore, pepe dumbella ... pari me dumbella
-//pepe quackmore is wrong not with grandpa AND donald with grandpa
-        //donald grandma ludwig fanny they_are != or == null
-        //far sibligns working? root me root? root me child? root me blood child? bastard with bastard? daisy fanny gladstone gus
-        if (!incest) {//far bastards in arms(gus gladstone) + not related may huey ..gus grandpa far bastard, may huey far in blood siblings mix
+
+        if (!incest) {
             if (!(isIsSiblings1Far && isIsSiblings2Far)) {
-                if (isSiblings1 && isSiblings2 && N1_initials != null && N2_initials != null)
-                {
+                if (isSiblings1 && isSiblings2 && N1_initials != null && N2_initials != null) {
                     if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname))
                         System.out.println("\nFar Siblings in arms");
                     else if (!N1.contains(family_MAIN_lastname) && !N2.contains(family_MAIN_lastname))
                         System.out.println("\nFar Bastards in Arms");
                     else if (!N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname)
-                        || N1.contains(family_MAIN_lastname) && !N2.contains(family_MAIN_lastname)
-                        || !N1.contains(family_MAIN_lastname) && !N2.contains(family_MAIN_lastname)
-                        && N1_initials.contains(family_MAIN_lastname) || N2_initials.contains(family_MAIN_lastname))
+                            || N1.contains(family_MAIN_lastname) && !N2.contains(family_MAIN_lastname)
+                            || !N1.contains(family_MAIN_lastname) && !N2.contains(family_MAIN_lastname)
+                            && N1_initials.contains(family_MAIN_lastname) || N2_initials.contains(family_MAIN_lastname))
                         System.out.println("\n Far not related child's with \"in\" Blood Duck Parent");
                     else
                         System.out.println("\nFar Siblings in arms");
-                }
-                else if (N1_initials != null && N1_initials.contains(family_MAIN_lastname)
-                        && N2_initials != null && N2_initials.contains(family_MAIN_lastname) && !N1.contains(family_MAIN_lastname)
+                } else if (N1_initials != null && N1_initials.contains(family_MAIN_lastname)
+                        && N2_initials != null && N2_initials.contains(family_MAIN_lastname)
+                        && !N1.contains(family_MAIN_lastname)
                         || !N2.contains(family_MAIN_lastname) && they_are == null && exist_in_list)
                     System.out.println("\nFar Bastard child");
                 else if (!they_have.isEmpty())
                     System.out.println("\n" + they_are + " (not related) " + they_have);
-                else if ((N1_initials != null && N1_initials.contains(family_MAIN_lastname)) && (N2_initials != null && N2_initials.contains(family_MAIN_lastname)))
+                else if ((N1_initials != null && N1_initials.contains(family_MAIN_lastname))
+                        && (N2_initials != null && N2_initials.contains(family_MAIN_lastname)))
                     System.out.println("\nFar Child");
-                else if (they_are != null && !they_are.isEmpty() && they_have==null || they_have.isEmpty())
-                    System.out.println("\n" + they_are + " (not related)");
-                else if ((new_N2_p1 != null && (!new_N2_p1.isEmpty() && !isBlood_mix2)) || (new_N1_p1 != null
-                        && (!new_N1_p1.isEmpty() && !isBlood_mix2)) && !(they_are != null && they_are.contains("husband")
-                        || they_are != null && they_are.contains("wife")))
-                    System.out.println("\n (not related)");
                 else System.out.println("\n" + they_are + " (not related)");
             } else System.out.println("\nSiblings in arms");
-        } else if (isBlood_mix1 || isBlood_mix2){
+        } else if (isBlood_mix1 || isBlood_mix2) {
             System.out.println("\nFar siblings in Arm");
-            //System.out.println("\nBastard Child");
         } else
             System.out.println("\n" + they_are + " (related) " + they_have);
     }
 
-    private static void find_shared_root(String FName1, String FName2){
-        if(isTop_root_parent1 && isTop_root_parent2){
-//            if(isBlood_mix1&&isBlood_mix2)
-//                they_are="incest";
-//            else
-//                they_are="natural";
+    // finds from 2 Inputs relation between another Recursion of Tree backwards (including root)
+    private static void find_shared_root(String FName1, String FName2) {
+        if (isTop_root_parent1 && isTop_root_parent2) {
             if (N1_initials != null && N1_initials.toLowerCase().contains(N1))
-                N1=N1_initials;
+                N1 = N1_initials;  // input 1 from keyboard
             if (N1_initials_child != null && N1_initials_child.toLowerCase().contains(N1))
-                N1=N1_initials_child;
+                N1 = N1_initials_child;  // input 1 from keyboard
             if (N2_initials != null && N2_initials.toLowerCase().contains(N2))
-                N2=N2_initials;
+                N2 = N2_initials;  // input 2 from keyboard
             if (N2_initials_child != null && N2_initials_child.toLowerCase().contains(N2))
-                N2=N2_initials_child;
+                N2 = N2_initials_child;  // input 1 from keyboard
 
             return;
         }
-        boolean yes_new_parentS1=false, yes_new_parentS2=false;
-        name_N1p1_not_set=false;
-        name_N1p2_not_set=false;
-        name_N2p1_not_set=false;
-        name_N2p2_not_set=false;
+        boolean yes_new_parentS1 = false, yes_new_parentS2 = false;
+        name_N1p1_not_set = false;
+        name_N1p2_not_set = false;
+        name_N2p1_not_set = false;
+        name_N2p2_not_set = false;
         String[] clear_n1, clear_n2;
         for (Generation g : Generation.getObj_wFM) {
             String[] ch1_arr = g.getChild().toLowerCase().split(" ");
             String[] p_arr = g.getName().toLowerCase().split(" ");
             String ch1 = ch1_arr[0];
-            if (ch1.equals(FName1)){//g.getName().equals(FName1) ==
+            if (ch1.equals(FName1)) {
                 name_N1p1_not_set = !name_N1p1_not_set;  // false
-                name_N1p2_not_set = !name_N1p2_not_set;  // false
+                name_N1p2_not_set = !name_N1p2_not_set;  // false // switch prepare
                 if (name_N1p1_not_set) {
-                    new_N1_p1 = g.getName();  // gets full name of N1p1
-                    if (N1_initials==null) {
-                        N1_initials = g.getName();
-                        N1_initials_child = g.getChild();
+                    new_N1_p1 = g.getName();  // gets full name of N1p1 (Name 1 Parent 1)
+                    if (N1_initials == null) {
+                        N1_initials = g.getName();  // gets Parent Name and holds it
+                        N1_initials_child = g.getChild();  // gets child of Parent and holds it
                     }
-//                    if (g.getChild()==null)
-//                        N1_initials = g.getName();
-//                    else
-//                        N1_initials = g.getChild();
                     name_N1p1_not_set = true;
                     name_N1p2_not_set = false;
                 }
                 if (name_N1p2_not_set) {
-                    new_N1_p2 = g.getName();  // gets full name of N1p2
-                    name_N1p2_not_set=true;
+                    new_N1_p2 = g.getName();  // gets full name of N1p2 (Name 1 Parent 2)
+                    name_N1p2_not_set = true;
                 }
-                yes_new_parentS1=true;
-                name_N1p2_not_set=false;
+                yes_new_parentS1 = true;
+                name_N1p2_not_set = false;  // false so next recursion stack loop will have false -> true and no more exec
             }
-            if (ch1.equals(FName2)){
+            if (ch1.equals(FName2)) {
                 name_N2p1_not_set = !name_N2p1_not_set;  // false
                 name_N2p2_not_set = !name_N2p2_not_set;  // false
                 if (name_N2p1_not_set) {
-                    new_N2_p1 = g.getName();  // gets full name of N2p1
-                    if (N2_initials==null) {
+                    new_N2_p1 = g.getName();  // gets full name of N2p1 (Name 2 Parent 1)
+                    if (N2_initials == null) {
                         N2_initials = g.getName();
                         N2_initials_child = g.getChild();
                     }
-//                    if (g.getChild()==null)
-//                        N2_initials = g.getName();
-//                    else
-//                        N2_initials = g.getChild();
                     name_N2p2_not_set = false;
                 }
                 if (name_N2p2_not_set) {
-                    new_N2_p2 = g.getName();  // gets full name of N2p2
+                    new_N2_p2 = g.getName();  // gets full name of N2p2 (Name 2 Parent 2)
                     N2_initials = g.getChild();
-                    name_N2p2_not_set=true;
+                    name_N2p2_not_set = true;
                 }
-                yes_new_parentS2=true;
-                name_N2p2_not_set=false;
+                yes_new_parentS2 = true;
+                name_N2p2_not_set = false;
             }
 
-            if (take_once==false && FName1!= null && FName1.equals(p_arr[0])){
-                take_once=true;
-                N1_initials=g.getName();
+            if (!take_once && FName1 != null && FName1.equals(p_arr[0])) {
+                take_once = true;
+                N1_initials = g.getName();
                 N1_initials_child = g.getChild();
             }
-            if (take_once==false && FName2!= null && FName2.equals(p_arr[0]))
-            {
-                take_once=true;
-                N2_initials=g.getName();
+            if (!take_once && FName2 != null && FName2.equals(p_arr[0])) {
+                take_once = true;
+                N2_initials = g.getName();
                 N2_initials_child = g.getChild();
             }
-//            if(!g.getName().equals(N1_initials) && FName2.equals(p_arr[0]))
-//                N2_initials=g.getName();
-//            if(!g.getName().equals(N2_initials) && FName1.equals(p_arr[0]))
-//                N1_initials=g.getName();
-        }
-        if (!yes_new_parentS1 && !yes_new_parentS2){
-            isTop_root_parent1 = true;
-            isTop_root_parent2 = true;
         }
 
-        else {
-            //if (!new_N1_p1.equals(null) && !new_N1_p2.equals(null)) { //with equal null pointer exception always func
+        // reached the end of Tree reverse
+        if (!yes_new_parentS1 && !yes_new_parentS2) {
+            isTop_root_parent1 = true;
+            isTop_root_parent2 = true;
+        } else {
+            //  keeps one of 2 Parents with the "Incest" name either both are Incest or Blood mix so its keeps the Incest one #1
             if (!(new_N1_p1 == null) && !(new_N1_p2 == null)) {
                 if (new_N1_p1.contains(family_MAIN_lastname) && new_N1_p2.contains(family_MAIN_lastname)) {
                     clear_n1 = new_N1_p1.toLowerCase().split(" ");
@@ -392,6 +350,7 @@ recursive func find parent of parent apo domi same as .dot?
                     }
                 }
             }
+            //  keeps one of 2 Parents with the "Incest" name either both are Incest or Blood mix so its keeps the Incest one #2
             if (!(new_N2_p1 == null) && !(new_N2_p2 == null)) {
                 if (new_N2_p1.contains(family_MAIN_lastname) && new_N2_p2.contains(family_MAIN_lastname)) {
                     clear_n2 = new_N2_p1.toLowerCase().split(" ");
@@ -408,7 +367,7 @@ recursive func find parent of parent apo domi same as .dot?
                 }
             }
         }
-        //need to store both names somewhere? by default keeps the not null
+
         find_shared_root(new_N1_p1, new_N2_p1);
     }
 
@@ -419,8 +378,8 @@ recursive func find parent of parent apo domi same as .dot?
         for (int i = 0; i < allStrings.length; i++) {
             timesCsv.incrementAndGet();
             String capFirstMove;
-            String[] capFirst = null;
-            String save_new_Cap = "";
+            String[] capFirst;
+            StringBuilder save_new_Cap = new StringBuilder();
             if (i != 1) {
                 capFirstMove = allStrings[i];
                 capFirst = capFirstMove.split(" ");
@@ -429,21 +388,21 @@ recursive func find parent of parent apo domi same as .dot?
 
                     // csv first Start Of File has a special character (\uFEFF AKA== "BOM" char utf-8)
                     // so we just from charAt(0) to 1 only and only then!
-                    final String s = makeCap.toUpperCase().charAt(0) + makeCap.substring(1, makeCap.length());
+                    final String s = makeCap.toUpperCase().charAt(0) + makeCap.substring(1);
                     if (timesCsv.get() == 1) {
                         if (j != 0)
                             capFirst[j] = s;
                         else
-                            capFirst[j] = makeCap.toUpperCase().charAt(1) + makeCap.substring(2, makeCap.length());
+                            capFirst[j] = makeCap.toUpperCase().charAt(1) + makeCap.substring(2);
                     } else
                         capFirst[j] = s;
 
                     if (j == 0)
-                        save_new_Cap += capFirst[j];
+                        save_new_Cap.append(capFirst[j]);
                     else
-                        save_new_Cap += " " + capFirst[j];
+                        save_new_Cap.append(" ").append(capFirst[j]);
                     if (j == capFirst.length - 1)
-                        allStrings[i] = save_new_Cap;
+                        allStrings[i] = save_new_Cap.toString();
                 }
             }
         }
@@ -483,12 +442,14 @@ recursive func find parent of parent apo domi same as .dot?
 
                 // Arrange as Who has wife or husband name list
                 if ((allStrings[1].equals("wife")))
-                    who_is_husband_wife_List.put(String.valueOf(new Random().nextInt()), new Generation(allStrings[0], allStrings[1], allStrings[2], "null"));
+                    who_is_husband_wife_List.put(String.valueOf(new Random().nextInt()),
+                            new Generation(allStrings[0], allStrings[1], allStrings[2], "null"));
 
                 // check father or mother both have in common for Create ".dot" File .. DB simulation with Hashmap uses PK
                 // as new Random and Values the object to access itself
                 if ((allStrings[1].equals("mother")) || (allStrings[1].equals("father"))) {
-                    who_is_father_mother_List.put(String.valueOf(new Random().nextInt()), gen = new Generation(allStrings[0], allStrings[1], allStrings[2]));
+                    who_is_father_mother_List.put(String.valueOf(new Random().nextInt()),
+                            gen = new Generation(allStrings[0], allStrings[1], allStrings[2]));
                 }
                 // Check to see if one of the two names give input IS NOT a Child to the other input Flag while adding the (as)child
                 if ((allStringsLC[0].contains(FName1.toLowerCase()) && (allStrings[1].contains("mother") || allStrings[1].contains("father"))
@@ -539,7 +500,8 @@ recursive func find parent of parent apo domi same as .dot?
             if (allStrings.length == 3) {
                 if ((allStrings[1].equals("mother")) || (allStrings[1].equals("father"))) {
                     //myList1.add(new Generation(allStrings[0], allStrings[1], allStrings[2]));
-                    who_is_father_mother_List.put(String.valueOf(new Random().nextInt()), new Generation(allStrings[0], allStrings[1], allStrings[2]));
+                    who_is_father_mother_List.put(String.valueOf(new Random().nextInt()),
+                            new Generation(allStrings[0], allStrings[1], allStrings[2]));
                 }
             }
         }
@@ -555,25 +517,30 @@ recursive func find parent of parent apo domi same as .dot?
 
     public static void main(String[] args) {
         //Creating the text menu
+        System.out.println("###Non-Case-Sensitive###");
         String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
-//        try {
-//            Scanner fam_lst = new Scanner(System.in);
-//            System.out.print("\nWhat is Main Family Lastname?: ");
-//            family_MAIN_lastname = fam_lst.nextLine().toLowerCase(Locale.ROOT);
-//            if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
-//                throw new IOException();
-//            String capFirst = family_MAIN_lastname;
-//            family_MAIN_lastname = capFirst.toUpperCase().charAt(0) + capFirst.substring(1, capFirst.length());
-//        } catch (IOException e) {
-//            System.out.println("Input Error ... Program Exits ...");
-//            e.printStackTrace();
-//            System.exit(1);
-//        }
-        family_MAIN_lastname = "Duck";
+        try {
+            Scanner fam_lst = new Scanner(System.in);
+            System.out.print("\nWhat is Main Family Lastname?: ");
+            family_MAIN_lastname = fam_lst.nextLine().toLowerCase(Locale.ROOT);
+            if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
+                throw new IOException();
+            String capFirst = family_MAIN_lastname;
+            family_MAIN_lastname = capFirst.toUpperCase().charAt(0) + capFirst.substring(1, capFirst.length());
+        } catch (IOException e) {
+            System.out.println("Input Error ... Program Exits ...");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        //family_MAIN_lastname = "Duck";
         System.out.println("***This is the " + family_MAIN_lastname + " family tree app***");
         System.out.println("***Main Menu***");
         try (Scanner menu = new Scanner(System.in)) {
-            System.out.println("Press 1 to read the family members list \nPress 2 to create an alphabetically sorted family members list \nPress 3 to use the relationship app \nPress 4 to generate the .dot file");
+            System.out.println("""
+                    Press 1 to read the family members list\s
+                    Press 2 to create an alphabetically sorted family members list\s
+                    Press 3 to use the relationship app\s
+                    Press 4 to generate the .dot file""");
             int input = menu.nextInt();
             switch (input) {
                 case 1 -> readcsv(csvFile, input, null, null);
@@ -597,217 +564,3 @@ recursive func find parent of parent apo domi same as .dot?
         }
     }
 }
-
-/*
-    private static void find_shared_root(String FName1, String FName2, String pFname1, String pFname2){
-        if(isTop_root_parent1 && isTop_root_parent2){
-            return;
-        }
-        boolean yes_new_parentS1=false, yes_new_parentS2=false;
-        name_N1p1_not_set=false;
-        name_N1p2_not_set=false;
-        name_N2p1_not_set=false;
-        name_N2p2_not_set=false;
-        for (Generation g : Generation.getObj_wFM) {
-            String[] ch1_arr = g.getChild().toLowerCase().split(" ");
-            String ch1 = ch1_arr[0];
-            if (ch1.equals(FName1)){//g.getName().equals(FName1) ==
-                name_N1p1_not_set = !name_N1p1_not_set;  // false
-                name_N1p2_not_set = !name_N1p2_not_set;  // false
-                if (name_N1p1_not_set) {
-                    new_N1_p1 = g.getName();  // gets full name of N1p1
-                    name_N1p1_not_set = true;
-                    name_N1p2_not_set = false;
-                }
-                if (name_N1p2_not_set) {
-                    new_N1_p2 = g.getName();  // gets full name of N1p2
-                    name_N1p2_not_set=true;
-                }
-                yes_new_parentS1=true;
-                name_N1p2_not_set=false;
-            }
-            if (ch1.equals(FName2)){
-                name_N2p1_not_set = !name_N2p1_not_set;  // false
-                name_N2p2_not_set = !name_N2p2_not_set;  // false
-                if (name_N2p1_not_set) {
-                    new_N2_p1 = g.getName();  // gets full name of N2p1
-                    name_N2p2_not_set = false;
-                }
-                if (name_N2p2_not_set) {
-                    new_N2_p2 = g.getName();  // gets full name of N2p2
-                    name_N2p2_not_set=true;
-                }
-                yes_new_parentS2=true;
-                name_N2p2_not_set=false;
-            }
-        }
-//        if (!yes_new_parentS1 && !yes_new_parentS2){
-//            isTop_root_parent1 = true;
-//            isTop_root_parent2 = true;
-//        }
-        if (!yes_new_parentS1) isTop_root_parent1=true;
-        if (!yes_new_parentS2) isParent_of_parent=true;
-        if (isTop_root_parent1 && isTop_root_parent2){}
-        else
-        {
-            new_N1_p1 = FName1;
-            new_N1_p2 = FName2;
-        }
-        System.out.println("code here");
-        find_shared_root(new_N1_p1, new_N1_p2, new_N2_p1, new_N2_p2 );
-    }
- */
-
-
-/*
-
- if (!incest) {
-            if (!(isIsSiblings1Far && isIsSiblings2Far)) {
-                if (isSiblings1 && isSiblings2 && N1_initials != null && N2_initials != null)
-                {
-                    if (isSiblings1 && isSiblings2)
-                    System.out.println("\nFar Siblings in arms");
-                    else if ((!isBlood_mix1 || !isBlood_mix2)
-                        && (N1_initials != null && N1_initials.contains(family_MAIN_lastname))
-                        && (N2_initials != null && N2_initials.contains(family_MAIN_lastname))){
-                        System.out.println("\nFar Siblings in arms");
-                    }
-                }
-                else if (!they_have.isEmpty())
-                    System.out.println("\n" + they_are + " (not related) " + they_have);
-                else if (isBlood_mix1 || isBlood_mix2)
-                    System.out.println("\nBastard Child");
-                else if ((N1_initials != null && N1_initials.contains(family_MAIN_lastname)) && (N2_initials != null && N2_initials.contains(family_MAIN_lastname)))
-                    System.out.println("\nFar Child");//System.out.println("\n (not related)");
-//                else if (they_are==null && ((new_N2_p1 == null && new_N1_p1 != null) || (new_N2_p1 != null  && new_N1_p1 == null)) && (!isBlood_mix1 && !isBlood_mix2))//!= or == they are?
-//                    System.out.println("\n (not related)");//if this removed the below if else always kick in for the above donald grandpa ludwig fanny
-                else if ((new_N2_p1 != null && (!new_N2_p1.isEmpty() && !isBlood_mix2)) || (new_N1_p1 != null
-                        && (!new_N1_p1.isEmpty() && !isBlood_mix2)) && !(they_are != null && they_are.contains("husband")
-                        || they_are != null && they_are.contains("wife")))
-                    System.out.println("\n (not related)");//System.out.println("\nFar Child");
-//                else if (isBlood_mix1 || isBlood_mix2)
-//                    System.out.println("\nBastard Child");
-                else System.out.println("\n" + they_are + " (not related)");
-            } else System.out.println("\nSiblings in arms");
-        } else if (isBlood_mix1 || isBlood_mix2){
-            System.out.println("\nBastard Child");
-        } else
-            System.out.println("\n" + they_are + " (related) " + they_have);
-
- */
-
-
-/*
-
-        if (!incest) {
-            if (!(isIsSiblings1Far && isIsSiblings2Far)) {
-//                if (isSiblings1 && isSiblings2 && N1_initials != null && N1_initials.contains(family_MAIN_lastname)
-//                && N2_initials != null && N2_initials.contains(family_MAIN_lastname) && !isBlood_mix1 || !isBlood_mix2)//why initials null?
-//                    System.out.println("\nFar Siblings in arms");
-                 if (isSiblings1 && isSiblings2 && (N1_initials != null && N1_initials.contains(family_MAIN_lastname) && isBlood_mix1)
-                        && (N2_initials != null && N2_initials.contains(family_MAIN_lastname) && !isBlood_mix2))
-                    System.out.println("\nFar Bastards in arms");
-               else if (isSiblings1 && isSiblings2 && (N1_initials != null && N1_initials.contains(family_MAIN_lastname) && !isBlood_mix1)
-                        && (N2_initials != null && N2_initials.contains(family_MAIN_lastname) && isBlood_mix2))
-                    System.out.println("\nFar Bastards in arms");
-                else if (isSiblings1 && isSiblings2) System.out.println("\nFar Siblings in arms");
-                else if (!they_have.isEmpty())
-                    System.out.println("\n" + they_are + " (not related) " + they_have);
-                else if (isBlood_mix1 || isBlood_mix2)
-                    System.out.println("\nBastard Child");
-                else if ((N1_initials != null && N1_initials.contains(family_MAIN_lastname))
-                        && (N2_initials != null && N2_initials.contains(family_MAIN_lastname)))
-                    System.out.println("\nFar Child");
-                else if (new_N2_p1 != null && !new_N2_p1.isEmpty() || new_N1_p1 != null && !new_N1_p1.isEmpty()
-                        && (they_are != null && they_are.contains("husband") || they_are != null && they_are.contains("wife")))
-                    System.out.println("\n" + they_are + " (not related)");
-                else System.out.println("\n (not related)");
-            } else System.out.println("\nSiblings in arms");
-        } else if (isBlood_mix1 || isBlood_mix2){
-            System.out.println("\nBastard Child");
-        } else
-            System.out.println("\n" + they_are + " (related) " + they_have);
-
- */
-
-
-
-/*
-
-       if (!incest) {
-            if (!(isIsSiblings1Far && isIsSiblings2Far)) {
-//                if (isSiblings1 && isSiblings2 && N1_initials != null && N1_initials.contains(family_MAIN_lastname)
-//                && N2_initials != null && N2_initials.contains(family_MAIN_lastname) && !isBlood_mix1 || !isBlood_mix2)//why initials null?
-//                    System.out.println("\nFar Siblings in arms");
-                if (isSiblings1 && isSiblings2 && N1_initials_child != null && N1_initials_child.contains(family_MAIN_lastname)
-                && N2_initials_child != null && !N2_initials_child.contains(family_MAIN_lastname) && !isBlood_mix1 || !isBlood_mix2)//why initials null?
-                    System.out.println("\nFar Bastards in arms");
-                else if (isSiblings1 && isSiblings2 && N1_initials_child != null && !N1_initials_child.contains(family_MAIN_lastname)
-                        && N2_initials_child != null && N2_initials_child.contains(family_MAIN_lastname) && !isBlood_mix1 || !isBlood_mix2)//why initials null?
-                    System.out.println("\nFar Bastards in arms");
-//                 if (isSiblings1 && isSiblings2 && (N1_initials_child != null && N1_initials_child.contains(family_MAIN_lastname) && isBlood_mix1)
-//                        && (N2_initials_child != null && N2_initials_child.contains(family_MAIN_lastname) && !isBlood_mix2))
-//                    System.out.println("\nFar Bastards in arms");
-//               else if (isSiblings1 && isSiblings2 && (N1_initials_child != null && N1_initials_child.contains(family_MAIN_lastname) && !isBlood_mix1)
-//                        && (N2_initials_child != null && N2_initials_child.contains(family_MAIN_lastname) && isBlood_mix2))
-//                    System.out.println("\nFar Bastards in arms");
-                else if (isSiblings1 && isSiblings2) System.out.println("\nFar Siblings in arms");
-                else if (!they_have.isEmpty())
-                    System.out.println("\n" + they_are + " (not related) " + they_have);
-                else if (isBlood_mix1 || isBlood_mix2)
-                    System.out.println("\nBastard Child");
-                else if ((N1_initials != null && N1_initials.contains(family_MAIN_lastname))
-                        && (N2_initials != null && N2_initials.contains(family_MAIN_lastname)))
-                    System.out.println("\nFar Child");
-                else if (new_N2_p1 != null && !new_N2_p1.isEmpty() || new_N1_p1 != null && !new_N1_p1.isEmpty()
-                        && (they_are != null && they_are.contains("husband") || they_are != null && they_are.contains("wife")))
-                    System.out.println("\n" + they_are + " (not related)");
-                else System.out.println("\n (not related)");
-            } else System.out.println("\nSiblings in arms");
-        } else if (isBlood_mix1 || isBlood_mix2){
-            System.out.println("\nBastard Child");
-        } else
-            System.out.println("\n" + they_are + " (related) " + they_have);
-
- */
-
-/*
-
-if (!incest) {//far bastards in arms(gus gladstone) + not related may huey ..gus grandpa far bastard, may huey far in blood siblings mix
-            if (!(isIsSiblings1Far && isIsSiblings2Far)) {
-                if (isSiblings1 && isSiblings2 && N1_initials != null && N2_initials != null)
-                {
-                    if (N1_initials.contains(family_MAIN_lastname) && N1_initials_child != null
-                            && !N1_initials_child.contains(family_MAIN_lastname)
-                        && N2_initials.contains(family_MAIN_lastname) && N2_initials_child != null
-                            && !N2_initials_child.contains(family_MAIN_lastname))
-                        System.out.println("\n Far not related child's with \"in\" Blood Duck Parent");
-                    else if (N1_initials.contains(family_MAIN_lastname) && N1_initials_child != null
-                            && N1_initials_child.contains(family_MAIN_lastname)
-                            && N2_initials.contains(family_MAIN_lastname) && N2_initials_child != null
-                            && N2_initials_child.contains(family_MAIN_lastname))
-                        System.out.println("\nFar Siblings in arms");
-                    else
-                        System.out.println("\n Far not related child's with \"in\" Blood Duck Parent");
-                }
-                else if (N1_initials.contains(family_MAIN_lastname)
-                        && N2_initials.contains(family_MAIN_lastname))
-                    System.out.println("\nFar Bastard child");
-                else if (!they_have.isEmpty())
-                    System.out.println("\n" + they_are + " (not related) " + they_have);
-//                else if (isBlood_mix1 || isBlood_mix2)
-//                    System.out.println("\nBastard Child");
-                else if ((N1_initials != null && N1_initials.contains(family_MAIN_lastname)) && (N2_initials != null && N2_initials.contains(family_MAIN_lastname)))
-                    System.out.println("\nFar Child");//System.out.println("\n (not related)");
-                else if ((new_N2_p1 != null && (!new_N2_p1.isEmpty() && !isBlood_mix2)) || (new_N1_p1 != null
-                        && (!new_N1_p1.isEmpty() && !isBlood_mix2)) && !(they_are != null && they_are.contains("husband")
-                        || they_are != null && they_are.contains("wife")))
-                    System.out.println("\n (not related)");//System.out.println("\nFar Child");
-                else System.out.println("\n" + they_are + " (not related)");
-            } else System.out.println("\nSiblings in arms");
-        } else if (isBlood_mix1 || isBlood_mix2){
-            System.out.println("\nBastard Child");
-        } else
-            System.out.println("\n" + they_are + " (related) " + they_have);
-
- */

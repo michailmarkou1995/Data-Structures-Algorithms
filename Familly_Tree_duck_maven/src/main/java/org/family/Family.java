@@ -2,6 +2,9 @@ package org.family;
 
 import org.apache.commons.lang3.StringUtils;
 import org.family.famillytree.Generation;
+import org.family.famillytree.Parent;
+import org.family.famillytree.Person;
+import org.family.famillytree.Wife;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,47 +17,42 @@ import java.util.regex.Pattern;
 
 /*
 .\dot.exe -Tsvg .\toGraphviz.dotbak
- 1) TO-DO make menu 3, 4 with 3? uses enter a name and see local tree like a short story father-grandfather + children
+ 1) Graph convert
    1.1) give Manios
-   1.2) Make Loop Menu
-   1.3) Read csv search
-   1.4) remove 1.3 and make graph search convert before search
-   1.5) Fix null Pointers try Catch + Make First Capital or lowercase all no matter the input User
-   1.6) name output with Capital First Letter
-   1.7) fix hashmaps? reduce? no second input check2 there
-   1.8) when they are far related == not related?! + no match name == not related or doesnt exist message
-   1.9) DO GRANDPA RELATED WITH FAR CHILDER AS FAR CHILDREN !!! + no DUCK in CODE HARDCODE search in CONTROL + F
+   1.10) new classes for string overide Interface? assign from new class style sto not null output toString ovveride
+   1.11) new sorting
+   1.12) load from old style with path and regex for \\
+   1.13) cmd arg input or not then load from in menu
+   1.14) use graphviz embeded for java?
+   1.17) load paths from user input
  2) push github
- 3) make resources Local Path instead of Read from File
  4) make web viz out of this like python */
 
 public class Family {
 
     private static final Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
-    public static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname;
-    public static boolean blood_hus = false, blood_wife = false;
-    public static List<String> all_names = new ArrayList<>();
-    //Creating an Arraylist that stores objects <Person>
-    static List<Generation> name_sorted_List = new ArrayList<>();
-    static HashMap<String, Generation> who_is_father_mother_List = new HashMap<>();
-    static HashMap<String, Generation> who_is_husband_wife_List = new HashMap<>();
+    //private static Generation generation = new Generation();
+    static List<String> all_names = new ArrayList<>();  // all names of csv
+    static List<Generation> name_sorted_List = new ArrayList<>();  // Creating an Arraylist that stores objects <Person>
     static List<List<String>> records1 = new ArrayList<>();
     static HashMap<String, String> childs = new HashMap<>();
-    //StringBuffer
-    static String they_are, they_have = "", husband, wife;
-    static boolean not_children_of_parent = false, isSiblings1 = false, isSiblings2 = false,
-            isIsSiblings1Far = false, isIsSiblings2Far = false,
-            incest = false, add_they_have = false;
-    static Generation gen = new Generation();
+    static HashMap<String, Generation> who_is_father_mother_List = new HashMap<>();
+    static HashMap<String, Generation> who_is_husband_of_wife_List = new HashMap<>();
+    static HashMap<String, Generation> all_list = new HashMap<>();
     static AtomicInteger timesCsv = new AtomicInteger();
+    static AtomicInteger idK = new AtomicInteger();
+    static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname, new_N1_p1, new_N1_p2,
+            new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child, N2_initials_child,
+            they_are, they_have = "", husband, wife;
     static boolean isTop_root_parent1 = false, isTop_root_parent2 = false, name_N1p1_not_set = false,
             name_N1p2_not_set = false, name_N2p1_not_set = false, name_N2p2_not_set = false, isBlood_mix1 = false,
-            isBlood_mix2 = false, take_once = false, exist_in_list = false;
-    static String new_N1_p1, new_N1_p2, new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child,
-            N2_initials_child;
+            isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
+            isSiblings1 = false, isSiblings2 = false, isIsSiblings1Far = false, isIsSiblings2Far = false,
+            incest = false, add_they_have = false, blood_hus = false, blood_wife = false;
 
     //This function reads the csv file and stores its content on an Arraylist, printing the result
-    public static void readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase) {
+    public static void readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase,
+                               Generation generation) {
         String line;
         final String csvSplitBy = ",";
         String FName1 = "", FName2 = "";
@@ -73,7 +71,7 @@ public class Family {
             //this loop parses every line of the csv file and stores it on the Arraylist mylist
             while ((line = br.readLine()) != null) {
                 String[] allStrings = line.split(csvSplitBy);
-                input_checking_scenario_Loop(input, FName1_originalCase, FName2_originalCase, allStrings);
+                input_checking_scenario_Loop(input, FName1_originalCase, FName2_originalCase, allStrings, generation);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,10 +81,10 @@ public class Family {
     //this function sorts the Arraylist alphabetically and then exports a sorted csv file
     private static void sortcsv() {
         //compares series of pairs of elements and based on result of compare
-// it sees if elements from that pair should be swapped or not
+        // it sees if elements from that pair should be swapped or not
         name_sorted_List.sort((o1, o2) -> {
             // compare two instance of `Score` and return `int` as result.
-            return ~o2.getName().compareTo(o1.getName());
+            return ~o2.getName().compareTo(o1.getName())-1;
             // use ~ to reverse order
         });
         //loop that prints the sorted result
@@ -119,7 +117,7 @@ public class Family {
             Scanner name2 = new Scanner(System.in);
             System.out.print("Enter 2nd First Names character (as unique ID)\nName: (e.g. dumbella) ");
             String Personname2 = name2.nextLine();
-            readcsv(csvFile, input, Personname1, Personname2);
+            readcsv(csvFile, input, Personname1, Personname2, null);
             case_scenario_checking(input);
         } catch (Exception e) {
             System.out.println("There was a Input Problem");
@@ -128,8 +126,8 @@ public class Family {
         }
     }
 
-    private static void createDot(String csvFile, int input) {
-        readcsv(csvFile, input, null, null);
+    private static void createDot(String csvFile, int input, Generation generation) {
+        readcsv(csvFile, input, null, null, generation);
         FileWriter writerF;
         try {
             writerF = new FileWriter("resources/toGraphViz.dot", StandardCharsets.UTF_8);
@@ -161,7 +159,7 @@ public class Family {
     private static void case_scenario_checking(int input) {
 
         // Check if two Inputs have same parents
-        for (Generation g : Generation.getObj_wFM) {
+        for (Generation g : Generation.getObj_wFatherMother) {
             String[] names_children_equals = g.getChild().toLowerCase().split(" ");
             String names_father_equals = g.getName();
             for (String names_children_equal : names_children_equals) {
@@ -177,7 +175,7 @@ public class Family {
                 // makes in memory Data structure file with relations of wife or husband e.g. this has this as wife
                 // so its diff parents and they are far siblings(not the parent included as root)
                 if (!parent1.equals(parent2) && (isSiblings1 && isSiblings2)) {
-                    who_is_husband_wife_List.forEach((key, value) -> {
+                    who_is_husband_of_wife_List.forEach((key, value) -> {
                         if (value.getName().equals(parent1) && value.getHusband().equals(parent2)
                                 || value.getName().equals(parent2) && value.getHusband().equals(parent1)) {
                             isIsSiblings1Far = true;
@@ -274,7 +272,7 @@ public class Family {
         name_N2p1_not_set = false;
         name_N2p2_not_set = false;
         String[] clear_n1, clear_n2;
-        for (Generation g : Generation.getObj_wFM) {
+        for (Generation g : Generation.getObj_wFatherMother) {
             String[] ch1_arr = g.getChild().toLowerCase().split(" ");
             String[] p_arr = g.getName().toLowerCase().split(" ");
             String ch1 = ch1_arr[0];
@@ -371,7 +369,8 @@ public class Family {
         find_shared_root(new_N1_p1, new_N2_p1);
     }
 
-    private static void input_checking_scenario_Loop(int input, String FName1, String FName2, String[] allStrings) {
+    private static void input_checking_scenario_Loop(int input, String FName1, String FName2, String[] allStrings,
+                                                     Generation generation) {
 
         // Make CSV input for Only Name Sections for Cols NOT EQUAL to 1 which will be "relations" part
         // Make Only name Sections First capitalize
@@ -421,7 +420,10 @@ public class Family {
         // sort csv used
         if (input != 3 && input != 4)
             if (allStrings.length == 2) {
-                name_sorted_List.add(new Generation(allStrings[0], allStrings[1]));
+//                if (allStrings[1].equals("male") || allStrings[1].equals("female")
+//                        || allStrings[1].equals("father") || allStrings[1].equals("mother")
+//                        || allStrings[1].equals("husband") || allStrings[1].equals("wife"))
+                name_sorted_List.add(new Person(allStrings[0], allStrings[1]));
             }
 
         // Search and Fine Relations part
@@ -442,14 +444,14 @@ public class Family {
 
                 // Arrange as Who has wife or husband name list
                 if ((allStrings[1].equals("wife")))
-                    who_is_husband_wife_List.put(String.valueOf(new Random().nextInt()),
-                            new Generation(allStrings[0], allStrings[1], allStrings[2], "null"));
+                    who_is_husband_of_wife_List.put(String.valueOf(new Random().nextInt() & Integer.MAX_VALUE),
+                            new Wife(allStrings[0], allStrings[1], allStrings[2]));  // zero out the sign bit 0x7fffffff
 
                 // check father or mother both have in common for Create ".dot" File .. DB simulation with Hashmap uses PK
                 // as new Random and Values the object to access itself
                 if ((allStrings[1].equals("mother")) || (allStrings[1].equals("father"))) {
-                    who_is_father_mother_List.put(String.valueOf(new Random().nextInt()),
-                            gen = new Generation(allStrings[0], allStrings[1], allStrings[2]));
+                    who_is_father_mother_List.put(String.valueOf(Math.abs(new Random().nextInt())),
+                            new Parent(allStrings[0], allStrings[1], allStrings[2]));
                 }
                 // Check to see if one of the two names give input IS NOT a Child to the other input Flag while adding the (as)child
                 if ((allStringsLC[0].contains(FName1.toLowerCase()) && (allStrings[1].contains("mother") || allStrings[1].contains("father"))
@@ -495,16 +497,41 @@ public class Family {
                 }
             }
         }
+
         if (input == 4) {
             //myList.clear();
             if (allStrings.length == 3) {
                 if ((allStrings[1].equals("mother")) || (allStrings[1].equals("father"))) {
                     //myList1.add(new Generation(allStrings[0], allStrings[1], allStrings[2]));
-                    who_is_father_mother_List.put(String.valueOf(new Random().nextInt()),
-                            new Generation(allStrings[0], allStrings[1], allStrings[2]));
+                    who_is_father_mother_List.put(String.valueOf(new Random().nextInt() & Integer.MAX_VALUE),
+                            new Parent(allStrings[0], allStrings[1], allStrings[2]));  //new AtomicInteger(1).incrementAndGet()
+                    //all_list.put(allStrings[0], generation.se);
+                }
+                if ((allStrings[1].equals("husband"))) {
+                    all_list.put(String.valueOf(idK.get()), generation.setHusbandObj(allStrings[0]));
+                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0));
+                }
+                if ((allStrings[1].equals("wife"))) {
+                    all_list.put(String.valueOf(idK.get()), generation.setWifeObj(allStrings[0]));
+                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
+                }
+                if ((allStrings[1].equals("father"))) {
+                    /* ######### LIST OF CHILDS ara hasmap treemap? mesa me List? arrayList <> */
+                    all_list.put(String.valueOf(idK.get()), generation.setChildObj(allStrings[2]));
+                    idK.incrementAndGet();
+                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
+                }
+                if ((allStrings[1].equals("male")) || (allStrings[1].equals("female"))) {
+                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2]));
                 }
             }
         }
+    }
+
+    private static void advancedSortData() {
+        /*
+        combines case 1,3? then spits 5 run here again?
+        */
     }
 
     public static boolean isNumeric(String strNum) {
@@ -516,6 +543,7 @@ public class Family {
     }
 
     public static void main(String[] args) {
+        Generation generation = new Generation();
         //Creating the text menu
         System.out.println("###Non-Case-Sensitive###");
         String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
@@ -538,22 +566,26 @@ public class Family {
         try (Scanner menu = new Scanner(System.in)) {
             System.out.println("""
                     Press 1 to read the family members list\s
-                    Press 2 to create an alphabetically sorted family members list\s
+                    Press 2 to create an alphabetically minimal sorted family members list\s
+                    Press 5 to create a Full output sorted Family members\s
                     Press 3 to use the relationship app\s
                     Press 4 to generate the .dot file""");
             int input = menu.nextInt();
             switch (input) {
-                case 1 -> readcsv(csvFile, input, null, null);
+                case 1 -> readcsv(csvFile, input, null, null, null);
                 case 2 -> {
                     //It is important to run readcsv() first, for sortcsv() to work
-                    readcsv(csvFile, input, null, null);
+                    readcsv(csvFile, input, null, null, null);
                     System.out.println("\n");
                     sortcsv();
                 }
                 case 3 -> searchNameRelations(csvFile, input);
                 case 4 -> {
                     name_sorted_List.clear();
-                    createDot(csvFile, input);
+                    createDot(csvFile, input, generation);
+                }
+                case 5 -> {
+                    advancedSortData();
                 }
                 default -> System.out.println("Please try again!");
             }

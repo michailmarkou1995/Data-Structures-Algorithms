@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Generation {
-    public static List<Generation> getObj = new ArrayList<>();
+    public static List<Generation> getObj_wFM = new ArrayList<>();
+    public static List<Generation> getObj_wHW = new ArrayList<>();
     private String name, gender, related, child, wife, husband;
 
     public Generation(String allStringsName, String allStringsGender) {
@@ -16,7 +17,7 @@ public class Generation {
         this.setName(allStringsName);
         this.related = allStringsRelated;
         this.child = Child;
-        getObj.add(this);
+        getObj_wFM.add(this);
     }
 
     public Generation(String allStringsName, String Wife, String Husband, String allStringsRelated) {
@@ -24,9 +25,26 @@ public class Generation {
         this.related = allStringsRelated;
         this.wife = Wife;
         this.husband = Husband;
+        getGetObj_wHW().add(this);
     }
 
     public Generation() {
+    }
+
+    public static List<Generation> getGetObj_wHW() {
+        return getObj_wHW;
+    }
+
+    public static void setGetObj_wHW(List<Generation> getObj_wHW) {
+        Generation.getObj_wHW = getObj_wHW;
+    }
+
+    public static List<Generation> getGetObj_wFM() {
+        return getObj_wFM;
+    }
+
+    public static void setGetObj_wFM(List<Generation> getObj_wFM) {
+        Generation.getObj_wFM = getObj_wFM;
     }
 
     public String getName() {
@@ -59,14 +77,6 @@ public class Generation {
 
     public void setChild(String child) {
         this.child = child;
-    }
-
-    public static List<Generation> getGetObj() {
-        return getObj;
-    }
-
-    public static void setGetObj(List<Generation> getObj) {
-        Generation.getObj = getObj;
     }
 
     public String getWife() {

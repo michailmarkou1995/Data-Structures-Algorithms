@@ -50,6 +50,7 @@ public class Family {
     static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname, new_N1_p1, new_N1_p2,
             new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child, N2_initials_child,
             they_are, they_have = "", husband, wife;
+    static StringBuilder file_path_canonical, getFile_path_canonical;
     static boolean isTop_root_parent1 = false, isTop_root_parent2 = false, name_N1p1_not_set = false,
             name_N1p2_not_set = false, name_N2p1_not_set = false, name_N2p2_not_set = false, isBlood_mix1 = false,
             isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
@@ -140,8 +141,19 @@ public class Family {
     private static void createDot(String csvFile, int input, Generation generation) {
         readcsv(csvFile, input, null, null, generation);
         FileWriter writerF;
+//        StringBuilder csvFileExtension;
+
         try {
-            writerF = new FileWriter("resources/toGraphViz.dot", StandardCharsets.UTF_8);
+//            Scanner file_path = new Scanner(System.in);
+//            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
+//            System.out.print("Path: ");
+//            csvFileExtension = new StringBuilder(file_path.nextLine());
+            /* Gets File Path from readcsv and saves it in the same place */
+            writerF = new FileWriter(file_path_canonical
+                    .append("\\toGraphViz_")
+                    .append(family_MAIN_lastname)
+                    .append(".dot").toString(), StandardCharsets.UTF_8);
+            file_path_canonical = getFile_path_canonical;
 
             writerF.write("digraph " + family_MAIN_lastname + " {\n");
             writerF.write("rankdir=LR;\n");
@@ -557,6 +569,8 @@ public class Family {
         File file = new File(csvFile);
         if (!file.isDirectory())
             file = file.getCanonicalFile();  // getParentFile()
+        file_path_canonical = new StringBuilder(file.getParent());
+        getFile_path_canonical = new StringBuilder(file_path_canonical);
         if (file.isDirectory())
             throw new IOException();
         if (file.exists()) {
@@ -571,8 +585,9 @@ public class Family {
     private static String write_file_path_to_disk(String csvFile) throws IOException {
         String answer;
         File file = new File(csvFile);
-        if (!file.isDirectory())
+        if (!file.isDirectory()) {
             file = file.getCanonicalFile();  // getParentFile()
+        }
         if (file.isDirectory())
             throw new IOException();
         if (file.exists()) {
@@ -654,14 +669,26 @@ public class Family {
         return Names.values()[random % Names.values().length]; // cycle itself till max limit
     }
 
-    private static void graphvizGenerate() {
-        try (InputStream dot = Family.class.getResourceAsStream("/toGraphViz.dot")) {
+    private static void graphvizGenerate() {//family.csv
+        String path_temp_original = getFile_path_canonical.toString();
+        String reverese_slashses = file_path_canonical.toString().replaceAll("\\\\", "/");
+        file_path_canonical = new StringBuilder(reverese_slashses);
+        String path_temp_reverse = file_path_canonical.toString();
+
+        // accepts / and \\
+        File dot = new File(String.valueOf(path_temp_reverse + "/toGraphViz_" + family_MAIN_lastname + ".dot"));
+
+        //BufferedReader br = new BufferedReader(new FileReader(path))
+        try (BufferedReader dotBuffer = new BufferedReader(new FileReader(dot))) {
             // compress Output Error's from this "Javascript Engine"
             PrintStream out = System.out;
             System.setOut(new PrintStream(OutputStream.nullOutputStream()));
             /*starts*/
+            assert dot != null;
+
             MutableGraph g = new Parser().read(dot);
-            Graphviz.fromGraph(g).width(700).render(Format.SVG).toFile(new File("resources/example/ex4-1.svg"));
+            Graphviz.fromGraph(g).width(700).render(Format.SVG)
+                    .toFile(new File(path_temp_original + "\\" + family_MAIN_lastname + "_tree_simple.svg"));
 
             g.graphAttrs()
                     .add(guru.nidi.graphviz.attribute.Color
@@ -671,7 +698,9 @@ public class Family {
                     node.add(
                             guru.nidi.graphviz.attribute.Color.named(node.name().toString()),
                             Style.lineWidth(4), Style.FILLED));
-            Graphviz.fromGraph(g).width(700).render(Format.SVG).toFile(new File("resources/example/ex4-2.svg"));
+            Graphviz.fromGraph(g).width(700).render(Format.SVG)
+                    .toFile(new File(path_temp_original + "\\" + family_MAIN_lastname + "_tree_simple_gradient.svg"));
+
             System.setOut(out); // beyond re-enables Console Output
             /*end compressing*/
         } catch (IOException e) {
@@ -681,26 +710,26 @@ public class Family {
 
     public static void main(String[] args) {
         // randomized
-//        ascii_art_generator();
+        ascii_art_generator();
         Generation generation = new Generation();
-//        //Creating the text menu
-//        System.out.println("###Non-Case-Sensitive###\n");
-//        System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
-//                "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
-//        System.out.print("Path: ");
-//        String csvFile = "C:\\example\\file\\to\\my\\family.csv";
-//        try {
-//            Scanner file_path = new Scanner(System.in);
-//            csvFile = file_path.nextLine();
-//            read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
-//        } catch (IOException e) {
-//            System.out.print("File Path Input Error: " + csvFile + "\n");
-//            e.printStackTrace();
-//            System.exit(1);
-//        }
+        //Creating the text menu
+        System.out.println("###Non-Case-Sensitive###\n");
+        System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
+                "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
+        System.out.print("Path: ");
+        String csvFile = "C:\\example\\file\\to\\my\\family.csv";
+        try {
+            Scanner file_path = new Scanner(System.in);
+            csvFile = file_path.nextLine();
+            read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
+        } catch (IOException e) {
+            System.out.print("File Path Input Error: " + csvFile + "\n");
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         //for local Resources in compile uncomment this
-        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
+//        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
 //        try {
 //            Scanner fam_lst = new Scanner(System.in);
 //            System.out.print("\nWhat is Main Family Lastname?: ");

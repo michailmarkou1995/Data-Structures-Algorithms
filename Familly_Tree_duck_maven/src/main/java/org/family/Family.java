@@ -649,13 +649,17 @@ public class Family {
 
     }
 
-    // You call them now they are here !
+    // You called them now they are here !
     private static Names callThem(int random) {
         return Names.values()[random % Names.values().length]; // cycle itself till max limit
     }
 
     private static void graphvizGenerate() {
         try (InputStream dot = Family.class.getResourceAsStream("/toGraphViz.dot")) {
+            // compress Output Error's from this "Javascript Engine"
+            PrintStream out = System.out;
+            System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+            /*starts*/
             MutableGraph g = new Parser().read(dot);
             Graphviz.fromGraph(g).width(700).render(Format.SVG).toFile(new File("resources/example/ex4-1.svg"));
 
@@ -668,6 +672,8 @@ public class Family {
                             guru.nidi.graphviz.attribute.Color.named(node.name().toString()),
                             Style.lineWidth(4), Style.FILLED));
             Graphviz.fromGraph(g).width(700).render(Format.SVG).toFile(new File("resources/example/ex4-2.svg"));
+            System.setOut(out); // beyond re-enables Console Output
+            /*end compressing*/
         } catch (IOException e) {
             e.printStackTrace();
         }

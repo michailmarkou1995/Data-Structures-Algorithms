@@ -1,6 +1,6 @@
 package org.family.famillytree;
 
-public class Wife extends Generation{
+public class Wife extends Generation {
 
     public Wife(String allStringsName, String Wife, String Husband) {
         super.setName(allStringsName);

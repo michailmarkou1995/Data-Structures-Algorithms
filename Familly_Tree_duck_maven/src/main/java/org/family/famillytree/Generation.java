@@ -31,7 +31,7 @@ public class Generation {
 
     public Generation(String Name, String Gender, String related, String Wife, String Husband) {
         this.setName(Name);
-        this.gender=Gender;
+        this.gender = Gender;
         this.related = related;
         this.wife = Wife;
         this.husband = Husband;

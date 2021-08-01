@@ -1,6 +1,6 @@
 package org.family.famillytree;
 
-public class Husband extends Generation{
+public class Husband extends Generation {
     @Override
     public String toString() {
         return "Husband{" +

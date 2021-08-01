@@ -5,11 +5,15 @@ import org.family.famillytree.Generation;
 import org.family.famillytree.Parent;
 import org.family.famillytree.Person;
 import org.family.famillytree.Wife;
+import org.family.famillytree.toons.Toons;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
+import java.util.List;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,7 +86,7 @@ public class Family {
         // it sees if elements from that pair should be swapped or not
         name_sorted_List.sort((o1, o2) -> {
             // compare two instance of `Score` and return `int` as result.
-            return ~o2.getName().compareTo(o1.getName())-1;
+            return ~o2.getName().compareTo(o1.getName()) - 1;
             // use ~ to reverse order
         });
         //loop that prints the sorted result
@@ -234,7 +238,7 @@ public class Family {
                             || N1.contains(family_MAIN_lastname) && !N2.contains(family_MAIN_lastname)
                             || !N1.contains(family_MAIN_lastname) && !N2.contains(family_MAIN_lastname)
                             && N1_initials.contains(family_MAIN_lastname) || N2_initials.contains(family_MAIN_lastname))
-                        System.out.println("\n Far not related child's with \"in\" Blood Duck Parent");
+                        System.out.println("\n Far not related child's with \"in\" Blood \"" + family_MAIN_lastname + "\" Parent");
                     else
                         System.out.println("\nFar Siblings in arms");
                 } else if (N1_initials != null && N1_initials.contains(family_MAIN_lastname)
@@ -537,7 +541,7 @@ public class Family {
         */
     }
 
-    public static boolean isNumeric(String strNum) {
+    private static boolean isNumeric(String strNum) {
 
         if (strNum == null) {
             return false;
@@ -545,68 +549,117 @@ public class Family {
         return pattern.matcher(strNum).matches();
     }
 
-    public static void read_file_path_to_disk(String csvFile) throws IOException {
+    private static void read_file_path_to_disk(String csvFile) throws IOException {
         File file = new File(csvFile);
         if (!file.isDirectory())
             file = file.getCanonicalFile();  // getParentFile()
         if (file.isDirectory())
             throw new IOException();
-        if (file.exists())
-        {
-            csvFile=file.toString();
-            csvFile=csvFile.replaceAll(file_path_drive.toString(), Matcher.quoteReplacement("\\\\"));
+        if (file.exists()) {
+            //csvFile=file.toString();
+            //csvFile=csvFile.replaceAll(file_path_drive.toString(), Matcher.quoteReplacement("\\\\"));
             //String CapFirst= csvFile.substring(0,1).toUpperCase(Locale.ROOT);
             //csvFile=CapFirst + csvFile.substring(1);
-        }
-        else
+        } else
             throw new IOException();
     }
 
-    public static String write_file_path_to_disk(String csvFile) throws IOException {
-
+    private static String write_file_path_to_disk(String csvFile) throws IOException {
         String answer;
         File file = new File(csvFile);
         if (!file.isDirectory())
             file = file.getCanonicalFile();  // getParentFile()
         if (file.isDirectory())
             throw new IOException();
-        if (file.exists())
-        {
+        if (file.exists()) {
             System.out.print("\nFile Already exists replace it? (y/N): [N] ");
             Scanner getAnswer = new Scanner(System.in);
             answer = getAnswer.nextLine().toLowerCase();
-            if (answer != null && answer.equals("yes") || answer.equals("y")){
+            if (answer.equals("yes") || answer.equals("y")) {
                 System.out.println("File Modified...");
                 return csvFile;
-            }
-            else if (answer != null & answer.equals("no") || answer.equals("n")){
+            } else if (answer.equals("no") || answer.equals("n")) {
                 System.out.println("Operation Aborted...");
                 System.exit(0);
-            }
-            else
-            {
+            } else {
                 System.out.println("Operation Aborted...");
                 System.exit(0);
             }
         }
-        if (!file.exists())
-        {
-            csvFile=file.toString();
-            csvFile=csvFile.replaceAll(file_path_drive.toString(), Matcher.quoteReplacement("\\\\"));
+        if (!file.exists()) {
+            csvFile = file.toString();
+            csvFile = csvFile.replaceAll(file_path_drive.toString(), Matcher.quoteReplacement("\\\\"));
             System.out.println("File is Written...");
             return csvFile;
-        }
-        else
+        } else
             throw new IOException();
     }
 
+    private static void ascii_art_generator() {
+
+        int min = 0;
+        int max = 20; // max from 1-20 while % max length is always 1-max of enum actually
+        Names spoken = callThem(ThreadLocalRandom.current().nextInt(min, max + 1));
+
+        int width = 180;
+        int height = 30;
+
+        //BufferedImage image = ImageIO.read(new File("/Users/username/Desktop/logo.jpg"));
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics g = image.getGraphics();
+        g.setFont(new Font("SansSerif", Font.BOLD, 24));
+
+        Graphics2D graphics = (Graphics2D) g;
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        graphics.drawString(String.valueOf(spoken), 12, 24);
+
+        //save this image
+        //ImageIO.write(image, "png", new File("/users/username/ascii-art.png"));
+
+        for (int y = 0; y < height; y++) {
+            StringBuilder sb = new StringBuilder();
+            for (int x = 0; x < width; x++) {
+
+                sb.append(image.getRGB(x, y) == -16777216 ? " " : "*");  // 0 starts from
+
+            }
+
+            if (sb.toString().trim().isEmpty()) {
+                continue;
+            }
+
+            System.out.println(sb);
+        }
+        System.out.println();
+
+        switch ((new Random().nextInt((max + 1) - min) + min) % 7) {
+            case 1 -> Toons.BugsBunny();
+            case 2 -> Toons.DonaldDuck();
+            case 3 -> Toons.GrandpaDuck();
+            case 4 -> Toons.MarvinTheMartian();
+            case 5 -> Toons.SylvesterTheCat();
+            case 6 -> Toons.YosemiteSam();
+            default -> Toons.DonaldDuck();
+        }
+
+    }
+
+    // You call them now they are here !
+    private static Names callThem(int random) {
+        return Names.values()[random % Names.values().length]; // cycle itself till max limit
+    }
+
     public static void main(String[] args) {
+        // randomized
+        ascii_art_generator();
         Generation generation = new Generation();
         //Creating the text menu
         System.out.println("###Non-Case-Sensitive###\n");
-        System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path e.g. C:\\Users\\myUser\\Downloads\\Exercise\\Family.csv");
+        System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
+                "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
         System.out.print("Path: ");
-        String csvFile = "C:\\example\\file\\to\\my\\path.csv";
+        String csvFile = "C:\\example\\file\\to\\my\\family.csv";
         try {
             Scanner file_path = new Scanner(System.in);
             csvFile = file_path.nextLine();
@@ -618,7 +671,7 @@ public class Family {
         }
 
         //for local Resources in compile uncomment this
-        //String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
+//        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
         try {
             Scanner fam_lst = new Scanner(System.in);
             System.out.print("\nWhat is Main Family Lastname?: ");
@@ -632,16 +685,18 @@ public class Family {
             e.printStackTrace();
             System.exit(1);
         }
-        //family_MAIN_lastname = "Duck";
-        System.out.println("***This is the " + family_MAIN_lastname + " family tree app***");
+        family_MAIN_lastname = "Duck";
+        System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
         System.out.println("***Main Menu***");
         try (Scanner menu = new Scanner(System.in)) {
-            System.out.println("""
+            System.out.print("""
                     Press 1 to read the family members list\s
                     Press 2 to create an alphabetically minimal sorted family members list\s
                     Press 5 to create a Full output sorted Family members\s
                     Press 3 to use the relationship app\s
-                    Press 4 to generate the .dot file""");
+                    Press 4 to generate the .dot file\s
+                    Enter: """);
+
             int input = menu.nextInt();
             switch (input) {
                 case 1 -> readcsv(csvFile, input, null, null, null);
@@ -665,6 +720,26 @@ public class Family {
             System.out.println("Input Error ... Program Exits ...");
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    private enum Names {
+        JAVA(1),
+        FAMILY(2),
+        HOPE(3),
+        SUMMER(4),
+        TOONS(5),
+        LOVE(6),
+        AWAY(7);
+
+        private final int names;
+
+        Names(int i) {
+            this.names = i;
+        }
+
+        public int getNamesValue() {
+            return names;
         }
     }
 }

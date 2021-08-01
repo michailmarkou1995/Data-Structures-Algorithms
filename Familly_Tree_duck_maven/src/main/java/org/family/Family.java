@@ -6,13 +6,12 @@ import org.family.famillytree.Parent;
 import org.family.famillytree.Person;
 import org.family.famillytree.Wife;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /*
@@ -21,16 +20,15 @@ import java.util.regex.Pattern;
    1.1) give Manios
    1.10) new classes for string overide Interface? assign from new class style sto not null output toString ovveride
    1.11) new sorting
-   1.12) load from old style with path and regex for \\
    1.13) cmd arg input or not then load from in menu
    1.14) use graphviz embeded for java?
-   1.17) load paths from user input
  2) push github
  4) make web viz out of this like python */
 
 public class Family {
 
     private static final Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+    private static final Pattern file_path_drive = Pattern.compile("\\\\");
     //private static Generation generation = new Generation();
     static List<String> all_names = new ArrayList<>();  // all names of csv
     static List<Generation> name_sorted_List = new ArrayList<>();  // Creating an Arraylist that stores objects <Person>
@@ -93,9 +91,14 @@ public class Family {
         }
         // Create csv
         FileWriter writer;
+        String csvFile;
         try {
+            Scanner file_path = new Scanner(System.in);
+            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
+            System.out.print("Path: ");
+            csvFile = file_path.nextLine();
             //creating object writer with a path and charset format
-            writer = new FileWriter("resources/Duck_generated.csv", StandardCharsets.UTF_8);
+            writer = new FileWriter(write_file_path_to_disk(csvFile), StandardCharsets.UTF_8);  // "resources/Duck_generated.csv"
 
             //this loop uses Filewriter "write" function to print the result on the newly created csv file
             for (Generation s : name_sorted_List) {
@@ -542,11 +545,80 @@ public class Family {
         return pattern.matcher(strNum).matches();
     }
 
+    public static void read_file_path_to_disk(String csvFile) throws IOException {
+        File file = new File(csvFile);
+        if (!file.isDirectory())
+            file = file.getCanonicalFile();  // getParentFile()
+        if (file.isDirectory())
+            throw new IOException();
+        if (file.exists())
+        {
+            csvFile=file.toString();
+            csvFile=csvFile.replaceAll(file_path_drive.toString(), Matcher.quoteReplacement("\\\\"));
+            //String CapFirst= csvFile.substring(0,1).toUpperCase(Locale.ROOT);
+            //csvFile=CapFirst + csvFile.substring(1);
+        }
+        else
+            throw new IOException();
+    }
+
+    public static String write_file_path_to_disk(String csvFile) throws IOException {
+
+        String answer;
+        File file = new File(csvFile);
+        if (!file.isDirectory())
+            file = file.getCanonicalFile();  // getParentFile()
+        if (file.isDirectory())
+            throw new IOException();
+        if (file.exists())
+        {
+            System.out.print("\nFile Already exists replace it? (y/N): [N] ");
+            Scanner getAnswer = new Scanner(System.in);
+            answer = getAnswer.nextLine().toLowerCase();
+            if (answer != null && answer.equals("yes") || answer.equals("y")){
+                System.out.println("File Modified...");
+                return csvFile;
+            }
+            else if (answer != null & answer.equals("no") || answer.equals("n")){
+                System.out.println("Operation Aborted...");
+                System.exit(0);
+            }
+            else
+            {
+                System.out.println("Operation Aborted...");
+                System.exit(0);
+            }
+        }
+        if (!file.exists())
+        {
+            csvFile=file.toString();
+            csvFile=csvFile.replaceAll(file_path_drive.toString(), Matcher.quoteReplacement("\\\\"));
+            System.out.println("File is Written...");
+            return csvFile;
+        }
+        else
+            throw new IOException();
+    }
+
     public static void main(String[] args) {
         Generation generation = new Generation();
         //Creating the text menu
-        System.out.println("###Non-Case-Sensitive###");
-        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
+        System.out.println("###Non-Case-Sensitive###\n");
+        System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path e.g. C:\\Users\\myUser\\Downloads\\Exercise\\Family.csv");
+        System.out.print("Path: ");
+        String csvFile = "C:\\example\\file\\to\\my\\path.csv";
+        try {
+            Scanner file_path = new Scanner(System.in);
+            csvFile = file_path.nextLine();
+            read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
+        } catch (IOException e) {
+            System.out.print("File Path Input Error: " + csvFile + "\n");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        //for local Resources in compile uncomment this
+        //String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
         try {
             Scanner fam_lst = new Scanner(System.in);
             System.out.print("\nWhat is Main Family Lastname?: ");

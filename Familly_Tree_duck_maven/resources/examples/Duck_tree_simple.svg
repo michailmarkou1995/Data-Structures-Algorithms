@@ -1,0 +1,417 @@
+<svg width="700px" height="596px"
+ viewBox="0.00 0.00 422.99 360.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.58 0.58) rotate(0.0) translate(4.0 621.0)">
+<title>Duck</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-621 730.36,-621 730.36,4 -4,4"/>
+<!-- Grandma Duck -->
+<g id="node1" class="node">
+<title>Grandma Duck</title>
+<polygon fill="none" stroke="black" points="101.86,-306 0.05,-306 0.05,-270 101.86,-270 101.86,-306"/>
+<text text-anchor="middle" x="50.95" y="-283.8" font-family="Times,serif" font-size="14.00">Grandma Duck</text>
+</g>
+<!-- Hortense Duck McDuck -->
+<g id="node2" class="node">
+<title>Hortense Duck McDuck</title>
+<polygon fill="none" stroke="black" points="330.31,-297 177.65,-297 177.65,-261 330.31,-261 330.31,-297"/>
+<text text-anchor="middle" x="253.98" y="-274.8" font-family="Times,serif" font-size="14.00">Hortense Duck McDuck</text>
+</g>
+<!-- Grandma Duck&#45;&gt;Hortense Duck McDuck -->
+<g id="edge1" class="edge">
+<title>Grandma Duck&#45;&gt;Hortense Duck McDuck</title>
+<path fill="none" stroke="black" d="M79.86,-306.18C91.71,-312.87 105.98,-319.62 119.91,-323 137.04,-327.15 142.36,-326.85 159.56,-323 178.43,-318.78 197.98,-310.31 214.29,-301.91"/>
+<polygon fill="black" stroke="black" points="216.3,-304.81 223.48,-297.01 213.01,-298.63 216.3,-304.81"/>
+<text text-anchor="middle" x="139.74" y="-329.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Quackmore Duck -->
+<g id="node14" class="node">
+<title>Quackmore Duck</title>
+<polygon fill="none" stroke="black" points="311.6,-417 196.36,-417 196.36,-381 311.6,-381 311.6,-417"/>
+<text text-anchor="middle" x="253.98" y="-394.8" font-family="Times,serif" font-size="14.00">Quackmore Duck</text>
+</g>
+<!-- Grandma Duck&#45;&gt;Quackmore Duck -->
+<g id="edge2" class="edge">
+<title>Grandma Duck&#45;&gt;Quackmore Duck</title>
+<path fill="none" stroke="black" d="M56.52,-306.03C64.37,-332.78 83.25,-382.08 119.91,-403 139.67,-414.28 163.9,-416.29 186.25,-414.5"/>
+<polygon fill="black" stroke="black" points="186.79,-417.96 196.37,-413.42 186.05,-411 186.79,-417.96"/>
+<text text-anchor="middle" x="139.74" y="-418.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Scrooge McDuck -->
+<g id="node15" class="node">
+<title>Scrooge McDuck</title>
+<polygon fill="none" stroke="black" points="311.33,-224 196.63,-224 196.63,-188 311.33,-188 311.33,-224"/>
+<text text-anchor="middle" x="253.98" y="-201.8" font-family="Times,serif" font-size="14.00">Scrooge McDuck</text>
+</g>
+<!-- Grandma Duck&#45;&gt;Scrooge McDuck -->
+<g id="edge3" class="edge">
+<title>Grandma Duck&#45;&gt;Scrooge McDuck</title>
+<path fill="none" stroke="black" d="M96.57,-269.8C126.86,-257.44 167.09,-241.03 199.17,-227.95"/>
+<polygon fill="black" stroke="black" points="200.9,-231.02 208.84,-224.01 198.26,-224.54 200.9,-231.02"/>
+<text text-anchor="middle" x="139.74" y="-263.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Fanny Goose Duck -->
+<g id="node16" class="node">
+<title>Fanny Goose Duck</title>
+<polygon fill="none" stroke="black" points="316.07,-617 191.9,-617 191.9,-581 316.07,-581 316.07,-617"/>
+<text text-anchor="middle" x="253.98" y="-594.8" font-family="Times,serif" font-size="14.00">Fanny Goose Duck</text>
+</g>
+<!-- Grandma Duck&#45;&gt;Fanny Goose Duck -->
+<g id="edge4" class="edge">
+<title>Grandma Duck&#45;&gt;Fanny Goose Duck</title>
+<path fill="none" stroke="black" d="M54.88,-306.16C63.85,-355.88 95.44,-495.64 177.56,-572 179.26,-573.58 181.06,-575.06 182.93,-576.46"/>
+<polygon fill="black" stroke="black" points="181.29,-579.57 191.58,-582.07 185.09,-573.7 181.29,-579.57"/>
+<text text-anchor="middle" x="139.74" y="-551.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Jira Gander McDuck -->
+<g id="node18" class="node">
+<title>Jira Gander McDuck</title>
+<polygon fill="none" stroke="black" points="320.87,-90 187.09,-90 187.09,-54 320.87,-54 320.87,-90"/>
+<text text-anchor="middle" x="253.98" y="-67.8" font-family="Times,serif" font-size="14.00">Jira Gander McDuck</text>
+</g>
+<!-- Grandma Duck&#45;&gt;Jira Gander McDuck -->
+<g id="edge5" class="edge">
+<title>Grandma Duck&#45;&gt;Jira Gander McDuck</title>
+<path fill="none" stroke="black" d="M68.8,-269.9C79.04,-258.39 92.02,-242.91 101.91,-228 111.54,-213.49 108.71,-206.53 119.91,-193.2 134.16,-176.24 147.11,-181.32 159.56,-163 176.18,-138.56 157.41,-120.61 177.56,-99 178.35,-98.16 179.16,-97.35 179.99,-96.56"/>
+<polygon fill="black" stroke="black" points="182.45,-99.08 188.13,-90.13 178.11,-93.59 182.45,-99.08"/>
+<text text-anchor="middle" x="139.74" y="-197.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Louis Von Drake Duck -->
+<g id="node20" class="node">
+<title>Louis Von Drake Duck</title>
+<polygon fill="none" stroke="black" points="327.49,-36 180.47,-36 180.47,0 327.49,0 327.49,-36"/>
+<text text-anchor="middle" x="253.98" y="-13.8" font-family="Times,serif" font-size="14.00">Louis Von Drake Duck</text>
+</g>
+<!-- Grandma Duck&#45;&gt;Louis Von Drake Duck -->
+<g id="edge6" class="edge">
+<title>Grandma Duck&#45;&gt;Louis Von Drake Duck</title>
+<path fill="none" stroke="black" d="M71.5,-269.82C82.18,-258.77 94.67,-243.77 101.91,-228 122,-184.26 97.44,-163.77 119.91,-121.2 131.33,-99.56 145.28,-102.87 159.56,-83 170.47,-67.83 163.72,-57.55 177.56,-45 178.72,-43.95 179.93,-42.94 181.17,-41.97"/>
+<polygon fill="black" stroke="black" points="183.52,-44.6 189.84,-36.1 179.6,-38.81 183.52,-44.6"/>
+<text text-anchor="middle" x="139.74" y="-125.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Dumbella Duck Duck -->
+<g id="node3" class="node">
+<title>Dumbella Duck Duck</title>
+<polygon fill="none" stroke="black" points="553,-468 414.3,-468 414.3,-432 553,-432 553,-468"/>
+<text text-anchor="middle" x="483.65" y="-445.8" font-family="Times,serif" font-size="14.00">Dumbella Duck Duck</text>
+</g>
+<!-- Hortense Duck McDuck&#45;&gt;Dumbella Duck Duck -->
+<g id="edge7" class="edge">
+<title>Hortense Duck McDuck&#45;&gt;Dumbella Duck Duck</title>
+<path fill="none" stroke="black" d="M283.55,-297.15C320.27,-320.65 380.23,-359.74 388.05,-369.2 400.94,-384.79 392.22,-396.24 406.05,-411 411.78,-417.1 418.67,-422.4 425.94,-426.96"/>
+<polygon fill="black" stroke="black" points="424.19,-429.99 434.6,-431.97 427.7,-423.93 424.19,-429.99"/>
+<text text-anchor="middle" x="368.23" y="-373.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Helena Spouch Duck -->
+<g id="node7" class="node">
+<title>Helena Spouch Duck</title>
+<polygon fill="none" stroke="black" points="551.11,-228 416.19,-228 416.19,-192 551.11,-192 551.11,-228"/>
+<text text-anchor="middle" x="483.65" y="-205.8" font-family="Times,serif" font-size="14.00">Helena Spouch Duck</text>
+</g>
+<!-- Hortense Duck McDuck&#45;&gt;Helena Spouch Duck -->
+<g id="edge8" class="edge">
+<title>Hortense Duck McDuck&#45;&gt;Helena Spouch Duck</title>
+<path fill="none" stroke="black" d="M296.8,-260.78C309.11,-253.67 321.61,-244.43 330.4,-233 347.58,-210.66 325.82,-189.06 348.4,-172.2 378.37,-149.81 421.07,-168.22 450.21,-186.33"/>
+<polygon fill="black" stroke="black" points="448.5,-189.39 458.79,-191.9 452.31,-183.52 448.5,-189.39"/>
+<text text-anchor="middle" x="368.23" y="-176.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Donald Fauntleroy Duck -->
+<g id="node11" class="node">
+<title>Donald Fauntleroy Duck</title>
+<polygon fill="none" stroke="black" points="561.33,-528 405.96,-528 405.96,-492 561.33,-492 561.33,-528"/>
+<text text-anchor="middle" x="483.65" y="-505.8" font-family="Times,serif" font-size="14.00">Donald Fauntleroy Duck</text>
+</g>
+<!-- Hortense Duck McDuck&#45;&gt;Donald Fauntleroy Duck -->
+<g id="edge9" class="edge">
+<title>Hortense Duck McDuck&#45;&gt;Donald Fauntleroy Duck</title>
+<path fill="none" stroke="black" d="M272.16,-297.12C288.58,-315.1 313.3,-343.96 330.4,-372 340.76,-388.99 335.16,-398.14 348.4,-413 361.98,-428.25 374.46,-420.96 388.05,-436.2 401.25,-450.99 391.98,-463.05 406.05,-477 409.69,-480.6 413.78,-483.84 418.13,-486.74"/>
+<polygon fill="black" stroke="black" points="416.39,-489.78 426.77,-491.92 419.99,-483.78 416.39,-489.78"/>
+<text text-anchor="middle" x="368.23" y="-440.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Daisy Duck -->
+<g id="node12" class="node">
+<title>Daisy Duck</title>
+<polygon fill="none" stroke="black" points="525.13,-402 442.17,-402 442.17,-366 525.13,-366 525.13,-402"/>
+<text text-anchor="middle" x="483.65" y="-379.8" font-family="Times,serif" font-size="14.00">Daisy Duck</text>
+</g>
+<!-- Hortense Duck McDuck&#45;&gt;Daisy Duck -->
+<g id="edge10" class="edge">
+<title>Hortense Duck McDuck&#45;&gt;Daisy Duck</title>
+<path fill="none" stroke="black" d="M330.36,-270.69C350.89,-272.1 371.9,-277.36 388.05,-290.2 408.46,-306.41 389.05,-326.26 406.05,-346 413.4,-354.52 423.11,-361.33 433.14,-366.69"/>
+<polygon fill="black" stroke="black" points="431.86,-369.96 442.38,-371.22 434.94,-363.68 431.86,-369.96"/>
+<text text-anchor="middle" x="368.23" y="-294.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Dux Duck -->
+<g id="node13" class="node">
+<title>Dux Duck</title>
+<polygon fill="none" stroke="black" points="520.58,-337 446.72,-337 446.72,-301 520.58,-301 520.58,-337"/>
+<text text-anchor="middle" x="483.65" y="-314.8" font-family="Times,serif" font-size="14.00">Dux Duck</text>
+</g>
+<!-- Hortense Duck McDuck&#45;&gt;Dux Duck -->
+<g id="edge11" class="edge">
+<title>Hortense Duck McDuck&#45;&gt;Dux Duck</title>
+<path fill="none" stroke="black" d="M293.06,-260.93C305.98,-253.53 319.8,-244.09 330.4,-233 341.88,-220.98 334.09,-208.67 348.4,-200.2 363.57,-191.22 373.1,-190.87 388.05,-200.2 403.5,-209.84 395.73,-222.01 406.05,-237 420.3,-257.68 439.62,-278.33 455.29,-293.73"/>
+<polygon fill="black" stroke="black" points="453.03,-296.41 462.65,-300.84 457.89,-291.38 453.03,-296.41"/>
+<text text-anchor="middle" x="368.23" y="-204.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Louie Duck -->
+<g id="node4" class="node">
+<title>Louie Duck</title>
+<polygon fill="none" stroke="black" points="723.11,-468 640.15,-468 640.15,-432 723.11,-432 723.11,-468"/>
+<text text-anchor="middle" x="681.63" y="-445.8" font-family="Times,serif" font-size="14.00">Louie Duck</text>
+</g>
+<!-- Dumbella Duck Duck&#45;&gt;Louie Duck -->
+<g id="edge12" class="edge">
+<title>Dumbella Duck Duck&#45;&gt;Louie Duck</title>
+<path fill="none" stroke="black" d="M553.32,-466.51C574.37,-469.61 597.6,-471.04 618.9,-468 622.6,-467.47 626.38,-466.77 630.17,-465.96"/>
+<polygon fill="black" stroke="black" points="631.24,-469.3 640.14,-463.57 629.6,-462.5 631.24,-469.3"/>
+<text text-anchor="middle" x="599.07" y="-473.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Dewey Duck -->
+<g id="node5" class="node">
+<title>Dewey Duck</title>
+<polygon fill="none" stroke="black" points="726.59,-408 636.66,-408 636.66,-372 726.59,-372 726.59,-408"/>
+<text text-anchor="middle" x="681.63" y="-385.8" font-family="Times,serif" font-size="14.00">Dewey Duck</text>
+</g>
+<!-- Dumbella Duck Duck&#45;&gt;Dewey Duck -->
+<g id="edge13" class="edge">
+<title>Dumbella Duck Duck&#45;&gt;Dewey Duck</title>
+<path fill="none" stroke="black" d="M553.24,-443.99C574.72,-440.73 598.21,-435.72 618.9,-428 628.71,-424.34 638.67,-419.04 647.65,-413.55"/>
+<polygon fill="black" stroke="black" points="649.7,-416.39 656.25,-408.06 645.93,-410.49 649.7,-416.39"/>
+<text text-anchor="middle" x="599.07" y="-443.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Huey Duck -->
+<g id="node6" class="node">
+<title>Huey Duck</title>
+<polygon fill="none" stroke="black" points="721.77,-331 641.49,-331 641.49,-295 721.77,-295 721.77,-331"/>
+<text text-anchor="middle" x="681.63" y="-308.8" font-family="Times,serif" font-size="14.00">Huey Duck</text>
+</g>
+<!-- Dumbella Duck Duck&#45;&gt;Huey Duck -->
+<g id="edge14" class="edge">
+<title>Dumbella Duck Duck&#45;&gt;Huey Duck</title>
+<path fill="none" stroke="black" d="M533.2,-431.85C543.42,-426.34 553.45,-419.45 561.24,-411 575.51,-395.53 564.82,-382.53 579.24,-367.2 592.66,-352.94 601.56,-357.1 618.9,-348 626.03,-344.26 633.55,-340.14 640.79,-336.09"/>
+<polygon fill="black" stroke="black" points="642.77,-338.99 649.76,-331.02 639.33,-332.89 642.77,-338.99"/>
+<text text-anchor="middle" x="599.07" y="-371.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- June -->
+<g id="node8" class="node">
+<title>June</title>
+<polygon fill="none" stroke="black" points="708.63,-109 654.63,-109 654.63,-73 708.63,-73 708.63,-109"/>
+<text text-anchor="middle" x="681.63" y="-86.8" font-family="Times,serif" font-size="14.00">June</text>
+</g>
+<!-- Helena Spouch Duck&#45;&gt;June -->
+<g id="edge15" class="edge">
+<title>Helena Spouch Duck&#45;&gt;June</title>
+<path fill="none" stroke="black" d="M512.62,-191.84C527.77,-181.37 546.38,-167.44 561.24,-153 570.5,-144 568.85,-137.87 579.24,-130.2 598.82,-115.76 624.38,-105.92 644.95,-99.71"/>
+<polygon fill="black" stroke="black" points="645.94,-103.07 654.59,-96.95 644.01,-96.34 645.94,-103.07"/>
+<text text-anchor="middle" x="599.07" y="-134.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- April -->
+<g id="node9" class="node">
+<title>April</title>
+<polygon fill="none" stroke="black" points="708.63,-226 654.63,-226 654.63,-190 708.63,-190 708.63,-226"/>
+<text text-anchor="middle" x="681.63" y="-203.8" font-family="Times,serif" font-size="14.00">April</text>
+</g>
+<!-- Helena Spouch Duck&#45;&gt;April -->
+<g id="edge16" class="edge">
+<title>Helena Spouch Duck&#45;&gt;April</title>
+<path fill="none" stroke="black" d="M551.31,-226.59C572.91,-229.92 596.95,-231.47 618.9,-228 627.46,-226.65 636.44,-224.3 644.83,-221.68"/>
+<polygon fill="black" stroke="black" points="645.95,-225 654.34,-218.53 643.74,-218.36 645.95,-225"/>
+<text text-anchor="middle" x="599.07" y="-233.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- May -->
+<g id="node10" class="node">
+<title>May</title>
+<polygon fill="none" stroke="black" points="708.63,-169 654.63,-169 654.63,-133 708.63,-133 708.63,-169"/>
+<text text-anchor="middle" x="681.63" y="-146.8" font-family="Times,serif" font-size="14.00">May</text>
+</g>
+<!-- Helena Spouch Duck&#45;&gt;May -->
+<g id="edge17" class="edge">
+<title>Helena Spouch Duck&#45;&gt;May</title>
+<path fill="none" stroke="black" d="M551.13,-204.15C573.15,-200.9 597.5,-195.84 618.9,-188 628.3,-184.55 637.87,-179.64 646.57,-174.51"/>
+<polygon fill="black" stroke="black" points="648.61,-177.37 655.29,-169.15 644.94,-171.41 648.61,-177.37"/>
+<text text-anchor="middle" x="599.07" y="-203.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Dux Duck&#45;&gt;Louie Duck -->
+<g id="edge18" class="edge">
+<title>Dux Duck&#45;&gt;Louie Duck</title>
+<path fill="none" stroke="black" d="M520.89,-331.77C534.65,-337.88 549.76,-346.24 561.24,-357 572.87,-367.89 567.56,-377.17 579.24,-388 593.6,-401.32 601.99,-397.32 618.9,-407.2 628.64,-412.89 638.85,-419.62 648.09,-426.04"/>
+<polygon fill="black" stroke="black" points="646.09,-428.91 656.27,-431.81 650.12,-423.19 646.09,-428.91"/>
+<text text-anchor="middle" x="599.07" y="-411.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Dux Duck&#45;&gt;Dewey Duck -->
+<g id="edge19" class="edge">
+<title>Dux Duck&#45;&gt;Dewey Duck</title>
+<path fill="none" stroke="black" d="M520.76,-315.99C548.76,-315.12 587.89,-317.13 618.9,-331.2 635.15,-338.57 649.79,-352.05 660.73,-364.24"/>
+<polygon fill="black" stroke="black" points="658.2,-366.67 667.36,-371.99 663.52,-362.11 658.2,-366.67"/>
+<text text-anchor="middle" x="599.07" y="-335.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Dux Duck&#45;&gt;Huey Duck -->
+<g id="edge20" class="edge">
+<title>Dux Duck&#45;&gt;Huey Duck</title>
+<path fill="none" stroke="black" d="M520.7,-304.07C547.66,-294.73 585.47,-285.47 618.9,-291.2 623.06,-291.91 627.31,-292.88 631.54,-294.01"/>
+<polygon fill="black" stroke="black" points="630.73,-297.42 641.31,-296.89 632.71,-290.7 630.73,-297.42"/>
+<text text-anchor="middle" x="599.07" y="-295.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Quackmore Duck&#45;&gt;Dumbella Duck Duck -->
+<g id="edge22" class="edge">
+<title>Quackmore Duck&#45;&gt;Dumbella Duck Duck</title>
+<path fill="none" stroke="black" d="M276.32,-417.12C294.25,-431.08 321.23,-449.25 348.4,-457 366.01,-462.02 385.44,-463.31 403.91,-462.68"/>
+<polygon fill="black" stroke="black" points="404.26,-466.16 414.06,-462.14 403.89,-459.17 404.26,-466.16"/>
+<text text-anchor="middle" x="368.23" y="-466.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Quackmore Duck&#45;&gt;Helena Spouch Duck -->
+<g id="edge23" class="edge">
+<title>Quackmore Duck&#45;&gt;Helena Spouch Duck</title>
+<path fill="none" stroke="black" d="M273.05,-380.87C289.88,-363.1 314.69,-334.61 330.4,-306 342.53,-283.9 330.41,-269.86 348.4,-252.2 364.05,-236.83 385.24,-227.05 406.15,-220.83"/>
+<polygon fill="black" stroke="black" points="407.31,-224.14 416.04,-218.14 405.47,-217.39 407.31,-224.14"/>
+<text text-anchor="middle" x="368.23" y="-256.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Quackmore Duck&#45;&gt;Donald Fauntleroy Duck -->
+<g id="edge25" class="edge">
+<title>Quackmore Duck&#45;&gt;Donald Fauntleroy Duck</title>
+<path fill="none" stroke="black" d="M269.81,-417.17C286.73,-436.62 316.24,-466.85 348.4,-483 363,-490.33 379.44,-495.68 395.68,-499.57"/>
+<polygon fill="black" stroke="black" points="395.22,-503.05 405.74,-501.81 396.74,-496.22 395.22,-503.05"/>
+<text text-anchor="middle" x="368.23" y="-501.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Quackmore Duck&#45;&gt;Daisy Duck -->
+<g id="edge24" class="edge">
+<title>Quackmore Duck&#45;&gt;Daisy Duck</title>
+<path fill="none" stroke="black" d="M311.55,-395.27C348.47,-392.84 396.25,-389.69 431.93,-387.34"/>
+<polygon fill="black" stroke="black" points="432.38,-390.82 442.12,-386.67 431.92,-383.84 432.38,-390.82"/>
+<text text-anchor="middle" x="368.23" y="-396.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Quackmore Duck&#45;&gt;Dux Duck -->
+<g id="edge21" class="edge">
+<title>Quackmore Duck&#45;&gt;Dux Duck</title>
+<path fill="none" stroke="black" d="M269.56,-380.82C286.25,-361.58 315.57,-332.36 348.4,-320.2 376.38,-309.83 409.94,-309.53 436.51,-311.83"/>
+<polygon fill="black" stroke="black" points="436.39,-315.33 446.69,-312.86 437.09,-308.37 436.39,-315.33"/>
+<text text-anchor="middle" x="368.23" y="-324.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Gus Goose -->
+<g id="node17" class="node">
+<title>Gus Goose</title>
+<polygon fill="none" stroke="black" points="522.46,-585 444.83,-585 444.83,-549 522.46,-549 522.46,-585"/>
+<text text-anchor="middle" x="483.65" y="-562.8" font-family="Times,serif" font-size="14.00">Gus Goose</text>
+</g>
+<!-- Fanny Goose Duck&#45;&gt;Gus Goose -->
+<g id="edge26" class="edge">
+<title>Fanny Goose Duck&#45;&gt;Gus Goose</title>
+<path fill="none" stroke="black" d="M316.29,-590.38C353.41,-585.17 400.07,-578.61 434.52,-573.76"/>
+<polygon fill="black" stroke="black" points="435.38,-577.18 444.8,-572.32 434.41,-570.25 435.38,-577.18"/>
+<text text-anchor="middle" x="368.23" y="-589.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Gladstone Gander -->
+<g id="node19" class="node">
+<title>Gladstone Gander</title>
+<polygon fill="none" stroke="black" points="542.61,-90 424.69,-90 424.69,-54 542.61,-54 542.61,-90"/>
+<text text-anchor="middle" x="483.65" y="-67.8" font-family="Times,serif" font-size="14.00">Gladstone Gander</text>
+</g>
+<!-- Jira Gander McDuck&#45;&gt;Gladstone Gander -->
+<g id="edge27" class="edge">
+<title>Jira Gander McDuck&#45;&gt;Gladstone Gander</title>
+<path fill="none" stroke="black" d="M320.83,-72C350.2,-72 384.78,-72 414.43,-72"/>
+<polygon fill="black" stroke="black" points="414.69,-75.5 424.69,-72 414.69,-68.5 414.69,-75.5"/>
+<text text-anchor="middle" x="368.23" y="-76.2" font-family="Times,serif" font-size="14.00">mother</text>
+</g>
+<!-- Julious Gander -->
+<g id="node21" class="node">
+<title>Julious Gander</title>
+<polygon fill="none" stroke="black" points="304.35,-144 203.61,-144 203.61,-108 304.35,-108 304.35,-144"/>
+<text text-anchor="middle" x="253.98" y="-121.8" font-family="Times,serif" font-size="14.00">Julious Gander</text>
+</g>
+<!-- Julious Gander&#45;&gt;Gladstone Gander -->
+<g id="edge28" class="edge">
+<title>Julious Gander&#45;&gt;Gladstone Gander</title>
+<path fill="none" stroke="black" d="M304.38,-114.28C336.78,-106.6 379.55,-96.45 415.08,-88.03"/>
+<polygon fill="black" stroke="black" points="415.97,-91.41 424.9,-85.7 414.36,-84.6 415.97,-91.41"/>
+<text text-anchor="middle" x="368.23" y="-107.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Pepe -->
+<g id="node22" class="node">
+<title>Pepe</title>
+<polygon fill="none" stroke="black" points="510.65,-144 456.65,-144 456.65,-108 510.65,-108 510.65,-144"/>
+<text text-anchor="middle" x="483.65" y="-121.8" font-family="Times,serif" font-size="14.00">Pepe</text>
+</g>
+<!-- Pepe&#45;&gt;June -->
+<g id="edge29" class="edge">
+<title>Pepe&#45;&gt;June</title>
+<path fill="none" stroke="black" d="M510.85,-121.76C526.9,-118.04 547.02,-111.23 561.24,-99 574.15,-87.9 564.65,-73.96 579.24,-65.2 599.36,-53.12 625,-59.81 645.46,-69.39"/>
+<polygon fill="black" stroke="black" points="643.96,-72.55 654.46,-73.95 647.12,-66.31 643.96,-72.55"/>
+<text text-anchor="middle" x="599.07" y="-70.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Pepe&#45;&gt;April -->
+<g id="edge31" class="edge">
+<title>Pepe&#45;&gt;April</title>
+<path fill="none" stroke="black" d="M510.7,-131.65C538.36,-138.18 582.96,-150.24 618.9,-167.2 622.06,-168.69 633.7,-176.29 646.03,-184.54"/>
+<polygon fill="black" stroke="black" points="644.33,-187.62 654.58,-190.28 648.23,-181.8 644.33,-187.62"/>
+<text text-anchor="middle" x="599.07" y="-171.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Pepe&#45;&gt;May -->
+<g id="edge30" class="edge">
+<title>Pepe&#45;&gt;May</title>
+<path fill="none" stroke="black" d="M510.69,-117.32C525.59,-112.24 544.57,-105.54 561.24,-99 569.36,-95.82 570.7,-92.97 579.24,-91.2 596.5,-87.62 603.34,-82.91 618.9,-91.2 631.56,-97.95 627.03,-107.58 636.9,-118 639.84,-121.11 643.1,-124.14 646.47,-127.04"/>
+<polygon fill="black" stroke="black" points="644.48,-129.93 654.46,-133.49 648.88,-124.48 644.48,-129.93"/>
+<text text-anchor="middle" x="599.07" y="-95.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Poopy Goose -->
+<g id="node23" class="node">
+<title>Poopy Goose</title>
+<polygon fill="none" stroke="black" points="299.53,-563 208.43,-563 208.43,-527 299.53,-527 299.53,-563"/>
+<text text-anchor="middle" x="253.98" y="-540.8" font-family="Times,serif" font-size="14.00">Poopy Goose</text>
+</g>
+<!-- Poopy Goose&#45;&gt;Gus Goose -->
+<g id="edge32" class="edge">
+<title>Poopy Goose&#45;&gt;Gus Goose</title>
+<path fill="none" stroke="black" d="M299.69,-549.32C338.52,-553.07 394.64,-558.5 434.46,-562.34"/>
+<polygon fill="black" stroke="black" points="434.18,-565.83 444.47,-563.31 434.85,-558.86 434.18,-565.83"/>
+<text text-anchor="middle" x="368.23" y="-561.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Grandpa Duck -->
+<g id="node24" class="node">
+<title>Grandpa Duck</title>
+<polygon fill="none" stroke="black" points="99.97,-219 1.94,-219 1.94,-183 99.97,-183 99.97,-219"/>
+<text text-anchor="middle" x="50.95" y="-196.8" font-family="Times,serif" font-size="14.00">Grandpa Duck</text>
+</g>
+<!-- Grandpa Duck&#45;&gt;Hortense Duck McDuck -->
+<g id="edge34" class="edge">
+<title>Grandpa Duck&#45;&gt;Hortense Duck McDuck</title>
+<path fill="none" stroke="black" d="M99.98,-209.2C118.91,-213.21 140.62,-218.8 159.56,-226.2 179.33,-233.92 200,-245.22 216.86,-255.39"/>
+<polygon fill="black" stroke="black" points="215.45,-258.63 225.8,-260.89 219.12,-252.67 215.45,-258.63"/>
+<text text-anchor="middle" x="139.74" y="-230.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Grandpa Duck&#45;&gt;Quackmore Duck -->
+<g id="edge33" class="edge">
+<title>Grandpa Duck&#45;&gt;Quackmore Duck</title>
+<path fill="none" stroke="black" d="M67.16,-219.34C85.28,-241.11 113.89,-275.08 119.91,-280 135.55,-292.79 143.57,-289.87 159.56,-302.2 186.83,-323.22 213.68,-352.14 231.54,-372.88"/>
+<polygon fill="black" stroke="black" points="229.02,-375.32 238.16,-380.67 234.35,-370.78 229.02,-375.32"/>
+<text text-anchor="middle" x="139.74" y="-306.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Grandpa Duck&#45;&gt;Scrooge McDuck -->
+<g id="edge36" class="edge">
+<title>Grandpa Duck&#45;&gt;Scrooge McDuck</title>
+<path fill="none" stroke="black" d="M67.78,-182.88C80.4,-169.9 99.33,-153.46 119.91,-146.2 136.53,-140.33 142.65,-141.25 159.56,-146.2 172.37,-149.95 198.69,-167.17 220.14,-182.17"/>
+<polygon fill="black" stroke="black" points="218.2,-185.08 228.38,-187.99 222.24,-179.36 218.2,-185.08"/>
+<text text-anchor="middle" x="139.74" y="-150.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Grandpa Duck&#45;&gt;Fanny Goose Duck -->
+<g id="edge38" class="edge">
+<title>Grandpa Duck&#45;&gt;Fanny Goose Duck</title>
+<path fill="none" stroke="black" d="M71.01,-219.03C81.65,-230.15 94.28,-245.27 101.91,-261 118.76,-295.75 100.73,-312.48 119.91,-346 131.76,-366.71 148.91,-360.85 159.56,-382.2 178.48,-420.11 151.56,-538.55 177.56,-572 179.4,-574.37 181.47,-576.53 183.71,-578.5"/>
+<polygon fill="black" stroke="black" points="181.78,-581.42 191.92,-584.5 185.91,-575.77 181.78,-581.42"/>
+<text text-anchor="middle" x="139.74" y="-386.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Grandpa Duck&#45;&gt;Jira Gander McDuck -->
+<g id="edge37" class="edge">
+<title>Grandpa Duck&#45;&gt;Jira Gander McDuck</title>
+<path fill="none" stroke="black" d="M54.91,-182.99C60.97,-152.62 77.95,-92.03 119.91,-66.2 136.84,-55.78 157.4,-53.01 177.26,-53.93"/>
+<polygon fill="black" stroke="black" points="177,-57.42 187.24,-54.69 177.53,-50.44 177,-57.42"/>
+<text text-anchor="middle" x="139.74" y="-71.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+<!-- Grandpa Duck&#45;&gt;Louis Von Drake Duck -->
+<g id="edge35" class="edge">
+<title>Grandpa Duck&#45;&gt;Louis Von Drake Duck</title>
+<path fill="none" stroke="black" d="M53.5,-182.87C57.54,-147.83 71.71,-71.03 119.91,-34.2 134.34,-23.17 152.34,-17.36 170.39,-14.61"/>
+<polygon fill="black" stroke="black" points="170.9,-18.08 180.41,-13.39 170.05,-11.13 170.9,-18.08"/>
+<text text-anchor="middle" x="139.74" y="-39.2" font-family="Times,serif" font-size="14.00">father</text>
+</g>
+</g>
+</svg>

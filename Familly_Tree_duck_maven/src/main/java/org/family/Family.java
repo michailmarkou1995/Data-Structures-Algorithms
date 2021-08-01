@@ -1,6 +1,10 @@
 package org.family;
 
-import org.apache.commons.lang3.StringUtils;
+import guru.nidi.graphviz.attribute.Style;
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.parse.Parser;
 import org.family.famillytree.Generation;
 import org.family.famillytree.Parent;
 import org.family.famillytree.Person;
@@ -650,41 +654,60 @@ public class Family {
         return Names.values()[random % Names.values().length]; // cycle itself till max limit
     }
 
+    private static void graphvizGenerate() {
+        try (InputStream dot = Family.class.getResourceAsStream("/toGraphViz.dot")) {
+            MutableGraph g = new Parser().read(dot);
+            Graphviz.fromGraph(g).width(700).render(Format.SVG).toFile(new File("resources/example/ex4-1.svg"));
+
+            g.graphAttrs()
+                    .add(guru.nidi.graphviz.attribute.Color
+                            .WHITE.gradient(guru.nidi.graphviz.attribute.Color.rgb("888888")).background().angle(90))
+                    .nodeAttrs().add(guru.nidi.graphviz.attribute.Color.WHITE.fill())
+                    .nodes().forEach(node ->
+                    node.add(
+                            guru.nidi.graphviz.attribute.Color.named(node.name().toString()),
+                            Style.lineWidth(4), Style.FILLED));
+            Graphviz.fromGraph(g).width(700).render(Format.SVG).toFile(new File("resources/example/ex4-2.svg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         // randomized
-        ascii_art_generator();
+//        ascii_art_generator();
         Generation generation = new Generation();
-        //Creating the text menu
-        System.out.println("###Non-Case-Sensitive###\n");
-        System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
-                "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
-        System.out.print("Path: ");
-        String csvFile = "C:\\example\\file\\to\\my\\family.csv";
-        try {
-            Scanner file_path = new Scanner(System.in);
-            csvFile = file_path.nextLine();
-            read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
-        } catch (IOException e) {
-            System.out.print("File Path Input Error: " + csvFile + "\n");
-            e.printStackTrace();
-            System.exit(1);
-        }
+//        //Creating the text menu
+//        System.out.println("###Non-Case-Sensitive###\n");
+//        System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
+//                "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
+//        System.out.print("Path: ");
+//        String csvFile = "C:\\example\\file\\to\\my\\family.csv";
+//        try {
+//            Scanner file_path = new Scanner(System.in);
+//            csvFile = file_path.nextLine();
+//            read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
+//        } catch (IOException e) {
+//            System.out.print("File Path Input Error: " + csvFile + "\n");
+//            e.printStackTrace();
+//            System.exit(1);
+//        }
 
         //for local Resources in compile uncomment this
-//        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
-        try {
-            Scanner fam_lst = new Scanner(System.in);
-            System.out.print("\nWhat is Main Family Lastname?: ");
-            family_MAIN_lastname = fam_lst.nextLine().toLowerCase(Locale.ROOT);
-            if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
-                throw new IOException();
-            String capFirst = family_MAIN_lastname;
-            family_MAIN_lastname = capFirst.toUpperCase().charAt(0) + capFirst.substring(1, capFirst.length());
-        } catch (IOException e) {
-            System.out.println("Input Error ... Program Exits ...");
-            e.printStackTrace();
-            System.exit(1);
-        }
+        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
+//        try {
+//            Scanner fam_lst = new Scanner(System.in);
+//            System.out.print("\nWhat is Main Family Lastname?: ");
+//            family_MAIN_lastname = fam_lst.nextLine().toLowerCase(Locale.ROOT);
+//            if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
+//                throw new IOException();
+//            String capFirst = family_MAIN_lastname;
+//            family_MAIN_lastname = capFirst.toUpperCase().charAt(0) + capFirst.substring(1, capFirst.length());
+//        } catch (IOException e) {
+//            System.out.println("Input Error ... Program Exits ...");
+//            e.printStackTrace();
+//            System.exit(1);
+//        }
         family_MAIN_lastname = "Duck";
         System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
         System.out.println("***Main Menu***");
@@ -694,7 +717,7 @@ public class Family {
                     Press 2 to create an alphabetically minimal sorted family members list\s
                     Press 5 to create a Full output sorted Family members\s
                     Press 3 to use the relationship app\s
-                    Press 4 to generate the .dot file\s
+                    Press 4 to generate the .dot file + Generate SVG GraphViz Image\s
                     Enter: """);
 
             int input = menu.nextInt();
@@ -710,6 +733,7 @@ public class Family {
                 case 4 -> {
                     name_sorted_List.clear();
                     createDot(csvFile, input, generation);
+                    graphvizGenerate();
                 }
                 case 5 -> {
                     advancedSortData();

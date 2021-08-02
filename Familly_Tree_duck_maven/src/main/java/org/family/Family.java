@@ -5,12 +5,14 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
+import org.apache.commons.lang3.StringUtils;
 import org.family.famillytree.Generation;
 import org.family.famillytree.Parent;
 import org.family.famillytree.Person;
 import org.family.famillytree.Wife;
 import org.family.famillytree.toons.Toons;
 
+import javax.naming.Name;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -23,13 +25,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /*
-.\dot.exe -Tsvg .\toGraphviz.dotbak
+    add to "System Var" "winKey+S" a System variable path to jdk-16.0.2\bin
+    OR C:\Program Files (x86)\Common Files\Oracle\Java\javapath must have JRE 16.0.2 support
+    java --version
+    java -jar filename.jar must have 16.0.2 JDK (class file version 60)
+*/
+
+/*
+    .\dot.exe -Tsvg .\toGraphviz.dot
+*/
+
+/*
  1) Graph convert
    1.1) give Manios
    1.10) new classes for string overide Interface? assign from new class style sto not null output toString ovveride
    1.11) new sorting
-   1.13) cmd arg input or not then load from in menu
-   1.14) use graphviz embeded for java?
  2) push github
  4) make web viz out of this like python */
 
@@ -565,6 +575,7 @@ public class Family {
         return pattern.matcher(strNum).matches();
     }
 
+    // read from disk else callee throws exception to caller
     private static void read_file_path_to_disk(String csvFile) throws IOException {
         File file = new File(csvFile);
         if (!file.isDirectory())
@@ -572,16 +583,17 @@ public class Family {
         file_path_canonical = new StringBuilder(file.getParent());
         getFile_path_canonical = new StringBuilder(file_path_canonical);
         if (file.isDirectory())
-            throw new IOException();
+            throw new IOException("Directory detected");
         if (file.exists()) {
             //csvFile=file.toString();
             //csvFile=csvFile.replaceAll(file_path_drive.toString(), Matcher.quoteReplacement("\\\\"));
             //String CapFirst= csvFile.substring(0,1).toUpperCase(Locale.ROOT);
             //csvFile=CapFirst + csvFile.substring(1);
         } else
-            throw new IOException();
+            throw new IOException("File could not found");
     }
 
+    // save to disk else callee throws to caller exception
     private static String write_file_path_to_disk(String csvFile) throws IOException {
         String answer;
         File file = new File(csvFile);
@@ -589,7 +601,7 @@ public class Family {
             file = file.getCanonicalFile();  // getParentFile()
         }
         if (file.isDirectory())
-            throw new IOException();
+            throw new IOException("Directory detected");
         if (file.exists()) {
             System.out.print("\nFile Already exists replace it? (y/N): [N] ");
             Scanner getAnswer = new Scanner(System.in);
@@ -611,7 +623,7 @@ public class Family {
             System.out.println("File is Written...");
             return csvFile;
         } else
-            throw new IOException();
+            throw new IOException("File could not be saved");
     }
 
     private static void ascii_art_generator() {
@@ -652,7 +664,7 @@ public class Family {
         }
         System.out.println();
 
-        switch ((new Random().nextInt((max + 1) - min) + min) % 7) {
+        switch (new Random().nextInt(((max + 1) - min) + min) % 7) {
             case 1 -> Toons.BugsBunny();
             case 2 -> Toons.DonaldDuck();
             case 3 -> Toons.GrandpaDuck();
@@ -669,16 +681,15 @@ public class Family {
         return Names.values()[random % Names.values().length]; // cycle itself till max limit
     }
 
-    private static void graphvizGenerate() {//family.csv
+    private static void graphvizGenerate() {
         String path_temp_original = getFile_path_canonical.toString();
-        String reverese_slashses = file_path_canonical.toString().replaceAll("\\\\", "/");
-        file_path_canonical = new StringBuilder(reverese_slashses);
+        String reverse_slashes = file_path_canonical.toString().replaceAll("\\\\", "/");
+        file_path_canonical = new StringBuilder(reverse_slashes);
         String path_temp_reverse = file_path_canonical.toString();
 
         // accepts / and \\
         File dot = new File(String.valueOf(path_temp_reverse + "/toGraphViz_" + family_MAIN_lastname + ".dot"));
 
-        //BufferedReader br = new BufferedReader(new FileReader(path))
         try (BufferedReader dotBuffer = new BufferedReader(new FileReader(dot))) {
             // compress Output Error's from this "Javascript Engine"
             PrintStream out = System.out;
@@ -703,17 +714,31 @@ public class Family {
 
             System.setOut(out); // beyond re-enables Console Output
             /*end compressing*/
-        } catch (IOException e) {
+        } catch (IOException e) { // IOException| FileNotFound e
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
+    private static int getRandomNumberInRange(int min, int max) {
+        // min inclusive max exclusive
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+        //return (int)(Math.random() * ((max - min) + 1)) + min;
+    }
+
+    private static void intro_menu(){
         // randomized
         ascii_art_generator();
-        Generation generation = new Generation();
         //Creating the text menu
         System.out.println("###Non-Case-Sensitive###\n");
+    }
+
+    private static String read_file_input_menu(){
         System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
                 "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
         System.out.print("Path: ");
@@ -723,62 +748,169 @@ public class Family {
             csvFile = file_path.nextLine();
             read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
         } catch (IOException e) {
-            System.out.print("File Path Input Error: " + csvFile + "\n");
+            System.out.print("File Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
             e.printStackTrace();
             System.exit(1);
         }
+        return csvFile;
+    }
 
-        //for local Resources in compile uncomment this
-//        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
-//        try {
-//            Scanner fam_lst = new Scanner(System.in);
-//            System.out.print("\nWhat is Main Family Lastname?: ");
-//            family_MAIN_lastname = fam_lst.nextLine().toLowerCase(Locale.ROOT);
-//            if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
-//                throw new IOException();
-//            String capFirst = family_MAIN_lastname;
-//            family_MAIN_lastname = capFirst.toUpperCase().charAt(0) + capFirst.substring(1, capFirst.length());
-//        } catch (IOException e) {
-//            System.out.println("Input Error ... Program Exits ...");
-//            e.printStackTrace();
-//            System.exit(1);
-//        }
-        family_MAIN_lastname = "Duck";
-        System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
-        System.out.println("***Main Menu***");
-        try (Scanner menu = new Scanner(System.in)) {
-            System.out.print("""
-                    Press 1 to read the family members list\s
-                    Press 2 to create an alphabetically minimal sorted family members list\s
-                    Press 5 to create a Full output sorted Family members\s
-                    Press 3 to use the relationship app\s
-                    Press 4 to generate the .dot file + Generate SVG GraphViz Image\s
-                    Enter: """);
+    private static String read_file_input_menu(String csvFile){
+        try {
+            read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
+        } catch (IOException e) {
+            System.out.print("File Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return csvFile;
+    }
 
-            int input = menu.nextInt();
-            switch (input) {
-                case 1 -> readcsv(csvFile, input, null, null, null);
-                case 2 -> {
-                    //It is important to run readcsv() first, for sortcsv() to work
-                    readcsv(csvFile, input, null, null, null);
-                    System.out.println("\n");
-                    sortcsv();
-                }
-                case 3 -> searchNameRelations(csvFile, input);
-                case 4 -> {
-                    name_sorted_List.clear();
-                    createDot(csvFile, input, generation);
-                    graphvizGenerate();
-                }
-                case 5 -> {
-                    advancedSortData();
-                }
-                default -> System.out.println("Please try again!");
-            }
-        } catch (Exception e) {
+    private static void family_last_name_input(){
+        try {
+            Scanner fam_lst = new Scanner(System.in);
+            System.out.print("\nWhat is Main Family Lastname?: ");
+            family_MAIN_lastname = fam_lst.nextLine().toLowerCase(Locale.ROOT);
+            if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
+                throw new IOException();
+            String capFirst = family_MAIN_lastname;
+            family_MAIN_lastname = capFirst.toUpperCase().charAt(0) + capFirst.substring(1, capFirst.length());
+        } catch (IOException e) {
             System.out.println("Input Error ... Program Exits ...");
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    private static void family_last_name_input(String FamilyLastName){
+        try {
+            family_MAIN_lastname = FamilyLastName.toLowerCase(Locale.ROOT);
+            if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
+                throw new IOException();
+            String capFirst = family_MAIN_lastname;
+            family_MAIN_lastname = capFirst.toUpperCase().charAt(0) + capFirst.substring(1);
+        } catch (IOException e) {
+            System.out.println("Input Error ... Program Exits ...");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private static void menu_options(String csvFile, Generation generation, Integer inputOption){
+        if (inputOption==null) {
+            System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
+            System.out.println("***Main Menu***");
+            try (Scanner menu = new Scanner(System.in)) {
+                System.out.print("""
+                        Press 1 to read the family members list\s
+                        Press 2 to create an alphabetically minimal sorted family members list\s
+                        Press 5 to create a Full output sorted Family members\s
+                        Press 3 to use the relationship app\s
+                        Press 4 to generate the .dot file + Generate SVG GraphViz Image\s
+                        Enter: """);
+
+                int input = menu.nextInt();
+                switch (input) {
+                    case 1 -> readcsv(csvFile, input, null, null, null);
+                    case 2 -> {
+                        // It is important to run readcsv() first, for sortcsv() to work
+                        // select Save path
+                        readcsv(csvFile, input, null, null, null);
+                        System.out.println("\n");
+                        sortcsv();
+                    }
+                    case 3 -> searchNameRelations(csvFile, input);  // recursion
+                    case 4 -> {
+                        // re-uses File save dot and svg from readcsv() Path Taken
+                        name_sorted_List.clear();
+                        createDot(csvFile, input, generation);
+                        graphvizGenerate();
+                    }
+                    case 5 -> {
+                        advancedSortData();
+                    }
+                    default -> System.out.println("Please try again!");
+                }
+            } catch (Exception e) {
+                System.out.println("Input Error ... Program Exits ...");
+                e.printStackTrace();
+                System.exit(1);
+            }
+        } else {
+            System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
+            try (Scanner menu = new Scanner(System.in)) {
+                int input = inputOption;
+                switch (input) {
+                    case 1 -> readcsv(csvFile, input, null, null, null);
+                    case 2 -> {
+                        // It is important to run readcsv() first, for sortcsv() to work
+                        // select Save path
+                        readcsv(csvFile, input, null, null, null);
+                        System.out.println("\n");
+                        sortcsv();
+                    }
+                    case 3 -> searchNameRelations(csvFile, input);  // recursion
+                    case 4 -> {
+                        // re-uses File save dot and svg from readcsv() Path Taken
+                        name_sorted_List.clear();
+                        createDot(csvFile, input, generation);
+                        graphvizGenerate();
+                    }
+                    case 5 -> {
+                        advancedSortData();
+                    }
+                    default -> System.out.println("Please try again!");
+                }
+            } catch (Exception e) {
+                System.out.println("Input Error ... Program Exits ...");
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Generation generation = new Generation();
+        String csvFile;
+
+//        for (String str: args) { System.out.println(str); }
+
+        // ascii art
+        intro_menu();
+
+        // param #1 (Args)
+        try {
+            if (!args[0].equals("family.csv"))
+                csvFile = read_file_input_menu();
+            else
+                csvFile = read_file_input_menu(args[0]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            csvFile = read_file_input_menu();
+        }
+
+          // for local Resources in compile uncomment this
+//        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
+
+        // param #2
+        try {
+            if (!args[1].isEmpty())
+                family_last_name_input(args[1]);
+            else
+                family_last_name_input();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            family_last_name_input();
+        }
+
+//        family_MAIN_lastname = "Duck";
+
+        // param #3
+        try {
+            if (!args[2].isEmpty())
+                menu_options(csvFile, generation, Integer.parseInt(args[2]));
+            else
+                menu_options(csvFile, generation, null);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            menu_options(csvFile, generation, null);
         }
     }
 

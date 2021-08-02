@@ -12,7 +12,6 @@ import org.family.famillytree.Person;
 import org.family.famillytree.Wife;
 import org.family.famillytree.toons.Toons;
 
-import javax.naming.Name;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -141,6 +140,18 @@ public class Family {
             String Personname2 = name2.nextLine();
             readcsv(csvFile, input, Personname1, Personname2, null);
             case_scenario_checking(input);
+        } catch (Exception e) {
+            System.out.println("There was a Input Problem");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private static void searchNameRelations(String csvFile, String argName1, String argsName2) {
+        System.out.println("\n***Find Relationships***");
+        try {
+            readcsv(csvFile, 3, argName1, argsName2, null);
+            case_scenario_checking(3);
         } catch (Exception e) {
             System.out.println("There was a Input Problem");
             e.printStackTrace();
@@ -796,76 +807,81 @@ public class Family {
         }
     }
 
-    private static void menu_options(String csvFile, Generation generation, Integer inputOption){
-        if (inputOption==null) {
-            System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
-            System.out.println("***Main Menu***");
-            try (Scanner menu = new Scanner(System.in)) {
-                System.out.print("""
-                        Press 1 to read the family members list\s
-                        Press 2 to create an alphabetically minimal sorted family members list\s
-                        Press 5 to create a Full output sorted Family members\s
-                        Press 3 to use the relationship app\s
-                        Press 4 to generate the .dot file + Generate SVG GraphViz Image\s
-                        Enter: """);
+    private static void menu_options(String csvFile, Generation generation, Integer inputOption
+                                        , String argsName1, String argsName2){
+        if (!(argsName1 != null && argsName2 != null)) {
+            if (inputOption == null) {
+                System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
+                System.out.println("***Main Menu***");
+                try (Scanner menu = new Scanner(System.in)) {
+                    System.out.print("""
+                            Press 1 to read the family members list\s
+                            Press 2 to create an alphabetically minimal sorted family members list\s
+                            Press 5 to create a Full output sorted Family members\s
+                            Press 3 to use the relationship app\s
+                            Press 4 to generate the .dot file + Generate SVG GraphViz Image\s
+                            Enter: """);
 
-                int input = menu.nextInt();
-                switch (input) {
-                    case 1 -> readcsv(csvFile, input, null, null, null);
-                    case 2 -> {
-                        // It is important to run readcsv() first, for sortcsv() to work
-                        // select Save path
-                        readcsv(csvFile, input, null, null, null);
-                        System.out.println("\n");
-                        sortcsv();
+                    int input = menu.nextInt();
+                    switch (input) {
+                        case 1 -> readcsv(csvFile, input, null, null, null);
+                        case 2 -> {
+                            // It is important to run readcsv() first, for sortcsv() to work
+                            // select Save path
+                            readcsv(csvFile, input, null, null, null);
+                            System.out.println("\n");
+                            sortcsv();
+                        }
+                        case 3 -> searchNameRelations(csvFile, input);  // recursion
+                        case 4 -> {
+                            // re-uses File save dot and svg from readcsv() Path Taken
+                            name_sorted_List.clear();
+                            createDot(csvFile, input, generation);
+                            graphvizGenerate();
+                        }
+                        case 5 -> {
+                            advancedSortData();
+                        }
+                        default -> System.out.println("Please try again!");
                     }
-                    case 3 -> searchNameRelations(csvFile, input);  // recursion
-                    case 4 -> {
-                        // re-uses File save dot and svg from readcsv() Path Taken
-                        name_sorted_List.clear();
-                        createDot(csvFile, input, generation);
-                        graphvizGenerate();
-                    }
-                    case 5 -> {
-                        advancedSortData();
-                    }
-                    default -> System.out.println("Please try again!");
+                } catch (Exception e) {
+                    System.out.println("Input Error ... Program Exits ...");
+                    e.printStackTrace();
+                    System.exit(1);
                 }
-            } catch (Exception e) {
-                System.out.println("Input Error ... Program Exits ...");
-                e.printStackTrace();
-                System.exit(1);
+            } else {
+                System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
+                try (Scanner menu = new Scanner(System.in)) {
+                    int input = inputOption;
+                    switch (input) {
+                        case 1 -> readcsv(csvFile, input, null, null, null);
+                        case 2 -> {
+                            // It is important to run readcsv() first, for sortcsv() to work
+                            // select Save path
+                            readcsv(csvFile, input, null, null, null);
+                            System.out.println("\n");
+                            sortcsv();
+                        }
+                        case 3 -> searchNameRelations(csvFile, input);  // recursion
+                        case 4 -> {
+                            // re-uses File save dot and svg from readcsv() Path Taken
+                            name_sorted_List.clear();
+                            createDot(csvFile, input, generation);
+                            graphvizGenerate();
+                        }
+                        case 5 -> {
+                            advancedSortData();
+                        }
+                        default -> System.out.println("Please try again!");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Input Error ... Program Exits ...");
+                    e.printStackTrace();
+                    System.exit(1);
+                }
             }
         } else {
-            System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
-            try (Scanner menu = new Scanner(System.in)) {
-                int input = inputOption;
-                switch (input) {
-                    case 1 -> readcsv(csvFile, input, null, null, null);
-                    case 2 -> {
-                        // It is important to run readcsv() first, for sortcsv() to work
-                        // select Save path
-                        readcsv(csvFile, input, null, null, null);
-                        System.out.println("\n");
-                        sortcsv();
-                    }
-                    case 3 -> searchNameRelations(csvFile, input);  // recursion
-                    case 4 -> {
-                        // re-uses File save dot and svg from readcsv() Path Taken
-                        name_sorted_List.clear();
-                        createDot(csvFile, input, generation);
-                        graphvizGenerate();
-                    }
-                    case 5 -> {
-                        advancedSortData();
-                    }
-                    default -> System.out.println("Please try again!");
-                }
-            } catch (Exception e) {
-                System.out.println("Input Error ... Program Exits ...");
-                e.printStackTrace();
-                System.exit(1);
-            }
+            searchNameRelations(csvFile, argsName1, argsName2);  // recursion
         }
     }
 
@@ -880,7 +896,7 @@ public class Family {
 
         // param #1 (Args)
         try {
-            if (!args[0].equals("family.csv"))
+            if (args[0].isEmpty())
                 csvFile = read_file_input_menu();
             else
                 csvFile = read_file_input_menu(args[0]);
@@ -905,12 +921,18 @@ public class Family {
 
         // param #3
         try {
-            if (!args[2].isEmpty())
-                menu_options(csvFile, generation, Integer.parseInt(args[2]));
-            else
-                menu_options(csvFile, generation, null);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            menu_options(csvFile, generation, null);
+            // if not array out of bound or empty do below else catch
+            if (!args[2].isEmpty() && ((args[3].isEmpty() || args[4].isEmpty()) || (args[3].isBlank() || args[4].isBlank()))) {
+                menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
+            } else if (!args[2].isEmpty() && !((args[3].isEmpty() && args[4].isEmpty()) || (args[3].isBlank() && args[4].isBlank()))){
+                menu_options(csvFile, generation, Integer.parseInt(args[2]), args[3], args[4]);
+            }else {
+                if (!args[2].isEmpty()) {
+                    menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException ignored){
+            menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
         }
     }
 

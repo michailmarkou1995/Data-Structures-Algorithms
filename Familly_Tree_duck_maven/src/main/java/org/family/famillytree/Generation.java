@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Generation {
-    public static List<Generation> getObj_wFatherMother = new ArrayList<>();
+    public static List<Generation> getObj_wFatherMother = new ArrayList<>();  // same info as child_list
+    public static List<String> child_list = new ArrayList<>();  // one by one add
+    public static List<String> child_list1 = new ArrayList<>();
     public static List<Generation> getObj_wHusWife = new ArrayList<>();
     private String name = new String(), gender, related, child, wife, husband;
 
@@ -44,13 +46,28 @@ public class Generation {
         this.husband = Husband;
     }
 
-    public Generation(String Name, String related, String wife, int decoy1, int decoy2) {
-        this.name = Name;
+    public Generation(String Name, String related, String wife, String child, int decoy1, int decoy2) {
+        //this.name = Name;
+        this.husband = Name;
         this.related = related;
         this.wife = wife;
+        child_list.add(child);
+        //this.child += child;
     }
 
     public Generation() {
+    }
+
+    public static List<String> getChild_list() {
+        return child_list;
+    }
+
+    public static void setChild_list(List<String> child_list) {
+        Generation.child_list = child_list;
+    }
+
+    public static void setChild_list_one(String child_list) {
+        Generation.child_list.add(child_list);
     }
 
     public static List<Generation> getGetObj_wHusWife() {
@@ -99,6 +116,17 @@ public class Generation {
 
     public void setChild(String child) {
         this.child = child;
+    }
+
+    public void setChildConcat(String child) {
+        // if (this.child.contains("null"))// if null then null pointer exception do not use .contains func
+        if (this.child == null) // this to every obj memory reference and not static
+        {
+            //this.child=child + " ";
+            this.child = child; // does not leave trailing whitespace for future trim this way!
+        } else
+            this.child += ", " + child; // does not leave trailing whitespace for future trim this way!
+        //this.child += child + " ";
     }
 
     public Generation setChildObj(String child) {

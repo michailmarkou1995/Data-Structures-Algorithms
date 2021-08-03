@@ -57,13 +57,13 @@ public class Family {
     static HashMap<String, String> childs = new HashMap<>();
     static HashMap<String, Generation> who_is_father_mother_List = new HashMap<>();
     static HashMap<String, Generation> who_is_husband_of_wife_List = new HashMap<>();
-    static HashMap<String, Generation> all_list = new HashMap<>();
+    static Map<String, Generation> all_list = new HashMap<>();
     static AtomicInteger timesCsv = new AtomicInteger();
     static AtomicInteger idK = new AtomicInteger();
     static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname, new_N1_p1, new_N1_p2,
             new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child, N2_initials_child,
             they_are, they_have = "", husband, wife, root_of_root_p1, root_of_root_p2;
-    static StringBuilder file_path_canonical, getFile_path_canonical, N1_original, N2_original;
+    static StringBuilder file_path_canonical, getFile_path_canonical;
     static boolean isTop_root_parent1 = false, isTop_root_parent2 = false, name_N1p1_not_set = false,
             name_N1p2_not_set = false, name_N2p1_not_set = false, name_N2p2_not_set = false, isBlood_mix1 = false,
             isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
@@ -165,42 +165,55 @@ public class Family {
 
     private static void createDot(String csvFile, int input, Generation generation) {
         readcsv(csvFile, input, null, null, generation);
-        FileWriter writerF;
-//        StringBuilder csvFileExtension;
+//                    who_is_father_mother_List.forEach((key, value) -> {
+//                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+//                        + value.getRelated() + "\"];");
+//            });
+//        who_is_husband_of_wife_List.forEach((key, value) -> {
+//            System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+//                    + value.getRelated() + "\"];");
+//        });
 
-        try {
-//            Scanner file_path = new Scanner(System.in);
-//            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
-//            System.out.print("Path: ");
-//            csvFileExtension = new StringBuilder(file_path.nextLine());
-            /* Gets File Path from readcsv and saves it in the same place */
-            writerF = new FileWriter(file_path_canonical
-                    .append("\\toGraphViz_")
-                    .append(family_MAIN_lastname)
-                    .append(".dot").toString(), StandardCharsets.UTF_8);
-            file_path_canonical = getFile_path_canonical;
+        all_list.forEach((key, value) -> {
+            System.out.println(value);
+        });
 
-            writerF.write("digraph " + family_MAIN_lastname + " {\n");
-            writerF.write("rankdir=LR;\n");
-            writerF.write("size=\"8,5\"\n");
-            writerF.write("node [shape = rectangle] [color=black];\n");
-
-            who_is_father_mother_List.forEach((key, value) -> {
-                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-                        + value.getRelated() + "\"];");
-                try {
-                    writerF.write("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-                            + value.getRelated() + "\"];\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-
-            writerF.write("}");
-            writerF.close();
-        } catch (IOException e) { //| URISyntaxException
-            e.printStackTrace();
-        }
+//        FileWriter writerF;
+////        StringBuilder csvFileExtension;
+//
+//        try {
+////            Scanner file_path = new Scanner(System.in);
+////            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
+////            System.out.print("Path: ");
+////            csvFileExtension = new StringBuilder(file_path.nextLine());
+//            /* Gets File Path from readcsv and saves it in the same place */
+//            writerF = new FileWriter(file_path_canonical
+//                    .append("\\toGraphViz_")
+//                    .append(family_MAIN_lastname)
+//                    .append(".dot").toString(), StandardCharsets.UTF_8);
+//            file_path_canonical = getFile_path_canonical;
+//
+//            writerF.write("digraph " + family_MAIN_lastname + " {\n");
+//            writerF.write("rankdir=LR;\n");
+//            writerF.write("size=\"8,5\"\n");
+//            writerF.write("node [shape = rectangle] [color=black];\n");
+//
+//            who_is_father_mother_List.forEach((key, value) -> {
+//                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+//                        + value.getRelated() + "\"];");
+//                try {
+//                    writerF.write("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+//                            + value.getRelated() + "\"];\n");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//
+//            writerF.write("}");
+//            writerF.close();
+//        } catch (IOException e) { //| URISyntaxException
+//            e.printStackTrace();
+//        }
     }
 
     //after readcsv - input_checking_scenario_Loop - comes this (2)
@@ -294,11 +307,11 @@ public class Family {
                     System.out.println("\nFar Child");
                 else System.out.println("\n" + they_are + " (not related)");
             } else System.out.println("\nSiblings in arms");
-        }else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have == null){
+        } else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have == null) {
             System.out.println("\n" + they_are + " (related)");
-        }else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have != null){
+        } else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have != null) {
             System.out.println("\n" + they_are + " (related) " + they_have);
-        }else if (root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname)){
+        } else if (root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname)) {
             System.out.println("\n" + they_are + " (not related)");
         } else if (isBlood_mix1 || isBlood_mix2) {
             System.out.println("\nFar siblings in Arm");
@@ -308,10 +321,10 @@ public class Family {
 
     // finds from 2 Inputs relation between another Recursion of Tree backwards (including root)
     /* works 100% but it can be improved as direct full name capture and compare below in algorithm and in print above
-    * state to become way more efficient rather getting different names capture result will be less verbose algorithm
-    * + print statements */
+     * state to become way more efficient rather getting different names capture result will be less verbose algorithm
+     * + print statements */
     /* Notes to remember root of root foreign name do not append husbands lastname rather check if they are together +
-    * + flag it as foreign marriage like blood mix and not incest relationships */
+     * + flag it as foreign marriage like blood mix and not incest relationships */
     private static void find_shared_root(String FName1, String FName2) {
         if (isTop_root_parent1 && isTop_root_parent2) {
             if (N1_initials != null && N1_initials.toLowerCase().contains(N1))
@@ -322,16 +335,15 @@ public class Family {
                 N2 = N2_initials;  // input 2 from keyboard
             if (N2_initials_child != null && N2_initials_child.toLowerCase().contains(N2))
                 N2 = N2_initials_child;  // input 1 from keyboard
-            if (root_of_root_p1!= null && root_of_root_p2 != null){
+            if (root_of_root_p1 != null && root_of_root_p2 != null) {
                 if (!root_of_root_p1.contains(family_MAIN_lastname)) {
                     root_of_root_p1 += " " + family_MAIN_lastname;
                     if (root_of_root_p1.contains(N1))
-                         N1 = root_of_root_p1;
+                        N1 = root_of_root_p1;
                     else if (root_of_root_p2.contains(N2))
                         N2 = root_of_root_p1;
-                }else
-                {
-                    for (var name: all_names) {
+                } else {
+                    for (var name : all_names) {
                         if (name.toLowerCase().contains(N1) || name.contains(N1))
                             N1 = name;
                         if (name.toLowerCase().contains(N2) || name.contains(N2))
@@ -344,9 +356,8 @@ public class Family {
                         N1 = root_of_root_p2;
                     else if (root_of_root_p2.contains(N2))
                         N2 = root_of_root_p2;
-                }else
-                {
-                    for (var name: all_names) {
+                } else {
+                    for (var name : all_names) {
                         if (name.toLowerCase().contains(N1) || name.contains(N1))
                             N1 = name;
                         if (name.toLowerCase().contains(N2) || name.contains(N2))
@@ -448,8 +459,7 @@ public class Family {
             if (!(new_N2_p1 == null) && !(new_N2_p2 == null)) {
                 who_is_husband_of_wife_List.entrySet().forEach(entry -> {
                     if (entry.getValue().getName().contains(new_N2_p1) && entry.getValue().getHusband().contains(new_N2_p2)
-                            || entry.getValue().getName().contains(new_N2_p2) && entry.getValue().getHusband().contains(new_N2_p1))
-                    {
+                            || entry.getValue().getName().contains(new_N2_p2) && entry.getValue().getHusband().contains(new_N2_p1)) {
                         /* but not of root of root only locally its seems like it, it works 100% but must make it better */
                         //System.out.println("Together");
                         root_of_root_p1 = new_N2_p1;
@@ -457,7 +467,7 @@ public class Family {
                     }
                 });
                 if (new_N2_p1.contains(family_MAIN_lastname) && new_N2_p2.contains(family_MAIN_lastname)) {
-                    if (root_of_root_p1 == null){
+                    if (root_of_root_p1 == null) {
                         who_is_husband_of_wife_List.entrySet().forEach(entry -> {
                             if (entry.getValue().getName().contains(new_N2_p1))
                                 root_of_root_p1 = entry.getValue().getName();
@@ -465,7 +475,7 @@ public class Family {
                                 root_of_root_p1 = entry.getValue().getHusband();
                         });
                     }
-                    if (root_of_root_p2 == null){
+                    if (root_of_root_p2 == null) {
                         who_is_husband_of_wife_List.entrySet().forEach(entry -> {
                             if (entry.getValue().getName().contains(new_N2_p2))
                                 root_of_root_p2 = entry.getValue().getName();
@@ -616,12 +626,6 @@ public class Family {
                     they_are = allStrings[0] + " is " + allStrings[1] + " of " + allStrings[2];
 
                     add_they_have = true;
-                } else {
-                    /* here to solve the magic of CERSEI + ROBERT which results are incorrect somehow based on
-                    * the Tree map but they are actually correct based on Real Life of these 2 people*/
-                    who_is_husband_of_wife_List.entrySet().forEach(entry -> {
-
-                    });
                 }
             }
         }
@@ -636,22 +640,46 @@ public class Family {
                     //all_list.put(allStrings[0], generation.se);
                 }
                 if ((allStrings[1].equals("husband"))) {
-                    all_list.put(String.valueOf(idK.get()), generation.setHusbandObj(allStrings[0]));
+                    all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], null, 0, 0));
+                    //all_list.put(String.valueOf(idK.get()), generation.setHusbandObj(allStrings[0]));
                     //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0));
                 }
                 if ((allStrings[1].equals("wife"))) {
-                    all_list.put(String.valueOf(idK.get()), generation.setWifeObj(allStrings[0]));
+/*                    all_list.entrySet().forEach(entry -> {
+                        //if (entry.getKey().equals(allStrings[]))
+                    });*/
+                    //all_list.put(String.valueOf(idK.get()), generation.setWifeObj(allStrings[0]));
                     //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
                 }
                 if ((allStrings[1].equals("father"))) {
+                    if (all_list.containsKey(allStrings[0]))
+                        all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
+
+//                    for (Generation g : Generation.getObj_wFatherMother) { /* Array List Grab */ //is empty so without a flag to re-run it its a no no null pointer exception
+//                        if (g.getName().contains(allStrings[0]))
+//                            all_list.get(allStrings[0]).setChild(allStrings[2]);
+//                    }
+
+/*                    if(all_list.containsKey(allStrings[0])) //doesnt not work because is static and new object every loop iteration so String is messed Up from concat
+                        all_list.get(allStrings[0]).setChild(allStrings[2]);*/
+
+/*                    if(all_list.containsKey(allStrings[0]))
+                        all_list.get(allStrings[0]).setChild_list_one(allStrings[2]); *//* works one by one add child debug it *//*
+                    all_list.entrySet().forEach(entry -> { *//* same as above way works *//*
+                        if (entry.getKey().equals(allStrings[0]))
+                            all_list.put(entry.getKey(), new Generation(allStrings[0], allStrings[1], allStrings[2], allStrings[2], 0, 0));
+                    });*/
+                    /////all_list.computeIfAbsent(allStrings[0], k -> Generation.child_list.add(allStrings[2]));
                     /* ######### LIST OF CHILDS ara hasmap treemap? mesa me List? arrayList <> */
-                    all_list.put(String.valueOf(idK.get()), generation.setChildObj(allStrings[2]));
-                    idK.incrementAndGet();
+                    //all_list.put(String.valueOf(idK.get()), generation.setChildObj(allStrings[2]));
+                    //idK.incrementAndGet();
                     //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
                 }
                 if ((allStrings[1].equals("male")) || (allStrings[1].equals("female"))) {
                     //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2]));
                 }
+                if (((allStrings[1].contains("mother") || allStrings[1].contains("father"))))
+                    childs.put(allStrings[2], allStrings[2]);
             }
         }
     }
@@ -676,7 +704,7 @@ public class Family {
         Path path = Paths.get(String.valueOf(file));
         String test = file.getParent();
         if (!file.isDirectory()) {
-            List<String> results = check_and_find_Files(path, ".csv", "file");;
+            List<String> results = check_and_find_Files(path, ".csv", "file");
 
             file = file.getCanonicalFile();  // getParentFile()
             file_path_canonical = new StringBuilder(file.getParent());
@@ -729,7 +757,7 @@ public class Family {
     public static List<String> check_and_find_Files(Path path, String fileExtension, String category_type)
             throws IOException {
 
-        if (category_type.equals("dir")){
+        if (category_type.equals("dir")) {
             if (!Files.isDirectory(path)) {
                 throw new IllegalArgumentException("Path must be a directory!");
             }
@@ -1067,27 +1095,6 @@ public class Family {
         } catch (ArrayIndexOutOfBoundsException ignored) {
             menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
         }
-//        String[] name = {"John", "Remo", "Mixy", "Julie", "Ronny"};
-//        Arrays.sort(name, String.CASE_INSENSITIVE_ORDER.reversed());
-//        System.out.println(Arrays.toString(name));
-//        int n = 5;
-//        System.out.println("Before Sorting");
-//        for (int i = 0; i < n; i++) {
-//            System.out.println(name[i]);
-//        }
-//        for (int i = 0; i < n - 1; ++i) {
-//            for (int j = i + 1; j < n; ++j) {
-//                if (name[i].compareTo(name[j]) > 0) {
-//                    String temp = name[i];
-//                    name[i] = name[j];
-//                    name[j] = temp;
-//                }
-//            }
-//        }
-//        System.out.println("\nAfter performing lexicographical order: ");
-//        for (int i = 0; i < n; i++) {
-//            System.out.println(name[i]);
-//        }
     }
 
     private enum Names {

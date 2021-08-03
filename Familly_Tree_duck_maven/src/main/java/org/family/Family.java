@@ -62,8 +62,8 @@ public class Family {
     static AtomicInteger idK = new AtomicInteger();
     static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname, new_N1_p1, new_N1_p2,
             new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child, N2_initials_child,
-            they_are, they_have = "", husband, wife;
-    static StringBuilder file_path_canonical, getFile_path_canonical;
+            they_are, they_have = "", husband, wife, root_of_root_p1, root_of_root_p2;
+    static StringBuilder file_path_canonical, getFile_path_canonical, N1_original, N2_original;
     static boolean isTop_root_parent1 = false, isTop_root_parent2 = false, name_N1p1_not_set = false,
             name_N1p2_not_set = false, name_N2p1_not_set = false, name_N2p2_not_set = false, isBlood_mix1 = false,
             isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
@@ -294,6 +294,12 @@ public class Family {
                     System.out.println("\nFar Child");
                 else System.out.println("\n" + they_are + " (not related)");
             } else System.out.println("\nSiblings in arms");
+        }else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have == null){
+            System.out.println("\n" + they_are + " (related)");
+        }else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have != null){
+            System.out.println("\n" + they_are + " (related) " + they_have);
+        }else if (root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname)){
+            System.out.println("\n" + they_are + " (not related)");
         } else if (isBlood_mix1 || isBlood_mix2) {
             System.out.println("\nFar siblings in Arm");
         } else
@@ -301,6 +307,11 @@ public class Family {
     }
 
     // finds from 2 Inputs relation between another Recursion of Tree backwards (including root)
+    /* works 100% but it can be improved as direct full name capture and compare below in algorithm and in print above
+    * state to become way more efficient rather getting different names capture result will be less verbose algorithm
+    * + print statements */
+    /* Notes to remember root of root foreign name do not append husbands lastname rather check if they are together +
+    * + flag it as foreign marriage like blood mix and not incest relationships */
     private static void find_shared_root(String FName1, String FName2) {
         if (isTop_root_parent1 && isTop_root_parent2) {
             if (N1_initials != null && N1_initials.toLowerCase().contains(N1))
@@ -311,6 +322,38 @@ public class Family {
                 N2 = N2_initials;  // input 2 from keyboard
             if (N2_initials_child != null && N2_initials_child.toLowerCase().contains(N2))
                 N2 = N2_initials_child;  // input 1 from keyboard
+            if (root_of_root_p1!= null && root_of_root_p2 != null){
+                if (!root_of_root_p1.contains(family_MAIN_lastname)) {
+                    root_of_root_p1 += " " + family_MAIN_lastname;
+                    if (root_of_root_p1.contains(N1))
+                         N1 = root_of_root_p1;
+                    else if (root_of_root_p2.contains(N2))
+                        N2 = root_of_root_p1;
+                }else
+                {
+                    for (var name: all_names) {
+                        if (name.toLowerCase().contains(N1) || name.contains(N1))
+                            N1 = name;
+                        if (name.toLowerCase().contains(N2) || name.contains(N2))
+                            N2 = name;
+                    }
+                }
+                if (!root_of_root_p2.contains(family_MAIN_lastname)) {
+                    root_of_root_p2 += " " + family_MAIN_lastname;
+                    if (root_of_root_p2.contains(N1))
+                        N1 = root_of_root_p2;
+                    else if (root_of_root_p2.contains(N2))
+                        N2 = root_of_root_p2;
+                }else
+                {
+                    for (var name: all_names) {
+                        if (name.toLowerCase().contains(N1) || name.contains(N1))
+                            N1 = name;
+                        if (name.toLowerCase().contains(N2) || name.contains(N2))
+                            N2 = name;
+                    }
+                }
+            }
 
             return;
         }
@@ -321,6 +364,8 @@ public class Family {
         name_N2p2_not_set = false;
         String[] clear_n1, clear_n2;
         for (Generation g : Generation.getObj_wFatherMother) {
+
+            String whole_name = g.getName();
             String[] ch1_arr = g.getChild().toLowerCase().split(" ");
             String[] p_arr = g.getName().toLowerCase().split(" ");
             String ch1 = ch1_arr[0];
@@ -328,6 +373,7 @@ public class Family {
                 name_N1p1_not_set = !name_N1p1_not_set;  // false
                 name_N1p2_not_set = !name_N1p2_not_set;  // false // switch prepare
                 if (name_N1p1_not_set) {
+                    root_of_root_p1 = whole_name;
                     new_N1_p1 = g.getName();  // gets full name of N1p1 (Name 1 Parent 1)
                     if (N1_initials == null) {
                         N1_initials = g.getName();  // gets Parent Name and holds it
@@ -337,6 +383,7 @@ public class Family {
                     name_N1p2_not_set = false;
                 }
                 if (name_N1p2_not_set) {
+                    root_of_root_p2 = whole_name;
                     new_N1_p2 = g.getName();  // gets full name of N1p2 (Name 1 Parent 2)
                     name_N1p2_not_set = true;
                 }
@@ -396,9 +443,36 @@ public class Family {
                     }
                 }
             }
+
             //  keeps one of 2 Parents with the "Incest" name either both are Incest or Blood mix so its keeps the Incest one #2
             if (!(new_N2_p1 == null) && !(new_N2_p2 == null)) {
+                who_is_husband_of_wife_List.entrySet().forEach(entry -> {
+                    if (entry.getValue().getName().contains(new_N2_p1) && entry.getValue().getHusband().contains(new_N2_p2)
+                            || entry.getValue().getName().contains(new_N2_p2) && entry.getValue().getHusband().contains(new_N2_p1))
+                    {
+                        /* but not of root of root only locally its seems like it, it works 100% but must make it better */
+                        //System.out.println("Together");
+                        root_of_root_p1 = new_N2_p1;
+                        root_of_root_p2 = new_N2_p2;
+                    }
+                });
                 if (new_N2_p1.contains(family_MAIN_lastname) && new_N2_p2.contains(family_MAIN_lastname)) {
+                    if (root_of_root_p1 == null){
+                        who_is_husband_of_wife_List.entrySet().forEach(entry -> {
+                            if (entry.getValue().getName().contains(new_N2_p1))
+                                root_of_root_p1 = entry.getValue().getName();
+                            else if (entry.getValue().getHusband().contains(new_N2_p1))
+                                root_of_root_p1 = entry.getValue().getHusband();
+                        });
+                    }
+                    if (root_of_root_p2 == null){
+                        who_is_husband_of_wife_List.entrySet().forEach(entry -> {
+                            if (entry.getValue().getName().contains(new_N2_p2))
+                                root_of_root_p2 = entry.getValue().getName();
+                            else if (entry.getValue().getHusband().contains(new_N2_p2))
+                                root_of_root_p2 = entry.getValue().getHusband();
+                        });
+                    }
                     clear_n2 = new_N2_p1.toLowerCase().split(" ");
                     new_N2_p1 = clear_n2[0];
                 } else {
@@ -542,6 +616,12 @@ public class Family {
                     they_are = allStrings[0] + " is " + allStrings[1] + " of " + allStrings[2];
 
                     add_they_have = true;
+                } else {
+                    /* here to solve the magic of CERSEI + ROBERT which results are incorrect somehow based on
+                    * the Tree map but they are actually correct based on Real Life of these 2 people*/
+                    who_is_husband_of_wife_List.entrySet().forEach(entry -> {
+
+                    });
                 }
             }
         }
@@ -987,27 +1067,27 @@ public class Family {
         } catch (ArrayIndexOutOfBoundsException ignored) {
             menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
         }
-        String[] name = {"John", "Remo", "Mixy", "Julie", "Ronny"};
-        Arrays.sort(name, String.CASE_INSENSITIVE_ORDER.reversed());
-        System.out.println(Arrays.toString(name));
-        int n = 5;
-        System.out.println("Before Sorting");
-        for (int i = 0; i < n; i++) {
-            System.out.println(name[i]);
-        }
-        for (int i = 0; i < n - 1; ++i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (name[i].compareTo(name[j]) > 0) {
-                    String temp = name[i];
-                    name[i] = name[j];
-                    name[j] = temp;
-                }
-            }
-        }
-        System.out.println("\nAfter performing lexicographical order: ");
-        for (int i = 0; i < n; i++) {
-            System.out.println(name[i]);
-        }
+//        String[] name = {"John", "Remo", "Mixy", "Julie", "Ronny"};
+//        Arrays.sort(name, String.CASE_INSENSITIVE_ORDER.reversed());
+//        System.out.println(Arrays.toString(name));
+//        int n = 5;
+//        System.out.println("Before Sorting");
+//        for (int i = 0; i < n; i++) {
+//            System.out.println(name[i]);
+//        }
+//        for (int i = 0; i < n - 1; ++i) {
+//            for (int j = i + 1; j < n; ++j) {
+//                if (name[i].compareTo(name[j]) > 0) {
+//                    String temp = name[i];
+//                    name[i] = name[j];
+//                    name[j] = temp;
+//                }
+//            }
+//        }
+//        System.out.println("\nAfter performing lexicographical order: ");
+//        for (int i = 0; i < n; i++) {
+//            System.out.println(name[i]);
+//        }
     }
 
     private enum Names {

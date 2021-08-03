@@ -1,0 +1,20 @@
+digraph Baratheon {
+rankdir=LR;
+size="8,5"
+node [shape = rectangle] [color=black];
+"Robbert Baratheon" -> "Joffrey Baratheon" [label="father"];
+"Robbert Baratheon" -> "Myrchella Baratheon" [label="father"];
+"Cersei Lannister" -> "Joffrey Baratheon" [label="mother"];
+"Cassana Estermont" -> "Stannis Baratheon" [label="mother"];
+"Stannis Baratheon" -> "Shireen Baratheon" [label="father"];
+"Selyse Baratheon" -> "Shireen Baratheon" [label="mother"];
+"Robbert Baratheon" -> "Tommen Baratheon" [label="father"];
+"Cassana Estermont" -> "Renly Baratheon" [label="mother"];
+"Cersei Lannister" -> "Myrchella Baratheon" [label="mother"];
+"Cassana Estermont" -> "Robert Baratheon" [label="mother"];
+"Robbert Baratheon" -> "Gendry" [label="father"];
+"Cersei Lannister" -> "Tommen Baratheon" [label="mother"];
+"Steffon Baratheon" -> "Robert Baratheon" [label="father"];
+"Steffon Baratheon" -> "Stannis Baratheon" [label="father"];
+"Steffon Baratheon" -> "Renly Baratheon" [label="father"];
+}

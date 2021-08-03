@@ -16,12 +16,17 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
     add to "System Var" "winKey+S" a System variable path to jdk-16.0.2\bin
@@ -36,10 +41,9 @@ import java.util.regex.Pattern;
 
 /*
  1) Graph convert
-   1.1) give Manios
    1.10) new classes for string overide Interface? assign from new class style sto not null output toString ovveride
    1.11) new sorting
- 2) push github
+   1.12) Java CLI + java -jar program.jar -h or --help for help for params system out show !!
  4) make web viz out of this like python */
 
 public class Family {
@@ -100,7 +104,7 @@ public class Family {
         // it sees if elements from that pair should be swapped or not
         name_sorted_List.sort((o1, o2) -> {
             // compare two instance of `Score` and return `int` as result.
-            return ~o2.getName().compareTo(o1.getName()) - 1;
+            return ~o2.getName().compareTo(o1.getName());
             // use ~ to reverse order
         });
         //loop that prints the sorted result
@@ -589,10 +593,15 @@ public class Family {
     // read from disk else callee throws exception to caller
     private static void read_file_path_to_disk(String csvFile) throws IOException {
         File file = new File(csvFile);
-        if (!file.isDirectory())
+        Path path = Paths.get(String.valueOf(file));
+        String test = file.getParent();
+        if (!file.isDirectory()) {
+            List<String> results = check_and_find_Files(path, ".csv", "file");;
+
             file = file.getCanonicalFile();  // getParentFile()
-        file_path_canonical = new StringBuilder(file.getParent());
-        getFile_path_canonical = new StringBuilder(file_path_canonical);
+            file_path_canonical = new StringBuilder(file.getParent());
+            getFile_path_canonical = new StringBuilder(file_path_canonical);
+        }
         if (file.isDirectory())
             throw new IOException("Directory detected");
         if (file.exists()) {
@@ -635,6 +644,50 @@ public class Family {
             return csvFile;
         } else
             throw new IOException("File could not be saved");
+    }
+
+    public static List<String> check_and_find_Files(Path path, String fileExtension, String category_type)
+            throws IOException {
+
+        if (category_type.equals("dir")){
+            if (!Files.isDirectory(path)) {
+                throw new IllegalArgumentException("Path must be a directory!");
+            }
+
+            List<String> result;
+
+            try (Stream<Path> walk = Files.walk(path)) {
+                result = walk
+                        .filter(p -> !Files.isDirectory(p))
+                        // this is a path, not string,
+                        // this only test if path end with a certain path
+                        //.filter(p -> p.endsWith(fileExtension))
+                        // convert path to string first
+                        .map(p -> p.toString().toLowerCase())
+                        .filter(f -> f.endsWith(fileExtension))
+                        .collect(Collectors.toList());
+            }
+
+            return result;
+        } else if (!Files.isDirectory(path) && Files.exists(path)) {
+            List<String> result;
+
+            try (Stream<Path> walk = Files.walk(path)) {
+                result = walk
+                        .filter(p -> !Files.isDirectory(p))
+                        .map(p -> p.toString().toLowerCase())
+                        .filter(f -> f.endsWith(fileExtension))
+                        .collect(Collectors.toList());
+//                System.out.println(path);
+                // remove if to become find file if check only extension then include it for error pop up
+                if (result.isEmpty())
+                    throw new IOException("Only csv extensions");
+                return result;
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Path must be a file!");
+            }
+        } else
+            return null;
     }
 
     private static void ascii_art_generator() {
@@ -742,14 +795,14 @@ public class Family {
         //return (int)(Math.random() * ((max - min) + 1)) + min;
     }
 
-    private static void intro_menu(){
+    private static void intro_menu() {
         // randomized
         ascii_art_generator();
         //Creating the text menu
         System.out.println("###Non-Case-Sensitive###\n");
     }
 
-    private static String read_file_input_menu(){
+    private static String read_file_input_menu() {
         System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
                 "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
         System.out.print("Path: ");
@@ -766,7 +819,7 @@ public class Family {
         return csvFile;
     }
 
-    private static String read_file_input_menu(String csvFile){
+    private static String read_file_input_menu(String csvFile) {
         try {
             read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
         } catch (IOException e) {
@@ -777,7 +830,7 @@ public class Family {
         return csvFile;
     }
 
-    private static void family_last_name_input(){
+    private static void family_last_name_input() {
         try {
             Scanner fam_lst = new Scanner(System.in);
             System.out.print("\nWhat is Main Family Lastname?: ");
@@ -793,7 +846,7 @@ public class Family {
         }
     }
 
-    private static void family_last_name_input(String FamilyLastName){
+    private static void family_last_name_input(String FamilyLastName) {
         try {
             family_MAIN_lastname = FamilyLastName.toLowerCase(Locale.ROOT);
             if (isNumeric(family_MAIN_lastname) || StringUtils.isNumericSpace(family_MAIN_lastname))
@@ -808,7 +861,7 @@ public class Family {
     }
 
     private static void menu_options(String csvFile, Generation generation, Integer inputOption
-                                        , String argsName1, String argsName2){
+            , String argsName1, String argsName2) {
         if (!(argsName1 != null && argsName2 != null)) {
             if (inputOption == null) {
                 System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
@@ -904,7 +957,7 @@ public class Family {
             csvFile = read_file_input_menu();
         }
 
-          // for local Resources in compile uncomment this
+        // for local Resources in compile uncomment this
 //        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
 
         // param #2
@@ -924,15 +977,36 @@ public class Family {
             // if not array out of bound or empty do below else catch
             if (!args[2].isEmpty() && ((args[3].isEmpty() || args[4].isEmpty()) || (args[3].isBlank() || args[4].isBlank()))) {
                 menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
-            } else if (!args[2].isEmpty() && !((args[3].isEmpty() && args[4].isEmpty()) || (args[3].isBlank() && args[4].isBlank()))){
+            } else if (!args[2].isEmpty() && !((args[3].isEmpty() && args[4].isEmpty()) || (args[3].isBlank() && args[4].isBlank()))) {
                 menu_options(csvFile, generation, Integer.parseInt(args[2]), args[3], args[4]);
-            }else {
+            } else {
                 if (!args[2].isEmpty()) {
                     menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
                 }
             }
-        } catch (ArrayIndexOutOfBoundsException ignored){
+        } catch (ArrayIndexOutOfBoundsException ignored) {
             menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
+        }
+        String[] name = {"John", "Remo", "Mixy", "Julie", "Ronny"};
+        Arrays.sort(name, String.CASE_INSENSITIVE_ORDER.reversed());
+        System.out.println(Arrays.toString(name));
+        int n = 5;
+        System.out.println("Before Sorting");
+        for (int i = 0; i < n; i++) {
+            System.out.println(name[i]);
+        }
+        for (int i = 0; i < n - 1; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (name[i].compareTo(name[j]) > 0) {
+                    String temp = name[i];
+                    name[i] = name[j];
+                    name[j] = temp;
+                }
+            }
+        }
+        System.out.println("\nAfter performing lexicographical order: ");
+        for (int i = 0; i < n; i++) {
+            System.out.println(name[i]);
         }
     }
 

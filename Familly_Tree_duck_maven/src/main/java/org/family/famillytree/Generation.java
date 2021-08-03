@@ -7,6 +7,7 @@ public class Generation {
     public static List<Generation> getObj_wFatherMother = new ArrayList<>();  // same info as child_list
     public static List<String> child_list = new ArrayList<>();  // one by one add
     public static List<String> child_list1 = new ArrayList<>();
+    public List<String> child_list1_obj = new ArrayList<>();
     public static List<Generation> getObj_wHusWife = new ArrayList<>();
     private String name = new String(), gender, related, child, wife, husband;
 
@@ -51,23 +52,12 @@ public class Generation {
         this.husband = Name;
         this.related = related;
         this.wife = wife;
-        child_list.add(child);
+        //child_list.add(child);
+        //child_list1_obj.add(child);
         //this.child += child;
     }
 
     public Generation() {
-    }
-
-    public static List<String> getChild_list() {
-        return child_list;
-    }
-
-    public static void setChild_list(List<String> child_list) {
-        Generation.child_list = child_list;
-    }
-
-    public static void setChild_list_one(String child_list) {
-        Generation.child_list.add(child_list);
     }
 
     public static List<Generation> getGetObj_wHusWife() {
@@ -129,6 +119,34 @@ public class Generation {
         //this.child += child + " ";
     }
 
+    public static List<String> getChild_list1() {
+        return child_list1;
+    }
+
+    public static void setChild_list1(List<String> child_list1) {
+        Generation.child_list1 = child_list1;
+    }
+
+    public static void setChild_list1_one_by_one(String child_list1) {
+        Generation.child_list1.add(child_list1);
+    }
+
+    public static List<String> getChild_list() {
+        return child_list;
+    }
+
+    public static void setChild_list(List<String> child_list) {
+        Generation.child_list = child_list;
+    }
+
+    public static void setChild_list_one(String child_list) {
+        Generation.child_list1.add(child_list);
+    }
+
+    public void setChild_list_oneObj(String child_list) {
+        this.child_list1_obj.add(child_list);
+    }
+
     public Generation setChildObj(String child) {
         this.child = child;
         return this;
@@ -166,6 +184,7 @@ public class Generation {
                 "husband='" + husband + '\'' +
                 ", wife='" + wife + '\'' +
                 ", child='" + child + '\'' +
+                ", child='" + child_list1_obj + '\'' +
                 '}';
     }
 }

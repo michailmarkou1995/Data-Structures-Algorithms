@@ -620,7 +620,6 @@ public class Family {
             //myList.clear();
             if (allStrings.length == 3) {
                 if ((allStrings[1].equals("mother")) || (allStrings[1].equals("father"))) {
-                    //myList1.add(new Generation(allStrings[0], allStrings[1], allStrings[2]));
                     who_is_father_mother_List.put(String.valueOf(new Random().nextInt() & Integer.MAX_VALUE),
                             new Parent(allStrings[0], allStrings[1], allStrings[2]));  //new AtomicInteger(1).incrementAndGet()
                 }
@@ -640,16 +639,11 @@ public class Family {
                 //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
             }
             if ((allStrings[1].equals("father"))) {
+//                if (all_list.containsKey(allStrings[0]))
+//                    all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
                 if (all_list.containsKey(allStrings[0]))
-                    all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
+                    all_list.get(allStrings[0]).setChild_list_oneObj(allStrings[2]);
 
-//                    for (Generation g : Generation.getObj_wFatherMother) { /* Array List Grab */ //is empty so without a flag to re-run it its a no no null pointer exception
-//                        if (g.getName().contains(allStrings[0]))
-//                            all_list.get(allStrings[0]).setChild(allStrings[2]);
-//                    }
-
-/*                    if(all_list.containsKey(allStrings[0])) //doesnt not work because is static and new object every loop iteration so String is messed Up from concat
-                        all_list.get(allStrings[0]).setChild(allStrings[2]);*/
 
 /*                    if(all_list.containsKey(allStrings[0]))
                         all_list.get(allStrings[0]).setChild_list_one(allStrings[2]); *//* works one by one add child debug it *//*
@@ -663,35 +657,10 @@ public class Family {
                 //idK.incrementAndGet();
                 //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
             }
-            if ((allStrings[1].equals("male")) || (allStrings[1].equals("female"))) {
-                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2]));
-            }
-            if (((allStrings[1].contains("mother") || allStrings[1].contains("father"))))
-                childs.put(allStrings[2], allStrings[2]);
         }
     }
 
     private static void advancedSortData() {
-//            who_is_father_mother_List.forEach((key, value) -> {
-//                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-//                        + value.getRelated() + "\"];");
-//            });
-//        who_is_husband_of_wife_List.forEach((key, value) -> {
-//            System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-//                    + value.getRelated() + "\"];");
-//        });
-
-        /* below how you read ArrayList and more DOWN how you read Map */
-//        name_sorted_List.sort((o1, o2) -> {
-//            // compare two instance of `Score` and return `int` as result.
-//            return ~o2.getName().compareTo(o1.getName());
-//            // use ~ to reverse order
-//        });
-//        //loop that prints the sorted result
-//        for (Generation generation : name_sorted_List) {
-//            System.out.println(generation);
-//        }
-
         all_list.forEach((key, value) -> {
             System.out.println(value);
         });

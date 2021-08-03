@@ -41,8 +41,6 @@ import java.util.stream.Stream;
 
 /*
  1) Graph convert
-   1.10) new classes for string overide Interface? assign from new class style sto not null output toString ovveride
-   1.11) new sorting
    1.12) Java CLI + java -jar program.jar -h or --help for help for params system out show !!
  4) make web viz out of this like python */
 
@@ -165,55 +163,43 @@ public class Family {
 
     private static void createDot(String csvFile, int input, Generation generation) {
         readcsv(csvFile, input, null, null, generation);
-//                    who_is_father_mother_List.forEach((key, value) -> {
-//                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-//                        + value.getRelated() + "\"];");
-//            });
-//        who_is_husband_of_wife_List.forEach((key, value) -> {
-//            System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-//                    + value.getRelated() + "\"];");
-//        });
 
-        all_list.forEach((key, value) -> {
-            System.out.println(value);
-        });
+        FileWriter writerF;
+//        StringBuilder csvFileExtension;
 
-//        FileWriter writerF;
-////        StringBuilder csvFileExtension;
-//
-//        try {
-////            Scanner file_path = new Scanner(System.in);
-////            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
-////            System.out.print("Path: ");
-////            csvFileExtension = new StringBuilder(file_path.nextLine());
-//            /* Gets File Path from readcsv and saves it in the same place */
-//            writerF = new FileWriter(file_path_canonical
-//                    .append("\\toGraphViz_")
-//                    .append(family_MAIN_lastname)
-//                    .append(".dot").toString(), StandardCharsets.UTF_8);
-//            file_path_canonical = getFile_path_canonical;
-//
-//            writerF.write("digraph " + family_MAIN_lastname + " {\n");
-//            writerF.write("rankdir=LR;\n");
-//            writerF.write("size=\"8,5\"\n");
-//            writerF.write("node [shape = rectangle] [color=black];\n");
-//
-//            who_is_father_mother_List.forEach((key, value) -> {
-//                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-//                        + value.getRelated() + "\"];");
-//                try {
-//                    writerF.write("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-//                            + value.getRelated() + "\"];\n");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//
-//            writerF.write("}");
-//            writerF.close();
-//        } catch (IOException e) { //| URISyntaxException
-//            e.printStackTrace();
-//        }
+        try {
+//            Scanner file_path = new Scanner(System.in);
+//            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
+//            System.out.print("Path: ");
+//            csvFileExtension = new StringBuilder(file_path.nextLine());
+            /* Gets File Path from readcsv and saves it in the same place */
+            writerF = new FileWriter(file_path_canonical
+                    .append("\\toGraphViz_")
+                    .append(family_MAIN_lastname)
+                    .append(".dot").toString(), StandardCharsets.UTF_8);
+            file_path_canonical = getFile_path_canonical;
+
+            writerF.write("digraph " + family_MAIN_lastname + " {\n");
+            writerF.write("rankdir=LR;\n");
+            writerF.write("size=\"8,5\"\n");
+            writerF.write("node [shape = rectangle] [color=black];\n");
+
+            who_is_father_mother_List.forEach((key, value) -> {
+                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+                        + value.getRelated() + "\"];");
+                try {
+                    writerF.write("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+                            + value.getRelated() + "\"];\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            writerF.write("}");
+            writerF.close();
+        } catch (IOException e) { //| URISyntaxException
+            e.printStackTrace();
+        }
     }
 
     //after readcsv - input_checking_scenario_Loop - comes this (2)
@@ -637,23 +623,25 @@ public class Family {
                     //myList1.add(new Generation(allStrings[0], allStrings[1], allStrings[2]));
                     who_is_father_mother_List.put(String.valueOf(new Random().nextInt() & Integer.MAX_VALUE),
                             new Parent(allStrings[0], allStrings[1], allStrings[2]));  //new AtomicInteger(1).incrementAndGet()
-                    //all_list.put(allStrings[0], generation.se);
                 }
-                if ((allStrings[1].equals("husband"))) {
-                    all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], null, 0, 0));
-                    //all_list.put(String.valueOf(idK.get()), generation.setHusbandObj(allStrings[0]));
-                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0));
-                }
-                if ((allStrings[1].equals("wife"))) {
+            }
+        }
+        if (input == 5) {
+            if ((allStrings[1].equals("husband"))) {
+                all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], null, 0, 0));
+                //all_list.put(String.valueOf(idK.get()), generation.setHusbandObj(allStrings[0]));
+                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0));
+            }
+            if ((allStrings[1].equals("wife"))) {
 /*                    all_list.entrySet().forEach(entry -> {
                         //if (entry.getKey().equals(allStrings[]))
                     });*/
-                    //all_list.put(String.valueOf(idK.get()), generation.setWifeObj(allStrings[0]));
-                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
-                }
-                if ((allStrings[1].equals("father"))) {
-                    if (all_list.containsKey(allStrings[0]))
-                        all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
+                //all_list.put(String.valueOf(idK.get()), generation.setWifeObj(allStrings[0]));
+                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
+            }
+            if ((allStrings[1].equals("father"))) {
+                if (all_list.containsKey(allStrings[0]))
+                    all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
 
 //                    for (Generation g : Generation.getObj_wFatherMother) { /* Array List Grab */ //is empty so without a flag to re-run it its a no no null pointer exception
 //                        if (g.getName().contains(allStrings[0]))
@@ -669,25 +657,44 @@ public class Family {
                         if (entry.getKey().equals(allStrings[0]))
                             all_list.put(entry.getKey(), new Generation(allStrings[0], allStrings[1], allStrings[2], allStrings[2], 0, 0));
                     });*/
-                    /////all_list.computeIfAbsent(allStrings[0], k -> Generation.child_list.add(allStrings[2]));
-                    /* ######### LIST OF CHILDS ara hasmap treemap? mesa me List? arrayList <> */
-                    //all_list.put(String.valueOf(idK.get()), generation.setChildObj(allStrings[2]));
-                    //idK.incrementAndGet();
-                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
-                }
-                if ((allStrings[1].equals("male")) || (allStrings[1].equals("female"))) {
-                    //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2]));
-                }
-                if (((allStrings[1].contains("mother") || allStrings[1].contains("father"))))
-                    childs.put(allStrings[2], allStrings[2]);
+                /////all_list.computeIfAbsent(allStrings[0], k -> Generation.child_list.add(allStrings[2]));
+                /* ######### LIST OF CHILDS ara hasmap treemap? mesa me List? arrayList <> */
+                //all_list.put(String.valueOf(idK.get()), generation.setChildObj(allStrings[2]));
+                //idK.incrementAndGet();
+                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
             }
+            if ((allStrings[1].equals("male")) || (allStrings[1].equals("female"))) {
+                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2]));
+            }
+            if (((allStrings[1].contains("mother") || allStrings[1].contains("father"))))
+                childs.put(allStrings[2], allStrings[2]);
         }
     }
 
     private static void advancedSortData() {
-        /*
-        combines case 1,3? then spits 5 run here again?
-        */
+//            who_is_father_mother_List.forEach((key, value) -> {
+//                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+//                        + value.getRelated() + "\"];");
+//            });
+//        who_is_husband_of_wife_List.forEach((key, value) -> {
+//            System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+//                    + value.getRelated() + "\"];");
+//        });
+
+        /* below how you read ArrayList and more DOWN how you read Map */
+//        name_sorted_List.sort((o1, o2) -> {
+//            // compare two instance of `Score` and return `int` as result.
+//            return ~o2.getName().compareTo(o1.getName());
+//            // use ~ to reverse order
+//        });
+//        //loop that prints the sorted result
+//        for (Generation generation : name_sorted_List) {
+//            System.out.println(generation);
+//        }
+
+        all_list.forEach((key, value) -> {
+            System.out.println(value);
+        });
     }
 
     private static boolean isNumeric(String strNum) {
@@ -1031,6 +1038,7 @@ public class Family {
                             graphvizGenerate();
                         }
                         case 5 -> {
+                            readcsv(csvFile, input, null, null, null);
                             advancedSortData();
                         }
                         default -> System.out.println("Please try again!");

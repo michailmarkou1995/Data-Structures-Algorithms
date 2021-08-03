@@ -42,6 +42,7 @@ import java.util.stream.Stream;
 /*
  1) Graph convert
    1.12) Java CLI + java -jar program.jar -h or --help for help for params system out show !!
+   1.13) add BOM check instead of Atomic Integer which gets it wrong if another encoding
  4) make web viz out of this like python */
 
 public class Family {
@@ -57,7 +58,6 @@ public class Family {
     static HashMap<String, Generation> who_is_husband_of_wife_List = new HashMap<>();
     static Map<String, Generation> all_list = new HashMap<>();
     static AtomicInteger timesCsv = new AtomicInteger();
-    static AtomicInteger idK = new AtomicInteger();
     static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname, new_N1_p1, new_N1_p2,
             new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child, N2_initials_child,
             they_are, they_have = "", husband, wife, root_of_root_p1, root_of_root_p2;
@@ -134,11 +134,11 @@ public class Family {
 
     private static void searchNameRelations(String csvFile, int input) {
         System.out.println("\n***Find Relationships***");
-        System.out.print("Enter 1st First Names character (as unique ID) \nName: (e.g. grandpa) ");
+        System.out.print("Enter 1st First Names character (as unique ID) \nName: (e.g. grandpa or cersei) ");
         try (Scanner name1 = new Scanner(System.in)) {
             String Personname1 = name1.nextLine();
             Scanner name2 = new Scanner(System.in);
-            System.out.print("Enter 2nd First Names character (as unique ID)\nName: (e.g. dumbella) ");
+            System.out.print("Enter 2nd First Names character (as unique ID)\nName: (e.g. dumbella or robert) ");
             String Personname2 = name2.nextLine();
             readcsv(csvFile, input, Personname1, Personname2, null);
             case_scenario_checking(input);
@@ -493,11 +493,12 @@ public class Family {
         // Make CSV input for Only Name Sections for Cols NOT EQUAL to 1 which will be "relations" part
         // Make Only name Sections First capitalize
         for (int i = 0; i < allStrings.length; i++) {
-            timesCsv.incrementAndGet();
+            //timesCsv.incrementAndGet();
             String capFirstMove;
             String[] capFirst;
             StringBuilder save_new_Cap = new StringBuilder();
             if (i != 1) {
+                allStrings[i] = allStrings[i].replace("\uFEFF", "");
                 capFirstMove = allStrings[i];
                 capFirst = capFirstMove.split(" ");
                 for (int j = 0; j < Objects.requireNonNull(capFirst).length; j++) {
@@ -506,13 +507,13 @@ public class Family {
                     // csv first Start Of File has a special character (\uFEFF AKA== "BOM" char utf-8)
                     // so we just from charAt(0) to 1 only and only then!
                     final String s = makeCap.toUpperCase().charAt(0) + makeCap.substring(1);
-                    if (timesCsv.get() == 1) {
-                        if (j != 0)
-                            capFirst[j] = s;
-                        else
-                            capFirst[j] = makeCap.toUpperCase().charAt(1) + makeCap.substring(2);
-                    } else
-                        capFirst[j] = s;
+//                    if (timesCsv.get() == 1) {
+//                        if (j != 0)
+//                            capFirst[j] = s;
+//                        else
+//                            capFirst[j] = makeCap.toUpperCase().charAt(1) + makeCap.substring(2);
+//                    } else
+                    capFirst[j] = s;
 
                     if (j == 0)
                         save_new_Cap.append(capFirst[j]);
@@ -627,35 +628,28 @@ public class Family {
         }
         if (input == 5) {
             if ((allStrings[1].equals("husband"))) {
-                all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], null, 0, 0));
-                //all_list.put(String.valueOf(idK.get()), generation.setHusbandObj(allStrings[0]));
-                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0));
-            }
-            if ((allStrings[1].equals("wife"))) {
-/*                    all_list.entrySet().forEach(entry -> {
-                        //if (entry.getKey().equals(allStrings[]))
-                    });*/
-                //all_list.put(String.valueOf(idK.get()), generation.setWifeObj(allStrings[0]));
-                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
+                if (all_list.size() != 0) {
+                    if (all_list.containsKey(allStrings[0]))
+                        all_list.get(allStrings[0]).setWife(allStrings[2]);
+                    else
+                        all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], null, 0, 0));
+                } else
+                    all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], null, 0, 0));
             }
             if ((allStrings[1].equals("father"))) {
-//                if (all_list.containsKey(allStrings[0]))
+                if (all_list.size() != 0) {
+                    if (all_list.containsKey(allStrings[0]))
+                        all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
+                    else
+                        all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], null, allStrings[2], 0, 0));
+                } else if (all_list.size() == 0) {
+                    all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], null, allStrings[2], 0, 0));
+                }
+//                if (all_list.containsKey(allStrings[0])){
 //                    all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
-                if (all_list.containsKey(allStrings[0]))
-                    all_list.get(allStrings[0]).setChild_list_oneObj(allStrings[2]);
+//                    //all_list.get(allStrings[0]).setChild_list1_obj(allStrings[2]);
+//                }
 
-
-/*                    if(all_list.containsKey(allStrings[0]))
-                        all_list.get(allStrings[0]).setChild_list_one(allStrings[2]); *//* works one by one add child debug it *//*
-                    all_list.entrySet().forEach(entry -> { *//* same as above way works *//*
-                        if (entry.getKey().equals(allStrings[0]))
-                            all_list.put(entry.getKey(), new Generation(allStrings[0], allStrings[1], allStrings[2], allStrings[2], 0, 0));
-                    });*/
-                /////all_list.computeIfAbsent(allStrings[0], k -> Generation.child_list.add(allStrings[2]));
-                /* ######### LIST OF CHILDS ara hasmap treemap? mesa me List? arrayList <> */
-                //all_list.put(String.valueOf(idK.get()), generation.setChildObj(allStrings[2]));
-                //idK.incrementAndGet();
-                //all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], allStrings[2], 0, 0));
             }
         }
     }

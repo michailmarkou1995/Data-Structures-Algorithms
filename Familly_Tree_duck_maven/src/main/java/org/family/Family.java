@@ -1032,6 +1032,7 @@ public class Family implements Runnable {
                             graphvizGenerate();
                         }
                         case 5 -> {
+                            readcsv(csvFile, input, null, null, null);
                             advancedSortData();
                         }
                         default -> System.out.println("Please try again!");

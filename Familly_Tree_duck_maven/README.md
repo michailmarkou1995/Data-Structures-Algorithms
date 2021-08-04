@@ -9,7 +9,7 @@ Here a Project ScreenCast of the App about Usage: [YouTube ScreenCast Applicatio
 
 <!-- /TOC -->
 
-##download
+## download
 
 [Download Binaries Jar file](https://github.com/JotunMichael/Data-Structures-Algorithms/releases/tag/v0.1)
 

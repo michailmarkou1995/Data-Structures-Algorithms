@@ -14,7 +14,7 @@ Use the below commands in the Command Prompt or any Terminal.
 
 **Run App with or without Args**
 
-*Note: This requires JRE/JDK 16.0.2*
+*Note: This requires JRE/JDK 16.0.2*\
 *Note: If not args passed program will catch from the latest input if given*
 
 ```

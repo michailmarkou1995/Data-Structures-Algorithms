@@ -42,7 +42,6 @@ import java.util.stream.Stream;
 /*
  1) Graph convert
    1.12) Java CLI + java -jar program.jar -h or --help for help for params system out show !!
-   1.13) add BOM check instead of Atomic Integer which gets it wrong if another encoding
  4) make web viz out of this like python */
 
 public class Family {
@@ -493,7 +492,6 @@ public class Family {
         // Make CSV input for Only Name Sections for Cols NOT EQUAL to 1 which will be "relations" part
         // Make Only name Sections First capitalize
         for (int i = 0; i < allStrings.length; i++) {
-            //timesCsv.incrementAndGet();
             String capFirstMove;
             String[] capFirst;
             StringBuilder save_new_Cap = new StringBuilder();
@@ -506,14 +504,7 @@ public class Family {
 
                     // csv first Start Of File has a special character (\uFEFF AKA== "BOM" char utf-8)
                     // so we just from charAt(0) to 1 only and only then!
-                    final String s = makeCap.toUpperCase().charAt(0) + makeCap.substring(1);
-//                    if (timesCsv.get() == 1) {
-//                        if (j != 0)
-//                            capFirst[j] = s;
-//                        else
-//                            capFirst[j] = makeCap.toUpperCase().charAt(1) + makeCap.substring(2);
-//                    } else
-                    capFirst[j] = s;
+                    capFirst[j] = makeCap.toUpperCase().charAt(0) + makeCap.substring(1);
 
                     if (j == 0)
                         save_new_Cap.append(capFirst[j]);
@@ -539,9 +530,6 @@ public class Family {
         // sort csv used
         if (input != 3 && input != 4)
             if (allStrings.length == 2) {
-//                if (allStrings[1].equals("male") || allStrings[1].equals("female")
-//                        || allStrings[1].equals("father") || allStrings[1].equals("mother")
-//                        || allStrings[1].equals("husband") || allStrings[1].equals("wife"))
                 name_sorted_List.add(new Person(allStrings[0], allStrings[1]));
             }
 
@@ -638,26 +626,55 @@ public class Family {
             }
             if ((allStrings[1].equals("father"))) {
                 if (all_list.size() != 0) {
-                    if (all_list.containsKey(allStrings[0]))
+                    if (all_list.containsKey(allStrings[0])) {
                         all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
-                    else
+                        //all_list.get(allStrings[0]).setChild_list1_obj(allStrings[2]);
+                    } else
                         all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], null, allStrings[2], 0, 0));
-                } else if (all_list.size() == 0) {
+                } else {
                     all_list.put(allStrings[0], new Generation(allStrings[0], allStrings[1], null, allStrings[2], 0, 0));
                 }
-//                if (all_list.containsKey(allStrings[0])){
-//                    all_list.get(allStrings[0]).setChildConcat(allStrings[2]);
-//                    //all_list.get(allStrings[0]).setChild_list1_obj(allStrings[2]);
-//                }
-
             }
         }
     }
 
     private static void advancedSortData() {
-        all_list.forEach((key, value) -> {
+        TreeMap<String, Generation> sorted_all_list = new TreeMap<>(all_list);
+        //List<Generation> arr_all_list = new ArrayList<>(all_list.keySet());
+
+        sorted_all_list.forEach((key, value) -> {
             System.out.println(value);
         });
+
+        // Create csv
+        FileWriter writer;
+        String csvFile;
+        try {
+            Scanner file_path = new Scanner(System.in);
+            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
+            System.out.print("Path: ");
+            csvFile = file_path.nextLine();
+            //creating object writer with a path and charset format
+            writer = new FileWriter(write_file_path_to_disk(csvFile), StandardCharsets.UTF_8);
+
+            //this loop uses Filewriter "write" function to print the result on the newly created csv file
+            sorted_all_list.forEach((key, value) -> {
+                try {
+                    writer.write(value.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    writer.write(" \n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static boolean isNumeric(String strNum) {

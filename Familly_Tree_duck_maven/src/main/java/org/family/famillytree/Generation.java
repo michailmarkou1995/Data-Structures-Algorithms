@@ -3,10 +3,11 @@ package org.family.famillytree;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Generation {
+public class Generation implements Comparable<Generation> {
     public static List<Generation> getObj_wFatherMother = new ArrayList<>();  // same info as child_list
     public static List<Generation> getObj_wHusWife = new ArrayList<>();
-    private List<String> child_list1_obj = new ArrayList<>();
+    private final List<String> child_list1_obj = new ArrayList<>();
+    private Long id;
     private String name = new String(), gender, related, child, wife, husband;
 
     // simple ArrayList Sort
@@ -109,6 +110,14 @@ public class Generation {
         this.husband = husband;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Generation{" +
@@ -117,5 +126,10 @@ public class Generation {
                 ", child='" + child + '\'' +
                 //", child='" + child_list1_obj + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Generation o) {
+        return (int) (this.id - o.getId());
     }
 }

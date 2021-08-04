@@ -16,7 +16,13 @@ Here a Project ScreenCast of the App about Usage: [YouTube ScreenCast Applicatio
 
 ## App_Options
 
-[Download Binaries Jar file](https://github.com/JotunMichael/Data-Structures-Algorithms/releases/tag/v0.1)
+```
+Option 1 to read the family members lists
+Option 2 to create an alphabetically minimal sorted family members lists
+Option 5 to create a Full output sorted Family memberss
+Option 3 to use the relationship apps
+Option 4 to generate the .dot file + Generate SVG GraphViz Images
+```
 
 ## Usage
 

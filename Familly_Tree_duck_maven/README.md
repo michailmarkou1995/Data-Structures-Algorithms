@@ -4,9 +4,14 @@ Here a Project ScreenCast of the App about Usage: [YouTube ScreenCast Applicatio
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
+- [Download](#download)
 - [Usage](#usage)
 
 <!-- /TOC -->
+
+##download
+
+[Download Binaries Jar file](https://github.com/JotunMichael/Data-Structures-Algorithms/releases/tag/v0.1)
 
 ## Usage
 

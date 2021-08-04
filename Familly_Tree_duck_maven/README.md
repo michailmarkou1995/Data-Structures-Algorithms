@@ -1,4 +1,4 @@
-# Family Tree Traverse App - Any Family (GoT & Duck) tested
+# Family Tree Traverse App - Any Family (Game of Thrones & Duck Looney Tunes) tested
 
 Here a Project ScreenCast of the App about Usage: [YouTube ScreenCast Application](https://www.youtube.com/channel/UCpBydElhnrBL7yUFnV6OuHQ)
 

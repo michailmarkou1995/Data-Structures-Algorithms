@@ -11,6 +11,7 @@ import org.family.famillytree.Parent;
 import org.family.famillytree.Person;
 import org.family.famillytree.Wife;
 import org.family.famillytree.toons.Toons;
+import picocli.CommandLine;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,10 +42,23 @@ import java.util.stream.Stream;
 
 /*
  1) Graph convert
-   1.12) Java CLI + java -jar program.jar -h or --help for help for params system out show !!
  4) make web viz out of this like python */
 
-public class Family {
+@CommandLine.Command(name = "FamilyTreeApp", mixinStandardHelpOptions = true,
+        version = "FamilyTree Profile Information V1.0",
+        description = "Displays the FamilyTree profile information. " +
+                "##########################USAGE#############################" +
+                "\ne.g. java -jar familytreeduck.jar -p family_duck.csv -l duck -o 3" +
+                "\ne.g. java -jar familytreeduck.jar -p family_duck.csv -l duck -o 3 fanny dumbella " +
+                "<- both names must or none\ne.g. java -jar familytreeduck.jar <- Run it without Arguments\n" +
+                "##########################OPTIONS#############################" +
+                "\n--option=1 to read the family members lists\n" +
+                "--option=2 to create an alphabetically minimal sorted family members lists\n" +
+                "--option=5 to create a Full output sorted Family memberss\n" +
+                "--option=3 to use the relationship apps\n" +
+                "--option=4 to generate the .dot file + Generate SVG GraphViz Images" +
+                "\n##########################COMMANDS#############################")
+public class Family implements Runnable {
 
     private static final Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
     private static final Pattern file_path_drive = Pattern.compile("\\\\");
@@ -66,6 +80,36 @@ public class Family {
             isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
             isSiblings1 = false, isSiblings2 = false, isIsSiblings1Far = false, isIsSiblings2Far = false,
             incest = false, add_they_have = false, blood_hus = false, blood_wife = false;
+    @CommandLine.Option(names = {
+            "-p",
+            "--path"
+    },
+            required = false, description = "Path of csv file \"Absolute\" or \"Relative\"")
+    private String filepath;
+    @CommandLine.Option(names = {
+            "-l",
+            "--lastname"
+    },
+            required = false, description = "Last Name of the Family Incest Tree")
+    private String lastName;
+    @CommandLine.Option(names = {
+            "-o",
+            "--option"
+    },
+            required = false, description = "Option of Main Menu switch case loop")
+    private String optionsMenu;
+    @CommandLine.Option(names = {
+            "-f1",
+            "--firstname1"
+    },
+            required = false, description = "First Name of the user 1")
+    private String firstName1;
+    @CommandLine.Option(names = {
+            "-f2",
+            "--firstname2"
+    },
+            required = false, description = "First Name of the user 2")
+    private String firstName2;
 
     //This function reads the csv file and stores its content on an Arraylist, printing the result
     public static void readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase,
@@ -1034,21 +1078,33 @@ public class Family {
         }
     }
 
+    // This implements Runnable, so parsing, error handling, and help messages can be done with this line:
     public static void main(String[] args) {
+        int exitCode = new CommandLine(new Family()).execute(args);
+        System.exit(exitCode);
+    }
+
+    @Override
+    public void run() { // your business logic goes here...
+//        if (mobileNumber != null) {
+//            System.out.println("User Mobile Number is: " + mobileNumber);
+//        }
+//        if (country != null && !country.isEmpty()) {
+//            System.out.println("(Positional parameter) User's country is: " + country);
+//        }
+
         Generation generation = new Generation();
         String csvFile;
-
-//        for (String str: args) { System.out.println(str); }
 
         // ascii art
         intro_menu();
 
-        // param #1 (Args)
+        // param #0 (Args)
         try {
-            if (args[0].isEmpty())
+            if (filepath == null || filepath.isEmpty()) {
                 csvFile = read_file_input_menu();
-            else
-                csvFile = read_file_input_menu(args[0]);
+            } else
+                csvFile = read_file_input_menu(filepath);
         } catch (ArrayIndexOutOfBoundsException e) {
             csvFile = read_file_input_menu();
         }
@@ -1056,10 +1112,10 @@ public class Family {
         // for local Resources in compile uncomment this
 //        String csvFile = Objects.requireNonNull(Family.class.getClassLoader().getResource("family.csv")).getPath();
 
-        // param #2
+        // param #1
         try {
-            if (!args[1].isEmpty())
-                family_last_name_input(args[1]);
+            if (lastName != null && !lastName.isEmpty())
+                family_last_name_input(lastName);
             else
                 family_last_name_input();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -1068,23 +1124,30 @@ public class Family {
 
 //        family_MAIN_lastname = "Duck";
 
-        // param #3
+        // param #2
         try {
             // if not array out of bound or empty do below else catch
-            if (!args[2].isEmpty() && ((args[3].isEmpty() || args[4].isEmpty()) || (args[3].isBlank() || args[4].isBlank()))) {
-                menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
-            } else if (!args[2].isEmpty() && !((args[3].isEmpty() && args[4].isEmpty()) || (args[3].isBlank() && args[4].isBlank()))) {
-                menu_options(csvFile, generation, Integer.parseInt(args[2]), args[3], args[4]);
-            } else {
-                if (!args[2].isEmpty()) {
-                    menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
-                }
-            }
+            if (optionsMenu != null) {
+                if (firstName1 != null && firstName2 != null) {
+                    if (!optionsMenu.isEmpty() && ((firstName1.isEmpty() || firstName2.isEmpty()) || (firstName1.isBlank() || firstName2.isBlank()))) {
+                        menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null);
+                    } else if (!optionsMenu.isEmpty() && !((firstName1.isEmpty() && firstName2.isEmpty()) || (firstName1.isBlank() && firstName2.isBlank()))) {
+                        menu_options(csvFile, generation, Integer.parseInt(optionsMenu), firstName1, firstName2);
+                    } else {
+                        if (!optionsMenu.isEmpty()) {
+                            menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null);
+                        }
+                    }
+                } else
+                    menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null);
+            } else
+                throw new ArrayIndexOutOfBoundsException();
         } catch (ArrayIndexOutOfBoundsException ignored) {
-            menu_options(csvFile, generation, Integer.parseInt(args[2]), null, null);
+            assert optionsMenu == null;
+            menu_options(csvFile, generation, null, null, null);
         }
+        //Arrays.sort(); // see sort implementation
     }
-
     private enum Names {
         JAVA(1),
         FAMILY(2),

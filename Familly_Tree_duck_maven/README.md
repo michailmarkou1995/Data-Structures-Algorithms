@@ -5,7 +5,7 @@ Here a Project ScreenCast of the App about Usage: [YouTube ScreenCast Applicatio
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Download](#download)
-- [App Options](#optionapp)
+- [App Options](#app options)
 - [Usage](#usage)
 
 <!-- /TOC -->

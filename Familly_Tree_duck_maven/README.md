@@ -31,11 +31,13 @@ Use the below commands in the Command Prompt or any Terminal.
 **Run App with or without Args**
 
 *Note: This requires JRE/JDK 16.0.2*\
-*Note: If no args passed program will catch from the latest input if given*
+*Note: If no args passed program will catch from the latest input if given*\
+*Note: App Support Relative or Absolute Path Tracing*
 
 ```
 java -jar familytreeapp.jar
 java -jar familytreeapp.jar -p c:\path\to\family_duck.csv
+java -jar familytreeapp.jar -p family_got.csv
 java -jar familytreeapp.jar -p c:\path\to\family_duck.csv -l duck -o 5
 java -jar familytreeapp.jar -p c:\path\to\family_duck.csv -l duck -o 3 Name1 Name2
 ```

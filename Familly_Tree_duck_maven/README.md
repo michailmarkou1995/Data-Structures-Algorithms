@@ -32,7 +32,7 @@ Use the below commands in the Command Prompt or any Terminal.
 
 *Note: This requires JRE/JDK 16.0.2*\
 *Note: If no args passed program will catch from the latest input if given*\
-*Note: App Support Relative or Absolute Path Tracing*
+*Note: App Supports Relative or Absolute Path Tracing*
 
 ```
 java -jar familytreeapp.jar

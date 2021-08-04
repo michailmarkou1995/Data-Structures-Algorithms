@@ -5,7 +5,7 @@ Here a Project ScreenCast of the App about Usage: [YouTube ScreenCast Applicatio
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Download](#download)
-- [App Options](#app options)
+- [App Options](#app_options)
 - [Usage](#usage)
 
 <!-- /TOC -->
@@ -14,7 +14,7 @@ Here a Project ScreenCast of the App about Usage: [YouTube ScreenCast Applicatio
 
 [Download Binaries Jar file](https://github.com/JotunMichael/Data-Structures-Algorithms/releases/tag/v0.1)
 
-## App Options
+## App_Options
 
 [Download Binaries Jar file](https://github.com/JotunMichael/Data-Structures-Algorithms/releases/tag/v0.1)
 

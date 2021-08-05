@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>C:\Users\backt\Downloads\Programs\famillytreeduck.jar</jar>
+  <outfile>C:\Users\backt\Downloads\Programs\FamilyTreeApp.exe</outfile>
+  <errTitle>This Programs needs Java. Please download/install java first</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>true</stayAlive>
+  <restartOnCrash>true</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\backt\Downloads\Programs\Sykonist-Looney-Tunes-Looney-Tunes-Golden-Collection.ico</icon>
+  <singleInstance>
+    <mutexName>FamilyTreeApp</mutexName>
+    <windowTitle>FamilyTreeApp</windowTitle>
+  </singleInstance>
+  <jre>
+    <path>JRE</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+    <opt>-Dlaunch4j.exedir=&quot;%EXEDIR%&quot;</opt>
+  </jre>
+  <versionInfo>
+    <fileVersion>0.5.0.0</fileVersion>
+    <txtFileVersion>0.5.0.0</txtFileVersion>
+    <fileDescription>Family Tree App relations</fileDescription>
+    <copyright>Michail Markou</copyright>
+    <productVersion>0.5.0.0</productVersion>
+    <txtProductVersion>0.5.0.0</txtProductVersion>
+    <productName>FamilyTree</productName>
+    <companyName></companyName>
+    <internalName>FamilyTree</internalName>
+    <originalFilename>FamilyTree.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_US</language>
+  </versionInfo>
+</launch4jConfig>

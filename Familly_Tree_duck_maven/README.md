@@ -39,12 +39,12 @@ The family tree you will be working with is from the Duck family as shown in the
 
 ## App_Options
 
-```
+```bash
 Option 1 to read the family members lists
 Option 2 to create an alphabetically minimal sorted family members lists
 Option 5 to create a Full output sorted Family memberss
 Option 3 to use the relationship apps
-Option 4 to ***generate the .dot file + Generate SVG GraphViz Images****
+Option 4 to generate the .dot file + Generate SVG GraphViz Images
 ```
 
 ## Usage

@@ -340,8 +340,11 @@ public class Family implements Runnable {
             System.out.println("\n" + they_are + " (related)");
         } else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have != null) {
             System.out.println("\n" + they_are + " (related) " + they_have);
-        } else if (root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname)) {
+        } else if (root_of_root_p1 != null && root_of_root_p2 != null
+                && root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname)) {
             System.out.println("\n" + they_are + " (not related)");
+        } else if (they_have != null && they_are != null) {
+            System.out.println("\n" + they_are + " (not related) " + they_have);
         } else if (isBlood_mix1 || isBlood_mix2) {
             System.out.println("\nFar siblings in Arm");
         } else
@@ -1149,6 +1152,7 @@ public class Family implements Runnable {
         }
         //Arrays.sort(); // see sort implementation
     }
+
     private enum Names {
         JAVA(1),
         FAMILY(2),

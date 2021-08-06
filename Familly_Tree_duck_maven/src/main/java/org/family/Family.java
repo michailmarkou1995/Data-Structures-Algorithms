@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -112,8 +113,11 @@ public class Family implements Runnable {
     private String firstName2;
 
     //This function reads the csv file and stores its content on an Arraylist, printing the result
-    public static void readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase,
-                               Generation generation) {
+    public static int readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase,
+                              Generation generation) {
+        //if (path==null) return -1;
+        assert path != null : "Path is null";
+        if (path.isEmpty() || path.isBlank()) return -1;
         String line;
         final String csvSplitBy = ",";
         String FName1 = "", FName2 = "";
@@ -136,7 +140,11 @@ public class Family implements Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            //return -1;
+        } finally {
+            System.out.println("executed");
         }
+        return 0;
     }
 
     //this function sorts the Arraylist alphabetically and then exports a sorted csv file
@@ -733,7 +741,8 @@ public class Family implements Runnable {
     }
 
     // read from disk else callee throws exception to caller
-    private static void read_file_path_to_disk(String csvFile) throws IOException {
+    static void read_file_path_to_disk(String csvFile) throws IOException {
+        if (csvFile == null) throw new NullPointerException();
         File file = new File(csvFile);
         Path path = Paths.get(String.valueOf(file));
         String test = file.getParent();
@@ -944,7 +953,7 @@ public class Family implements Runnable {
         System.out.println("###Non-Case-Sensitive###\n");
     }
 
-    private static String read_file_input_menu() {
+    static String read_file_input_menu() {
         System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
                 "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
         System.out.print("Path: ");
@@ -953,21 +962,33 @@ public class Family implements Runnable {
             Scanner file_path = new Scanner(System.in);
             csvFile = file_path.nextLine();
             read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
-        } catch (IOException e) {
-            System.out.print("File Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
-            e.printStackTrace();
-            System.exit(1);
+        } catch (IOException | InvalidPathException e) {
+            if (e instanceof IOException) {
+                System.out.print("File Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
+                e.printStackTrace();
+                System.exit(1);
+            } else {
+                System.out.println("Invalid Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
+                e.printStackTrace();
+                System.exit(1);
+            }
         }
         return csvFile;
     }
 
-    private static String read_file_input_menu(String csvFile) {
+    static String read_file_input_menu(String csvFile) {
         try {
             read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
-        } catch (IOException e) {
-            System.out.print("File Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
-            e.printStackTrace();
-            System.exit(1);
+        } catch (IOException | InvalidPathException e) {
+            if (e instanceof IOException) {
+                System.out.print("File Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
+                e.printStackTrace();
+                System.exit(1);
+            } else {
+                System.out.println("Invalid Path Input Error: " + getFile_path_canonical + "\\" + csvFile + "\n");
+                e.printStackTrace();
+                System.exit(1);
+            }
         }
         return csvFile;
     }

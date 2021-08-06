@@ -30,35 +30,32 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/*
-    add to "System Var" "winKey+S" a System variable path to jdk-16.0.2\bin
-    OR C:\Program Files (x86)\Common Files\Oracle\Java\javapath must have JRE 16.0.2 support
-    java --version
-    java -jar filename.jar must have 16.0.2 JDK (class file version 60)
-*/
-
-/*
-    .\dot.exe -Tsvg .\toGraphviz.dot
-*/
-
-/*
- 1) Graph convert
- 4) make web viz out of this like python */
-
+/**
+ * <h1>Family Tree Traverse App.</h1>
+ * <p>
+ * add to "System Var" "winKey+S" a System variable path to jdk-16.0.2\bin
+ * OR C:\Program Files (x86)\Common Files\Oracle\Java\javapath must have JRE 16.0.2 support
+ * java --version
+ * java -jar filename.jar must have 16.0.2 JDK (class file version 60)
+ * </p>
+ * <p>use GraphViz binaries installed with this command .\dot.exe -Tsvg .\toGraphviz.dot</p>
+ *
+ * @author Michail Markou
+ */
 @CommandLine.Command(name = "FamilyTreeApp", mixinStandardHelpOptions = true,
         version = "FamilyTree Profile Information V1.0",
-        description = "Displays the FamilyTree profile information. " +
-                "##########################USAGE#############################" +
-                "\ne.g. java -jar familytreeduck.jar -p family_duck.csv -l duck -o 3" +
-                "\ne.g. java -jar familytreeduck.jar -p family_duck.csv -l duck -o 3 fanny dumbella " +
-                "<- both names must or none\ne.g. java -jar familytreeduck.jar <- Run it without Arguments\n" +
-                "##########################OPTIONS#############################" +
-                "\n--option=1 to read the family members lists\n" +
-                "--option=2 to create an alphabetically minimal sorted family members lists\n" +
-                "--option=5 to create a Full output sorted Family memberss\n" +
-                "--option=3 to use the relationship apps\n" +
-                "--option=4 to generate the .dot file + Generate SVG GraphViz Images" +
-                "\n##########################COMMANDS#############################")
+        description = """
+                Displays the FamilyTree profile information. ##########################USAGE#############################
+                e.g. java -jar familytreeduck.jar -p family_duck.csv -l duck -o 3
+                e.g. java -jar familytreeduck.jar -p family_duck.csv -l duck -o 3 fanny dumbella <- both names must or none
+                e.g. java -jar familytreeduck.jar <- Run it without Arguments
+                ##########################OPTIONS#############################
+                --option=1 to read the family members lists
+                --option=2 to create an alphabetically minimal sorted family members lists
+                --option=5 to create a Full output sorted Family memberss
+                --option=3 to use the relationship apps
+                --option=4 to generate the .dot file + Generate SVG GraphViz Images
+                ##########################COMMANDS#############################""")
 public class Family implements Runnable {
 
     private static final Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
@@ -81,6 +78,15 @@ public class Family implements Runnable {
             isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
             isSiblings1 = false, isSiblings2 = false, isIsSiblings1Far = false, isIsSiblings2Far = false,
             incest = false, add_they_have = false, blood_hus = false, blood_wife = false;
+
+    /**
+     * <p>
+     * picoCLI mvn repo
+     * PicoCLI command Arguments non-positional non-required
+     *
+     * @see <a href="https://picocli.info/"</a>
+     * </p>
+     */
     @CommandLine.Option(names = {
             "-p",
             "--path"
@@ -112,20 +118,39 @@ public class Family implements Runnable {
             required = false, description = "First Name of the user 2")
     private String firstName2;
 
-    //This function reads the csv file and stores its content on an Arraylist, printing the result
-    public static int readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase,
-                              Generation generation) {
-        //if (path==null) return -1;
+    public Family() {
+    }
+
+    /**
+     * <h2>[Wrapper Function]</h2>
+     * <p>
+     * This function reads the csv file and stores its content on an Arraylist, printing the result
+     * This function acts as component for every other function of this program
+     * This function does or does not accept null When CLI args or Not are given
+     * </p>
+     *
+     * @param path                Relative or absolute of System Path of existing File "ONLY" .csv accepted with max 1-3 Columns
+     *                            [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @param input               User Input of Main Menu Options 1-5
+     *                            1: Read csv and display it
+     *                            2: Create Person1 Dictionary sort of Name + Gender (simple sorting)
+     *                            3: Find relations between 2 Persons
+     *                            4: Create .dot File + Generate SVG files of GraphViz
+     *                            5: Advanced Full sort of Person1 has Which Wife Which Son/'s if any
+     * @param FName1_originalCase If not null user Selected Option 3 to Find Relationship between 2 Names (non-case-sensitive)
+     * @param FName2_originalCase If not null user Selected Option 3 to Find Relationship between 2 Names (non-case-sensitive)
+     * @param generation          Actually does not do anything for the moment
+     */
+    public static void readcsv(String path, int input, String FName1_originalCase, String FName2_originalCase,
+                               Generation generation) {
         assert path != null : "Path is null";
-        if (path.isEmpty() || path.isBlank()) return -1;
+        assert !path.isBlank() || !path.isEmpty() : "Path is Blank";
         String line;
         final String csvSplitBy = ",";
         String FName1 = "", FName2 = "";
         if (FName1_originalCase == null && FName2_originalCase == null) {
         } else {
-            assert FName1_originalCase != null;
-            assert FName2_originalCase != null;
-            FName1 = FName1_originalCase.toLowerCase(Locale.ROOT);
+            FName1 = Objects.requireNonNull(FName1_originalCase).toLowerCase(Locale.ROOT);
             FName2 = FName2_originalCase.toLowerCase(Locale.ROOT);
         }
 
@@ -140,14 +165,17 @@ public class Family implements Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            //return -1;
-        } finally {
-            System.out.println("executed");
         }
-        return 0;
     }
 
-    //this function sorts the Arraylist alphabetically and then exports a sorted csv file
+    /**
+     * <h2>[Wrapper Function]</h2>
+     * <p>
+     * this function sorts the Arraylist alphabetically (dictionary sort) and then exports a sorted csv file
+     * User gives Path where to be saved "Absolute" or "Relative"
+     * it checks if same file also exists for Message Prompt if wanna replace or not
+     * </p>
+     */
     private static void sortcsv() {
         //compares series of pairs of elements and based on result of compare
         // it sees if elements from that pair should be swapped or not
@@ -183,6 +211,18 @@ public class Family implements Runnable {
         }
     }
 
+    /**
+     * <p>
+     * [Wrapper Function]
+     * When (no) Initial CLI args "ARE NOT" given acts as a Wrapper function to find all kind of Tree Relationships
+     * between Name1, Name2 of given User Inputs
+     * </p>
+     *
+     * @param csvFile an .csv only Constrained File loaded absolute or relative from Non-Volatile Memory Storage Device
+     *                with max 1-3 Columns
+     *                [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @param input   a user input [3] of Options Menu on Main Program (run() thread) e.g. 3 find Name1 and Name2
+     */
     private static void searchNameRelations(String csvFile, int input) {
         System.out.println("\n***Find Relationships***");
         System.out.print("Enter 1st First Names character (as unique ID) \nName: (e.g. grandpa or cersei) ");
@@ -192,7 +232,7 @@ public class Family implements Runnable {
             System.out.print("Enter 2nd First Names character (as unique ID)\nName: (e.g. dumbella or robert) ");
             String Personname2 = name2.nextLine();
             readcsv(csvFile, input, Personname1, Personname2, null);
-            case_scenario_checking(input);
+            case_scenario_checking_relations(input);
         } catch (Exception e) {
             System.out.println("There was a Input Problem");
             e.printStackTrace();
@@ -200,11 +240,25 @@ public class Family implements Runnable {
         }
     }
 
+
+    /**
+     * <h2>[Wrapper Function]</h2>
+     * <p>
+     * When Initial CLI args "ARE" given acts as a Wrapper function to find all kind of Tree Relationships
+     * between Name1, Name2 of given User Inputs
+     * </p>
+     *
+     * @param csvFile   an .csv only Constrained File loaded absolute or relative from Non-Volatile Memory Storage Device
+     *                  with max 1-3 Columns
+     *                  [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @param argName1  a user input [3] of argName1 to compare with argsName2 for Tree relations
+     * @param argsName2 a user input [3] of argsName2 to compare with argName1 for Tree relations
+     */
     private static void searchNameRelations(String csvFile, String argName1, String argsName2) {
         System.out.println("\n***Find Relationships***");
         try {
             readcsv(csvFile, 3, argName1, argsName2, null);
-            case_scenario_checking(3);
+            case_scenario_checking_relations(3);
         } catch (Exception e) {
             System.out.println("There was a Input Problem");
             e.printStackTrace();
@@ -212,6 +266,19 @@ public class Family implements Runnable {
         }
     }
 
+    /**
+     * <p>
+     * Creates .dot file after Reading CSV from "component" function readcsv(**extra_fields)
+     * <strong>It does not ask for Output Directory File Path "ONLY" saves it Relative to this familytreeapp.jar OR
+     * familytreeapp.exe if it was installed from Packer</strong>
+     * </p>
+     *
+     * @param csvFile    an .csv only Constrained File loaded absolute or relative from Non-Volatile Memory Storage Device
+     *                   with max 1-3 Columns
+     *                   [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @param input      User Option [4]
+     * @param generation Actually does not do anything for the moment
+     */
     private static void createDot(String csvFile, int input, Generation generation) {
         readcsv(csvFile, input, null, null, generation);
 
@@ -254,7 +321,7 @@ public class Family implements Runnable {
     }
 
     //after readcsv - input_checking_scenario_Loop - comes this (2)
-    private static void case_scenario_checking(int input) {
+    private static void case_scenario_checking_relations(int input) {
 
         // Check if two Inputs have same parents
         for (Generation g : Generation.getObj_wFatherMother) {
@@ -318,6 +385,8 @@ public class Family implements Runnable {
                 exist_in_list = true;
         }
 
+        /*Actual Printing to Screen AKA output Stream forwarding messages of the results*/
+        // gets hairy
         if (!incest) {
             if (!(isIsSiblings1Far && isIsSiblings2Far)) {
                 if (isSiblings1 && isSiblings2 && N1_initials != null && N2_initials != null) {
@@ -359,12 +428,24 @@ public class Family implements Runnable {
             System.out.println("\n" + they_are + " (related) " + they_have);
     }
 
-    // finds from 2 Inputs relation between another Recursion of Tree backwards (including root)
-    /* works 100% but it can be improved as direct full name capture and compare below in algorithm and in print above
-     * state to become way more efficient rather getting different names capture result will be less verbose algorithm
-     * + print statements */
-    /* Notes to remember root of root foreign name do not append husbands lastname rather check if they are together +
-     * + flag it as foreign marriage like blood mix and not incest relationships */
+    /**
+     * <h2>Recursion to Traverse Tree</h2>
+     * <pre>
+     * TODO: Algorithm improvement
+     * works 100% but it can be improved as direct full name capture and compare below in algorithm and in print above
+     * state to become way more efficient rather getting different names capture result will be less
+     * verbose algorithm + print statements
+     * Notes to remember root of root foreign name do not append husbands lastname rather check
+     * if they are together + flag it as foreign marriage like blood mix and not incest relationships
+     * </pre>
+     *
+     * <p>This Traverse back the Tree Relationships, finds and holds Names of
+     * Parents + child's and if they are Incest or not
+     * </p>
+     *
+     * @param FName1 Name1 of user Input to compare Non-Case-sensitive
+     * @param FName2 Name2 of user Input to compare Non-Case-sensitive
+     */
     private static void find_shared_root(String FName1, String FName2) {
         if (isTop_root_parent1 && isTop_root_parent2) {
             if (N1_initials != null && N1_initials.toLowerCase().contains(N1))
@@ -537,12 +618,33 @@ public class Family implements Runnable {
                 }
             }
         }
-
+        // finds from 2 Inputs relation between another Recursion of Tree backwards (including root)
         find_shared_root(new_N1_p1, new_N2_p1);
     }
 
-    private static void input_checking_scenario_Loop(int input, String FName1, String FName2, String[] allStrings,
-                                                     Generation generation) {
+    /**
+     * <h2>Main Logic of Tree</h2>
+     * <p>
+     * Based on Users [1-5] Option Input, before sending to output Stream here finds
+     * Relation Loop Function that includes all scenarios following by a Recursion OR
+     * parses all input stream from csv and outputs it OR
+     * Creates Sorted List's
+     * </p>
+     *
+     * @param input      User Input of Main Menu Options 1-5
+     *                   1: Read csv and display it
+     *                   2: Create Person1 Dictionary sort of Name + Gender (simple sorting)
+     *                   3: Find relations between 2 Persons
+     *                   4: Create .dot File + Generate SVG files of GraphViz
+     *                   5: Advanced Full sort of Person1 has Which Wife Which Son/'s if any
+     * @param FName1     Name1 of User Input for Tree Map Relation (non-case-sensitive)
+     * @param FName2     Name2 of User Input for Tree Map Relation (non-case-sensitive)
+     * @param allStrings Actual Bytes from readcsv() e.g. The Fields of Columns Data themselves
+     * @param generation Actually does not do anything for the moment
+     * @throws ArrayIndexOutOfBoundsException if more than 3 columns in CSV are available
+     */
+    static void input_checking_scenario_Loop(int input, String FName1, String FName2, String[] allStrings,
+                                             Generation generation) throws ArrayIndexOutOfBoundsException {
 
         // Make CSV input for Only Name Sections for Cols NOT EQUAL to 1 which will be "relations" part
         // Make Only name Sections First capitalize
@@ -573,6 +675,10 @@ public class Family implements Runnable {
 
         // Capitalized copy of String array
         String[] allStringsLC = allStrings.clone();
+
+        // csv Max 3 cols
+        if (allStrings.length > 3)
+            throw new ArrayIndexOutOfBoundsException("csv file MUST not exceed 3 columns [1-3]");
 
         for (int i = 0; i < allStrings.length; i++) {
             allStringsLC[i] = allStrings[i].toLowerCase(Locale.ROOT); //str.substring(0,1).toUpperCase()
@@ -693,6 +799,12 @@ public class Family implements Runnable {
         }
     }
 
+    /**
+     * <p>
+     * Creates a full output based on Option 5 of Husband + Wife + Child/Children's AND
+     * sorts it in Natural Name Flow with a Map to Treemap Key sorted
+     * </p>
+     */
     private static void advancedSortData() {
         TreeMap<String, Generation> sorted_all_list = new TreeMap<>(all_list);
         //List<Generation> arr_all_list = new ArrayList<>(all_list.keySet());
@@ -732,6 +844,12 @@ public class Family implements Runnable {
         }
     }
 
+    /**
+     * <p>Checks if Menu Options is not and Invalid Input character/Integer</p>
+     *
+     * @param strNum Input of Menu Options if its Numeric
+     * @return A boolean approval of continuing or not with flow of program.
+     */
     private static boolean isNumeric(String strNum) {
 
         if (strNum == null) {
@@ -740,14 +858,20 @@ public class Family implements Runnable {
         return pattern.matcher(strNum).matches();
     }
 
-    // read from disk else callee throws exception to caller
+    /**
+     * <p>read from disk else callee throws exception to caller</p>
+     *
+     * @param csvFile Relative or absolute of System Path of existing File "ONLY" .csv accepted with max 1-3 Columns
+     *                [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @throws IOException throws if there is an IO error e.g. null, file not found, directory detected
+     */
     static void read_file_path_to_disk(String csvFile) throws IOException {
-        if (csvFile == null) throw new NullPointerException();
+        if (csvFile == null) throw new NullPointerException("Null File is not allowed");
         File file = new File(csvFile);
         Path path = Paths.get(String.valueOf(file));
         String test = file.getParent();
         if (!file.isDirectory()) {
-            List<String> results = check_and_find_Files(path, ".csv", "file");
+            List<String> result = check_and_find_Files(path, ".csv", "file");
 
             file = file.getCanonicalFile();  // getParentFile()
             file_path_canonical = new StringBuilder(file.getParent());
@@ -764,7 +888,15 @@ public class Family implements Runnable {
             throw new IOException("File could not found");
     }
 
-    // save to disk else callee throws to caller exception
+    /**
+     * <p>[Before] saves to disk else callee throws to caller exception</p>
+     * <p>Checks for Already if the file Exists and Makes "the user dilemma"</p>
+     * <p>it is not used on .dot creation though this function saves relative to .jar .exe and replaces always the file</p>
+     *
+     * @param csvFile File name to be written-[Before] in Non-Volatile Memory Storage Device any extension accepted (e.g. .dot, .csv)
+     * @return to function itself (feed) as parameter callback [returns the csvFile path to caller] -line 801
+     * @throws IOException throws if file already exists or is directory
+     */
     private static String write_file_path_to_disk(String csvFile) throws IOException {
         String answer;
         File file = new File(csvFile);
@@ -797,7 +929,17 @@ public class Family implements Runnable {
             throw new IOException("File could not be saved");
     }
 
-    public static List<String> check_and_find_Files(Path path, String fileExtension, String category_type)
+    /**
+     * <p>Ensures Correct file extension exists ".csv" only accepted</p>
+     *
+     * @param path          Relative or absolute of System Path of existing File "ONLY" .csv accepted with max 1-3 Columns
+     *                      [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @param fileExtension Extension permitted from user to load
+     * @param category_type Category of what is about to be loaded e.g. file vs dir find
+     * @return Never actually used anywhere just exits the func
+     * @throws IOException when file is not .csv
+     */
+    static List<String> check_and_find_Files(Path path, String fileExtension, String category_type)
             throws IOException {
 
         if (category_type.equals("dir")) {
@@ -838,9 +980,13 @@ public class Family implements Runnable {
                 throw new IllegalArgumentException("Path must be a file!");
             }
         } else
-            return null;
+            throw new IOException("File Error: Must not be a directory");
+        //return null;
     }
 
+    /**
+     * <p>Wrapper class of random Generation Toons Class and Inspirational quotes</p>
+     */
     private static void ascii_art_generator() {
 
         int min = 0;
@@ -891,11 +1037,24 @@ public class Family implements Runnable {
 
     }
 
-    // You called them now they are here !
+    /**
+     * <p>You called them now they are here !</p>
+     * <p>Generates Ascii Drawn (enumerator class) 2D Graphics Inspirational quotes following the Toons themselves</p>
+     *
+     * @param random Random Number based on inclusive 0 to exclusive Max number of Inspirational quotes available
+     * @return returns the Inspirational quote
+     */
     private static Names callThem(int random) {
         return Names.values()[random % Names.values().length]; // cycle itself till max limit
     }
 
+    /**
+     * <p>graphviz-java
+     * <strong>Plugin for In-Program creation SVG/PNG files Images</strong>
+     *
+     * @see <a href="https://github.com/nidi3/graphviz-java"</a>
+     * </p>
+     */
     private static void graphvizGenerate() {
         String path_temp_original = getFile_path_canonical.toString();
         String reverse_slashes = file_path_canonical.toString().replaceAll("\\\\", "/");
@@ -934,6 +1093,10 @@ public class Family implements Runnable {
         }
     }
 
+    /**
+     * @deprecated function
+     * <p>Not used anywhere</p>
+     */
     private static int getRandomNumberInRange(int min, int max) {
         // min inclusive max exclusive
 
@@ -946,6 +1109,10 @@ public class Family implements Runnable {
         //return (int)(Math.random() * ((max - min) + 1)) + min;
     }
 
+    /**
+     * <h2>Wrapper Function</h2>
+     * <p>Ascii Generator from Another Class File + enumerator of Text</p>
+     */
     private static void intro_menu() {
         // randomized
         ascii_art_generator();
@@ -953,6 +1120,11 @@ public class Family implements Runnable {
         System.out.println("###Non-Case-Sensitive###\n");
     }
 
+    /**
+     * <p>User has NOT Passed CLI args for File to Load from Disk Path location Relative or Absolute</p>
+     *
+     * @return returns if available the existing full path of File
+     */
     static String read_file_input_menu() {
         System.out.println("Enter File Path to csv \"Absolute\" or \"Local\" Path \ne.g. \"c:\\users\\myuser\\downloads" +
                 "\\exercise\\family.csv\" OR \"path\\local\\family.csv\"");
@@ -976,6 +1148,14 @@ public class Family implements Runnable {
         return csvFile;
     }
 
+    /**
+     * <p>User has Passed CLI args for File to Load from Disk Path location Relative or Absolute</p>
+     *
+     * @param csvFile an .csv only Constrained File loaded absolute or relative from Non-Volatile Memory Storage Device
+     *                with max 1-3 Columns
+     *                [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @return returns if available the existing full path of File
+     */
     static String read_file_input_menu(String csvFile) {
         try {
             read_file_path_to_disk(csvFile);  // throws to caller exception catch by callee
@@ -993,6 +1173,12 @@ public class Family implements Runnable {
         return csvFile;
     }
 
+    /**
+     * <p>
+     * Family Last Name
+     * </p>
+     * <p>User has NOT passed any CLI args but are given from normal Program Flow when asked</p>
+     */
     private static void family_last_name_input() {
         try {
             Scanner fam_lst = new Scanner(System.in);
@@ -1009,6 +1195,14 @@ public class Family implements Runnable {
         }
     }
 
+    /**
+     * <p>
+     * Family Last Name
+     * </p>
+     * <p>User has passed CLI args</p>
+     *
+     * @param FamilyLastName Family Main LastName of Tree
+     */
     private static void family_last_name_input(String FamilyLastName) {
         try {
             family_MAIN_lastname = FamilyLastName.toLowerCase(Locale.ROOT);
@@ -1023,6 +1217,22 @@ public class Family implements Runnable {
         }
     }
 
+    /**
+     * <h2>Menu Options</h2>
+     * <p>For both (CLI args passed OR NOT passed) Check States</p>
+     *
+     * @param csvFile     an .csv only Constrained File loaded absolute or relative from Non-Volatile Memory Storage Device
+     *                    with max 1-3 Columns
+     *                    [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
+     * @param generation  Actually does not do anything for the moment
+     * @param inputOption User Option [1-5] if "null" Then user has Passed CLI args
+     *                    if [2 MUST] Names have provided goes to final else
+     *                    else asks for Name1 (argsName1) and name2 (argsName2) respectively
+     * @param argsName1   argsName1 to compare argsName2 if "null" Then user has Passed CLI args
+     *                    user Must provide Both Names otherwise program kicks in from latest input normal flow
+     * @param argsName2   argsName2 to compare argsName1 if "null" Then user has Passed CLI args
+     *                    user Must provide Both Names otherwise program kicks in from latest input normal flow
+     */
     private static void menu_options(String csvFile, Generation generation, Integer inputOption
             , String argsName1, String argsName2) {
         if (!(argsName1 != null && argsName2 != null)) {
@@ -1103,12 +1313,20 @@ public class Family implements Runnable {
         }
     }
 
-    // This implements Runnable, so parsing, error handling, and help messages can be done with this line:
+    /**
+     * <p>This implements Runnable, so parsing, error handling, and help messages can be done with this line:</p>
+     *
+     * @param args Old Method CLI get Args no longer Used in this App
+     * @deprecated Params args As of Release v0.5, replaced by {@link CommandLine}
+     */
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Family()).execute(args);
         System.exit(exitCode);
     }
 
+    /**
+     * <p>Thread Run Caused By PicoCLI Options</p>
+     */
     @Override
     public void run() { // your business logic goes here...
 //        if (mobileNumber != null) {
@@ -1174,6 +1392,12 @@ public class Family implements Runnable {
         //Arrays.sort(); // see sort implementation
     }
 
+    /**
+     * <p>list of Random Ascii Inspiration Messages in Beginning of the App</p>
+     * <p>
+     * uses Integer to Get String with Names.values()[];
+     * </p>
+     */
     private enum Names {
         JAVA(1),
         FAMILY(2),

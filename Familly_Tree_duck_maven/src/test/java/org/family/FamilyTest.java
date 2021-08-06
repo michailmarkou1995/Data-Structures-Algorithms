@@ -1,6 +1,5 @@
 package org.family;
 
-import org.family.famillytree.Generation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -16,11 +15,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test for simple App.
+ * Unit test for Family Tree Traverse App.
+ *
+ * @author Michail Markou
  */
 public class FamilyTest {
-    //    @Rule
-//    public TemporaryFolder folder = new TemporaryFolder();
+
     @TempDir
     File anotherTempDir;
 
@@ -29,22 +29,11 @@ public class FamilyTest {
         assertTrue(true);
     }
 
+    /**
+     *
+     */
     @Test
-    void readcsv() {
-
-        //with if null return -1
-        Assertions.assertEquals(-1, Family.readcsv(null, 0, null, null, null));
-        Generation gen = new Generation();
-//        Assertions.assertThrows(FileNotFoundException.class, () -> {
-//            //new Family().run();
-//            Family.readcsv(null, 0, null, null, gen);
-//            //throw new FileNotFoundException();
-//        });
-
-    }
-
-    @Test
-    void read_file_path_to_disk() {
+    void testRead_file_path_to_disk() {
 //        File file = Mockito.mock(File.class);
 //        try {
 //            Mockito.verify(file).createNewFile();
@@ -61,22 +50,32 @@ public class FamilyTest {
         Assertions.assertThrows(NullPointerException.class, () -> Family.read_file_path_to_disk(null));
     }
 
+    /**
+     * <p>When user "DOES NOT" Provide CLI args</p>
+     *
+     * @param tempDir Local dir Created by JUnit 5
+     * @throws IOException
+     */
     @Test
-    void read_file_input_menu(@TempDir Path tempDir) throws IOException {
-//        Path numbers = tempDir.resolve("numbers.txt");
-//
-//        List<String> lines = Arrays.asList("1", "2", "3");
-//        Files.write(numbers, lines);
-//
-//        assertAll(
-//                () -> assertTrue(Files.exists(numbers), "File should exist"),
-//                () -> assertLinesMatch(lines, Files.readAllLines(numbers)));
+    void testRead_file_input_menu(@TempDir Path tempDir) throws IOException {
+
+    }
+
+    /**
+     * <p>When user "DOES" Provide CLI args</p>
+     *
+     * @param tempDir Local dir Created by JUnit 5
+     * @throws IOException
+     */
+    @Test
+    void testRead_file_input_menu_args(@TempDir Path tempDir) throws IOException {
 //        File file = Mockito.mock(File.class);
 //        Path filePath = tempDir.resolve(file.toString());
 //        Mockito.verify(file);
 //        System.out.println(Mockito.verify(file));
 //        File file1 = new File("C:\\Users\\backt\\Downloads\\Compressed\\family_duck1.csv");
 //        Assertions.assertSame(file1.toString(), Family.read_file_input_menu(file1.toString()));
+
         //File fileDenied = new File("C:\\users\\backt\\downloads\\");
         File fileTemp = new File("family_duck.csv");
         Path pathFileTemp = tempDir.resolve(String.valueOf(fileTemp));
@@ -102,24 +101,51 @@ public class FamilyTest {
         //() -> Assertions.assertSame(pathFileTemp.toString(), Family.read_file_input_menu(pathFileTemp.toString())));
     }
 
+    /**
+     * <p>Tests for any mismatch '"file" and Dir' extension of given input csvFile String toPath</p>
+     *
+     * @throws IOException if no Files.write then no actual file is created this ensures it has by not throwing,
+     *                     throws == File error on "declaration" not in creation (definition)
+     */
     @Test
-    void check_and_find_Files() {
+    void testCheck_and_find_Files() throws IOException {
+        assertTrue(this.anotherTempDir.isDirectory(), "Should be a directory ");
+
+        // File creation
+        File fileTemp = new File("family_duck.csv");
+        File fileTempWrong = new File("family_duck.css");
+
+        // Declare Files to Paths
+        Path pathFileTemp = anotherTempDir.toPath().resolve(String.valueOf(fileTemp));
+        Path pathFileTempWrong = anotherTempDir.toPath().resolve(String.valueOf(fileTempWrong));
+
+        // Create actual File by write
+        List<String> lines = Arrays.asList("Grandpa Duck", "husband", "Grandma Duck");  // if no write file No Exists empty dir
+        Files.write(pathFileTemp, lines);
+        Files.write(pathFileTempWrong, lines);
+
+        // File Temp is OK
+        assertAll(
+                () -> assertTrue(Files.exists(pathFileTemp), "File should exist"),
+                () -> assertTrue(Files.exists(pathFileTempWrong), "File should exist"),
+                () -> assertLinesMatch(lines, Files.readAllLines(pathFileTemp)),
+                () -> assertLinesMatch(lines, Files.readAllLines(pathFileTempWrong)));  // toPath() if its File not Path obj
+
+        // correct does not throw
+        Assertions.assertDoesNotThrow(() -> Family.check_and_find_Files(pathFileTemp, ".csv", "file"));
+        // invalid extension throws or isDirectory
+        Assertions.assertThrows(IOException.class, () -> Family.check_and_find_Files(pathFileTempWrong, ".csv", "file"));
+        Assertions.assertThrows(IOException.class, () -> Family.check_and_find_Files(this.anotherTempDir.toPath(), ".csv", "file"));
     }
 
-    @Test
-    void main() {
-    }
 
     @Test
-    void run() {
+    void testInput_checking_scenario_Loop() throws ArrayIndexOutOfBoundsException {
+
     }
 
     @Test
     void testReadcsv() {
-    }
-
-    @Test
-    void testCheck_and_find_Files() {
     }
 
     @Test

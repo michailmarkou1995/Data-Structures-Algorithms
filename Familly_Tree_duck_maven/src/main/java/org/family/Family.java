@@ -176,38 +176,41 @@ public class Family implements Runnable {
      * it checks if same file also exists for Message Prompt if wanna replace or not
      * </p>
      */
-    private static void sortcsv() {
-        //compares series of pairs of elements and based on result of compare
-        // it sees if elements from that pair should be swapped or not
-        name_sorted_List.sort((o1, o2) -> {
-            // compare two instance of `Score` and return `int` as result.
-            return ~o2.getName().compareTo(o1.getName());
-            // use ~ to reverse order
-        });
-        //loop that prints the sorted result
-        for (Generation generation : name_sorted_List) {
-            System.out.println(generation);
-        }
-        // Create csv
-        FileWriter writer;
-        String csvFile;
-        try {
-            Scanner file_path = new Scanner(System.in);
-            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
-            System.out.print("Path: ");
-            csvFile = file_path.nextLine();
-            //creating object writer with a path and charset format
-            writer = new FileWriter(write_file_path_to_disk(csvFile), StandardCharsets.UTF_8);  // "resources/Duck_generated.csv"
-
-            //this loop uses Filewriter "write" function to print the result on the newly created csv file
-            for (Generation s : name_sorted_List) {
-                writer.write(s.toString());
-                writer.write(" \n");
+    private static void sortcsv(String mode) {
+        assert mode != null;
+        if (!mode.equals("test")) {
+            //compares series of pairs of elements and based on result of compare
+            // it sees if elements from that pair should be swapped or not
+            name_sorted_List.sort((o1, o2) -> {
+                // compare two instance of `Score` and return `int` as result.
+                return ~o2.getName().compareTo(o1.getName());
+                // use ~ to reverse order
+            });
+            //loop that prints the sorted result
+            for (Generation generation : name_sorted_List) {
+                System.out.println(generation);
             }
+            // Create csv
+            FileWriter writer;
+            String csvFile;
+            try {
+                Scanner file_path = new Scanner(System.in);
+                System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
+                System.out.print("Path: ");
+                csvFile = file_path.nextLine();
+                //creating object writer with a path and charset format
+                writer = new FileWriter(write_file_path_to_disk(csvFile), StandardCharsets.UTF_8);  // "resources/Duck_generated.csv"
 
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+                //this loop uses Filewriter "write" function to print the result on the newly created csv file
+                for (Generation s : name_sorted_List) {
+                    writer.write(s.toString());
+                    writer.write(" \n");
+                }
+
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -278,45 +281,49 @@ public class Family implements Runnable {
      *                   [Person1, male] || [Person1, husband/wife, Person2] || [Person1, father/mother, Person2]
      * @param input      User Option [4]
      * @param generation Actually does not do anything for the moment
+     * @param mode       if its test don't save
      */
-    private static void createDot(String csvFile, int input, Generation generation) {
+    private static void createDot(String csvFile, int input, Generation generation, String mode) {
         readcsv(csvFile, input, null, null, generation);
 
-        FileWriter writerF;
+        assert mode != null;
+        if (!mode.equals("test")) {
+            FileWriter writerF;
 //        StringBuilder csvFileExtension;
 
-        try {
+            try {
 //            Scanner file_path = new Scanner(System.in);
 //            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
 //            System.out.print("Path: ");
 //            csvFileExtension = new StringBuilder(file_path.nextLine());
-            /* Gets File Path from readcsv and saves it in the same place */
-            writerF = new FileWriter(file_path_canonical
-                    .append("\\toGraphViz_")
-                    .append(family_MAIN_lastname)
-                    .append(".dot").toString(), StandardCharsets.UTF_8);
-            file_path_canonical = getFile_path_canonical;
+                /* Gets File Path from readcsv and saves it in the same place */
+                writerF = new FileWriter(file_path_canonical
+                        .append("\\toGraphViz_")
+                        .append(family_MAIN_lastname)
+                        .append(".dot").toString(), StandardCharsets.UTF_8);
+                file_path_canonical = getFile_path_canonical;
 
-            writerF.write("digraph " + family_MAIN_lastname + " {\n");
-            writerF.write("rankdir=LR;\n");
-            writerF.write("size=\"8,5\"\n");
-            writerF.write("node [shape = rectangle] [color=black];\n");
+                writerF.write("digraph " + family_MAIN_lastname + " {\n");
+                writerF.write("rankdir=LR;\n");
+                writerF.write("size=\"8,5\"\n");
+                writerF.write("node [shape = rectangle] [color=black];\n");
 
-            who_is_father_mother_List.forEach((key, value) -> {
-                System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-                        + value.getRelated() + "\"];");
-                try {
-                    writerF.write("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
-                            + value.getRelated() + "\"];\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+                who_is_father_mother_List.forEach((key, value) -> {
+                    System.out.println("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+                            + value.getRelated() + "\"];");
+                    try {
+                        writerF.write("\"" + value.getName() + "\" -> \"" + value.getChild() + "\" [label=\""
+                                + value.getRelated() + "\"];\n");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
 
-            writerF.write("}");
-            writerF.close();
-        } catch (IOException e) { //| URISyntaxException
-            e.printStackTrace();
+                writerF.write("}");
+                writerF.close();
+            } catch (IOException e) { //| URISyntaxException
+                e.printStackTrace();
+            }
         }
     }
 
@@ -417,6 +424,9 @@ public class Family implements Runnable {
             System.out.println("\n" + they_are + " (related)");
         } else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have != null) {
             System.out.println("\n" + they_are + " (related) " + they_have);
+        } else if (root_of_root_p1 != null && root_of_root_p2 != null
+                && root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname) && they_have != null) {
+            System.out.println("\n" + they_are + " (not related) " + they_have);
         } else if (root_of_root_p1 != null && root_of_root_p2 != null
                 && root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname)) {
             System.out.println("\n" + they_are + " (not related)");
@@ -804,8 +814,10 @@ public class Family implements Runnable {
      * Creates a full output based on Option 5 of Husband + Wife + Child/Children's AND
      * sorts it in Natural Name Flow with a Map to Treemap Key sorted
      * </p>
+     *
+     * @param mode modified output based if its run normally or if its testing
      */
-    private static void advancedSortData() {
+    private static void advancedSortData(String mode) {
         TreeMap<String, Generation> sorted_all_list = new TreeMap<>(all_list);
         //List<Generation> arr_all_list = new ArrayList<>(all_list.keySet());
 
@@ -813,34 +825,38 @@ public class Family implements Runnable {
             System.out.println(value);
         });
 
-        // Create csv
-        FileWriter writer;
-        String csvFile;
-        try {
-            Scanner file_path = new Scanner(System.in);
-            System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
-            System.out.print("Path: ");
-            csvFile = file_path.nextLine();
-            //creating object writer with a path and charset format
-            writer = new FileWriter(write_file_path_to_disk(csvFile), StandardCharsets.UTF_8);
+        assert mode != null;
+        if (!mode.equals("test")) {
 
-            //this loop uses Filewriter "write" function to print the result on the newly created csv file
-            sorted_all_list.forEach((key, value) -> {
-                try {
-                    writer.write(value.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    writer.write(" \n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            // Create csv
+            FileWriter writer;
+            String csvFile;
+            try {
+                Scanner file_path = new Scanner(System.in);
+                System.out.println("\n### Where you wanna save the export sorted List? \"Local\" or \"Absolute\" path ###");
+                System.out.print("Path: ");
+                csvFile = file_path.nextLine();
+                //creating object writer with a path and charset format
+                writer = new FileWriter(write_file_path_to_disk(csvFile), StandardCharsets.UTF_8);
 
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+                //this loop uses Filewriter "write" function to print the result on the newly created csv file
+                sorted_all_list.forEach((key, value) -> {
+                    try {
+                        writer.write(value.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        writer.write(" \n");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1069,7 +1085,6 @@ public class Family implements Runnable {
             PrintStream out = System.out;
             System.setOut(new PrintStream(OutputStream.nullOutputStream()));
             /*starts*/
-            assert dot != null;
 
             MutableGraph g = new Parser().read(dot);
             Graphviz.fromGraph(g).width(700).render(Format.SVG)
@@ -1232,9 +1247,14 @@ public class Family implements Runnable {
      *                    user Must provide Both Names otherwise program kicks in from latest input normal flow
      * @param argsName2   argsName2 to compare argsName1 if "null" Then user has Passed CLI args
      *                    user Must provide Both Names otherwise program kicks in from latest input normal flow
+     * @param mode        modified output based if its run normally or if its testing
      */
-    private static void menu_options(String csvFile, Generation generation, Integer inputOption
-            , String argsName1, String argsName2) {
+    static void menu_options(String csvFile, Generation generation, Integer inputOption
+            , String argsName1, String argsName2, String mode) {
+        if (mode == null)
+            mode = "userflow";
+        if (mode.isEmpty() || mode.isBlank())
+            mode = "userflow";
         if (!(argsName1 != null && argsName2 != null)) {
             if (inputOption == null) {
                 System.out.println("***This is the \"" + family_MAIN_lastname + "\" family tree app***");
@@ -1256,18 +1276,18 @@ public class Family implements Runnable {
                             // select Save path
                             readcsv(csvFile, input, null, null, null);
                             System.out.println("\n");
-                            sortcsv();
+                            sortcsv(mode);
                         }
                         case 3 -> searchNameRelations(csvFile, input);  // recursion
                         case 4 -> {
                             // re-uses File save dot and svg from readcsv() Path Taken
                             name_sorted_List.clear();
-                            createDot(csvFile, input, generation);
+                            createDot(csvFile, input, generation, mode);
                             graphvizGenerate();
                         }
                         case 5 -> {
                             readcsv(csvFile, input, null, null, null);
-                            advancedSortData();
+                            advancedSortData(mode);
                         }
                         default -> System.out.println("Please try again!");
                     }
@@ -1287,18 +1307,18 @@ public class Family implements Runnable {
                             // select Save path
                             readcsv(csvFile, input, null, null, null);
                             System.out.println("\n");
-                            sortcsv();
+                            sortcsv(mode);
                         }
                         case 3 -> searchNameRelations(csvFile, input);  // recursion
                         case 4 -> {
                             // re-uses File save dot and svg from readcsv() Path Taken
                             name_sorted_List.clear();
-                            createDot(csvFile, input, generation);
+                            createDot(csvFile, input, generation, mode);
                             graphvizGenerate();
                         }
                         case 5 -> {
                             readcsv(csvFile, input, null, null, null);
-                            advancedSortData();
+                            advancedSortData(mode);
                         }
                         default -> System.out.println("Please try again!");
                     }
@@ -1373,21 +1393,21 @@ public class Family implements Runnable {
             if (optionsMenu != null) {
                 if (firstName1 != null && firstName2 != null) {
                     if (!optionsMenu.isEmpty() && ((firstName1.isEmpty() || firstName2.isEmpty()) || (firstName1.isBlank() || firstName2.isBlank()))) {
-                        menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null);
+                        menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null, "");
                     } else if (!optionsMenu.isEmpty() && !((firstName1.isEmpty() && firstName2.isEmpty()) || (firstName1.isBlank() && firstName2.isBlank()))) {
-                        menu_options(csvFile, generation, Integer.parseInt(optionsMenu), firstName1, firstName2);
+                        menu_options(csvFile, generation, Integer.parseInt(optionsMenu), firstName1, firstName2, "");
                     } else {
                         if (!optionsMenu.isEmpty()) {
-                            menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null);
+                            menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null, "");
                         }
                     }
                 } else
-                    menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null);
+                    menu_options(csvFile, generation, Integer.parseInt(optionsMenu), null, null, "");
             } else
                 throw new ArrayIndexOutOfBoundsException();
         } catch (ArrayIndexOutOfBoundsException ignored) {
             assert optionsMenu == null;
-            menu_options(csvFile, generation, null, null, null);
+            menu_options(csvFile, generation, null, null, null, "");
         }
         //Arrays.sort(); // see sort implementation
     }

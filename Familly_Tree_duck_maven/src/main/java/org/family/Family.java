@@ -71,13 +71,14 @@ public class Family implements Runnable {
     static AtomicInteger timesCsv = new AtomicInteger();
     static String N1, N2, parent1 = "a", parent2 = "b", family_MAIN_lastname, new_N1_p1, new_N1_p2,
             new_N2_p1, new_N2_p2, N1_initials, N2_initials, N1_initials_child, N2_initials_child,
-            they_are, they_have = "", husband, wife, root_of_root_p1, root_of_root_p2;
+            they_are, they_have = "", husband, wife, root_of_root_p1, root_of_root_p2, n_original;
     static StringBuilder file_path_canonical, getFile_path_canonical;
     static boolean isTop_root_parent1 = false, isTop_root_parent2 = false, name_N1p1_not_set = false,
             name_N1p2_not_set = false, name_N2p1_not_set = false, name_N2p2_not_set = false, isBlood_mix1 = false,
             isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
             isSiblings1 = false, isSiblings2 = false, isIsSiblings1Far = false, isIsSiblings2Far = false,
-            incest = false, add_they_have = false, blood_hus = false, blood_wife = false;
+            incest = false, add_they_have = false, blood_hus = false, blood_wife = false, n1_full_given = false,
+            n2_full_given = false, isN1_full_given_falseIt = false, isN2_full_given_falseIt = false;
 
     /**
      * <p>
@@ -332,6 +333,50 @@ public class Family implements Runnable {
 
         // Check if two Inputs have same parents
         for (Generation g : Generation.getObj_wFatherMother) {
+            String names_children_equals_full = g.getChild().toLowerCase();
+            String names_father_equals_full = g.getName();
+
+            // if Name 1 or Name 2 is Full or partial given
+            if (N1.toLowerCase().contains(names_children_equals_full)
+                    || N2.toLowerCase().contains(names_children_equals_full)
+                    || names_children_equals_full.contains(N1.toLowerCase())
+                    || names_children_equals_full.contains(N2.toLowerCase())) {
+                if (N1.equals(names_children_equals_full)) {  // N1 is lowercased anyway later
+                    isSiblings1 = true;
+                    parent1 = names_father_equals_full;
+                    n1_full_given = true;
+                } else if (names_children_equals_full.contains(N1)) {  // if full or partial keep lowecase the first Name
+                    N1 = g.getChild();
+                    N1 = Arrays.stream(N1.split(" ")).toArray()[0].toString().toLowerCase();
+                    isSiblings1 = true;
+                    parent1 = names_father_equals_full;
+                    n1_full_given = true;
+                }
+
+
+                if (N2.equals(names_children_equals_full)) {   // N2 is lowercased anyway later
+                    isSiblings2 = true;
+                    parent2 = names_father_equals_full;
+                    n2_full_given = true;
+                } else if (names_children_equals_full.contains(N2)) {
+                    N2 = g.getChild();
+                    N2 = Arrays.stream(N2.split(" ")).toArray()[0].toString().toLowerCase();  // if full or partial keep lowecase the first Name
+                    isSiblings2 = true;
+                    parent2 = names_father_equals_full;
+                    n2_full_given = true;
+                }
+
+                if (!parent1.equals(parent2) && (isSiblings1 && isSiblings2)) {
+                    who_is_husband_of_wife_List.forEach((key, value) -> {
+                        if (value.getName().equals(parent1) && value.getHusband().equals(parent2)
+                                || value.getName().equals(parent2) && value.getHusband().equals(parent1)) {
+                            isIsSiblings1Far = true;
+                            isIsSiblings2Far = true;
+                        }
+                    });
+                }
+            }
+
             String[] names_children_equals = g.getChild().toLowerCase().split(" ");
             String names_father_equals = g.getName();
             for (String names_children_equal : names_children_equals) {
@@ -358,6 +403,18 @@ public class Family implements Runnable {
             }
         }
 
+        var temp_exist_1 = false;
+        var temp_exist_2 = false;
+        for (String all_name : all_names) {
+            if (N1.equals(all_name))
+                temp_exist_1 = true;
+            if (N2.equals(all_name))
+                temp_exist_2 = true;
+
+            if (temp_exist_1 && temp_exist_2)
+                exist_in_list = true;
+        }
+
         // finds from 2 Inputs relation between another Recursion of Tree backwards (including root)
         find_shared_root(N1, N2);
 
@@ -380,8 +437,8 @@ public class Family implements Runnable {
                 }
             }
         }
-        var temp_exist_1 = false;
-        var temp_exist_2 = false;
+        temp_exist_1 = false;
+        temp_exist_2 = false;
         for (String all_name : all_names) {
             if (N1.equals(all_name))
                 temp_exist_1 = true;
@@ -412,15 +469,23 @@ public class Family implements Runnable {
                         && N2_initials != null && N2_initials.contains(family_MAIN_lastname)
                         && !N1.contains(family_MAIN_lastname)
                         || !N2.contains(family_MAIN_lastname) && they_are == null && exist_in_list)
-                    System.out.println("\nFar Bastard child");
+                    if (N1_initials != null && N2_initials != null && N1_initials.contains(family_MAIN_lastname) && N2_initials.contains(family_MAIN_lastname))
+                        System.out.println("\nFar Bastard child");
+                    else
+                        System.out.println("\n" + they_are + " (not related)");//System.out.println("\nFar Bastard child");
                 else if (!they_have.isEmpty())
                     System.out.println("\n" + they_are + " (not related) " + they_have);
                 else if ((N1_initials != null && N1_initials.contains(family_MAIN_lastname))
                         && (N2_initials != null && N2_initials.contains(family_MAIN_lastname)))
                     System.out.println("\nFar Child");
+//                else if (N1.toLowerCase().contains(family_MAIN_lastname.toLowerCase()) && N2.toLowerCase().contains(family_MAIN_lastname.toLowerCase()))
+//                    System.out.println("\nSiblings in arms");
                 else System.out.println("\n" + they_are + " (not related)");
             } else System.out.println("\nSiblings in arms");
         } else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have == null) {
+            System.out.println("\n" + they_are + " (related)");
+        } else if (N1.toLowerCase().contains(family_MAIN_lastname.toLowerCase()) && N2.toLowerCase().contains(family_MAIN_lastname.toLowerCase())
+                && they_have.isEmpty()) {
             System.out.println("\n" + they_are + " (related)");
         } else if (N1.contains(family_MAIN_lastname) && N2.contains(family_MAIN_lastname) && they_have != null) {
             System.out.println("\n" + they_are + " (related) " + they_have);
@@ -430,8 +495,10 @@ public class Family implements Runnable {
         } else if (root_of_root_p1 != null && root_of_root_p2 != null
                 && root_of_root_p1.contains(family_MAIN_lastname) && root_of_root_p2.contains(family_MAIN_lastname)) {
             System.out.println("\n" + they_are + " (not related)");
-        } else if (they_have != null && they_are != null) {
+        } else if (they_have != null && they_are != null && n_original != null) {
             System.out.println("\n" + they_are + " (not related) " + they_have);
+        } else if (they_have != null && they_are != null) {
+            System.out.println("\n" + they_are + " (related) " + they_have);
         } else if (isBlood_mix1 || isBlood_mix2) {
             System.out.println("\nFar siblings in Arm");
         } else
@@ -468,6 +535,7 @@ public class Family implements Runnable {
                 N2 = N2_initials_child;  // input 1 from keyboard
             if (root_of_root_p1 != null && root_of_root_p2 != null) {
                 if (!root_of_root_p1.contains(family_MAIN_lastname)) {
+                    n_original = root_of_root_p1;
                     root_of_root_p1 += " " + family_MAIN_lastname;
                     if (root_of_root_p1.contains(N1))
                         N1 = root_of_root_p1;
@@ -482,6 +550,7 @@ public class Family implements Runnable {
                     }
                 }
                 if (!root_of_root_p2.contains(family_MAIN_lastname)) {
+                    n_original = root_of_root_p2;
                     root_of_root_p2 += " " + family_MAIN_lastname;
                     if (root_of_root_p2.contains(N1))
                         N1 = root_of_root_p2;
@@ -506,12 +575,34 @@ public class Family implements Runnable {
         name_N2p2_not_set = false;
         String[] clear_n1, clear_n2;
         for (Generation g : Generation.getObj_wFatherMother) {
-
             String whole_name = g.getName();
             String[] ch1_arr = g.getChild().toLowerCase().split(" ");
             String[] p_arr = g.getName().toLowerCase().split(" ");
             String ch1 = ch1_arr[0];
-            if (ch1.equals(FName1)) {
+
+            /* if full name is given instead of part then keep the first part as usual*/
+            if (n1_full_given) {
+                //System.out.println("test1");
+                //isN1_full_given_falseIt=true;
+                if (FName1 != null) {
+//                    for (String name : all_names) { if (name.contains(FName1)) FName1=name; }
+                    FName1 = Arrays.stream(FName1.split(" ")).toArray()[0].toString();
+                }
+                n1_full_given = false;
+            }
+            if (n2_full_given) {
+                //System.out.println("test2");
+                //isN2_full_given_falseIt=true;
+                if (FName2 != null) {
+//                    for (String name : all_names) { if (name.contains(FName2)) FName2=name;}
+                    FName2 = Arrays.stream(FName2.split(" ")).toArray()[0].toString();
+
+                }
+                //FName2= Arrays.toString(Arrays.stream(FName2.split(" ")).filter().collect(Collectors.toList()));
+                n1_full_given = false;
+            }
+
+            if (ch1.equals(FName1)) {  //&& !isN1_full_given_falseIt
                 name_N1p1_not_set = !name_N1p1_not_set;  // false
                 name_N1p2_not_set = !name_N1p2_not_set;  // false // switch prepare
                 if (name_N1p1_not_set) {
@@ -532,7 +623,7 @@ public class Family implements Runnable {
                 yes_new_parentS1 = true;
                 name_N1p2_not_set = false;  // false so next recursion stack loop will have false -> true and no more exec
             }
-            if (ch1.equals(FName2)) {
+            if (ch1.equals(FName2)) {  // && !isN2_full_given_falseIt
                 name_N2p1_not_set = !name_N2p1_not_set;  // false
                 name_N2p2_not_set = !name_N2p2_not_set;  // false
                 if (name_N2p1_not_set) {

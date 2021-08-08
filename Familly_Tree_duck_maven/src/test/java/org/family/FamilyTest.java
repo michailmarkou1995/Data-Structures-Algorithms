@@ -1,8 +1,6 @@
 package org.family;
 
 import org.family.famillytree.Generation;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -98,6 +96,7 @@ public class FamilyTest {
         Family.wife = "";
         Family.root_of_root_p1 = null;
         Family.root_of_root_p2 = null;
+        Family.n_original = null;
     }
 
     @Test
@@ -316,6 +315,7 @@ public class FamilyTest {
 
             System.out.print("\n######### " + "steffon uknownPerson " + "######### **BELOW**");
             Family.menu_options(fileGot.toString(), null, 3, "steffon", "uknownPerson", "test");
+            Family.menu_options(fileGot.toString(), null, 3, "steffon Baratheon", "uknownPerson", "test");
             clearDataStatic();
             System.out.println("################################");
 
@@ -327,10 +327,16 @@ public class FamilyTest {
             System.out.print("\n######### " + "steffon cassana " + "######### **BELOW**");
             Family.menu_options(fileGot.toString(), null, 3, "steffon", "cassana", "test");
             clearDataStatic();
+            Family.menu_options(fileGot.toString(), null, 3, "steffon baratheon", "cassana Estermont", "test");
+            clearDataStatic();
             System.out.println("################################");
 
             System.out.print("\n######### " + "cersei robert " + "######### **BELOW**");
             Family.menu_options(fileGot.toString(), null, 3, "cersei", "robert", "test");
+            clearDataStatic();
+            Family.menu_options(fileGot.toString(), null, 3, "cersei lannister", "robert", "test");
+            clearDataStatic();
+            Family.menu_options(fileGot.toString(), null, 3, "cersei lannister", "robert Baratheon", "test");
             clearDataStatic();
             System.out.println("################################");
 
@@ -526,6 +532,19 @@ public class FamilyTest {
 
             System.out.print("\n######### " + "pepe fanny " + "######### **BELOW**");
             Family.menu_options(fileDuck.toString(), null, 3, "pepe", "fanny", "test");
+            clearDataStatic();
+            System.out.println("################################");
+
+            System.out.print("\n######### " + "pepe dumbella " + "######### **BELOW**");
+            Family.menu_options(fileDuck.toString(), null, 3, "pepe", "dumbella", "test");
+            clearDataStatic();
+            Family.menu_options(fileDuck.toString(), null, 3, "pepe", "dumbella duck", "test");
+            clearDataStatic();
+            Family.menu_options(fileDuck.toString(), null, 3, "dumbella", "pepe", "test");
+            clearDataStatic();
+            Family.menu_options(fileDuck.toString(), null, 3, "dumbella duck", "pepe", "test");
+            clearDataStatic();
+            Family.menu_options(fileDuck.toString(), null, 3, "dumbella duck duck", "pepe", "test");
             clearDataStatic();
             System.out.println("################################");
 

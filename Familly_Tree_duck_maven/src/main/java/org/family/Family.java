@@ -78,7 +78,7 @@ public class Family implements Runnable {
             isBlood_mix2 = false, take_once = false, exist_in_list = false, not_children_of_parent = false,
             isSiblings1 = false, isSiblings2 = false, isIsSiblings1Far = false, isIsSiblings2Far = false,
             incest = false, add_they_have = false, blood_hus = false, blood_wife = false, n1_full_given = false,
-            n2_full_given = false, isN1_full_given_falseIt = false, isN2_full_given_falseIt = false;
+            n2_full_given = false;
 
     /**
      * <p>
@@ -334,15 +334,22 @@ public class Family implements Runnable {
         // Check if two Inputs have same parents
         for (Generation g : Generation.getObj_wFatherMother) {
             String names_children_equals_full = g.getChild().toLowerCase();
-            String names_father_equals_full = g.getName();
+            String names_father_equals_full = g.getName().toLowerCase();
 
             // if Name 1 or Name 2 is Full or partial given
             if (N1.toLowerCase().contains(names_children_equals_full)
                     || N2.toLowerCase().contains(names_children_equals_full)
                     || names_children_equals_full.contains(N1.toLowerCase())
-                    || names_children_equals_full.contains(N2.toLowerCase())) {
+                    || names_children_equals_full.contains(N2.toLowerCase())
+                    || N1.toLowerCase().contains(names_father_equals_full)
+                    || N2.toLowerCase().contains(names_father_equals_full)
+                    || names_father_equals_full.contains(N1.toLowerCase())
+                    || names_father_equals_full.contains(N2.toLowerCase())) {
                 if (N1.equals(names_children_equals_full)) {  // N1 is lowercased anyway later
                     isSiblings1 = true;
+                    parent1 = names_father_equals_full;
+                    n1_full_given = true;
+                } else if (N1.equals(names_father_equals_full)) {
                     parent1 = names_father_equals_full;
                     n1_full_given = true;
                 } else if (names_children_equals_full.contains(N1)) {  // if full or partial keep lowecase the first Name
@@ -351,17 +358,31 @@ public class Family implements Runnable {
                     isSiblings1 = true;
                     parent1 = names_father_equals_full;
                     n1_full_given = true;
-                }
-
+                } else if (names_father_equals_full.contains(N1)) {  // if full or partial keep lowecase the first Name
+                    N1 = g.getName();
+                    N1 = Arrays.stream(N1.split(" ")).toArray()[0].toString().toLowerCase();
+                    //isSiblings1 = false;
+                    parent1 = names_father_equals_full;
+                    n1_full_given = true;
+                } /* break name per child or per parent and set apropriate flags above and below */
 
                 if (N2.equals(names_children_equals_full)) {   // N2 is lowercased anyway later
                     isSiblings2 = true;
+                    parent2 = names_father_equals_full;
+                    n2_full_given = true;
+                } else if (N2.equals(names_father_equals_full)) {
                     parent2 = names_father_equals_full;
                     n2_full_given = true;
                 } else if (names_children_equals_full.contains(N2)) {
                     N2 = g.getChild();
                     N2 = Arrays.stream(N2.split(" ")).toArray()[0].toString().toLowerCase();  // if full or partial keep lowecase the first Name
                     isSiblings2 = true;
+                    parent2 = names_father_equals_full;
+                    n2_full_given = true;
+                } else if (names_father_equals_full.contains(N2)) {
+                    N2 = g.getName();
+                    N2 = Arrays.stream(N2.split(" ")).toArray()[0].toString().toLowerCase();  // if full or partial keep lowecase the first Name
+                    //isSiblings2 = false;
                     parent2 = names_father_equals_full;
                     n2_full_given = true;
                 }

@@ -544,6 +544,8 @@ public class Family implements Runnable {
      * @param FName1 Name1 of user Input to compare Non-Case-sensitive
      * @param FName2 Name2 of user Input to compare Non-Case-sensitive
      */
+    // gives 2 Names Finds each of those their parent and check if they are incest or not by raise flag till reaches
+    // root of root state which means the top has no more top e.g. a Name has No Parent
     private static void find_shared_root(String FName1, String FName2) {
         if (isTop_root_parent1 && isTop_root_parent2) {
             if (N1_initials != null && N1_initials.toLowerCase().contains(N1))

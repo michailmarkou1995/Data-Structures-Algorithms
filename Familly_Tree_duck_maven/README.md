@@ -54,6 +54,8 @@ Option 4 to generate the .dot file + Generate SVG GraphViz Images <-- via #https
 
 Use the below commands in the Command Prompt or any Terminal.
 
+<img src="resources/FamilyTreeImages/AppScreen.jpg" width="480">
+
 **Run App with or without Args**
 
 *Note: This requires JRE/JDK 16.0.2*\

@@ -164,6 +164,10 @@ public class Family implements Runnable {
                 String[] allStrings = line.split(csvSplitBy);
                 input_checking_scenario_Loop(input, FName1_originalCase, FName2_originalCase, allStrings, generation);
             }
+            // reduce amount of Data if duplicates e.g. just 25 names of duck tree
+            all_names = all_names.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -180,6 +184,11 @@ public class Family implements Runnable {
     private static void sortcsv(String mode) {
         assert mode != null;
         if (!mode.equals("test")) {
+
+              // calls the Class Comparable implementation
+//            Collections.sort(name_sorted_List);
+//            for (Generation s : name_sorted_List) { System.out.println(s); }
+
             //compares series of pairs of elements and based on result of compare
             // it sees if elements from that pair should be swapped or not
             name_sorted_List.sort((o1, o2) -> {
@@ -823,7 +832,6 @@ public class Family implements Runnable {
 
             //  Csv name list
             all_names.add(allStrings[0]);
-
 
             if (allStringsLC[0].contains(FName1.toLowerCase())) {
                 records1.add(Arrays.asList(allStrings));

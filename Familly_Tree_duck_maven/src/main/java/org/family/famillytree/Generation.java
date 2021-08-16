@@ -130,6 +130,7 @@ public class Generation implements Comparable<Generation> {
 
     @Override
     public int compareTo(Generation o) {
-        return (int) (this.id - o.getId());
+        // Natural order in field "Name"
+        return this.getName().compareTo(o.getName());
     }
 }

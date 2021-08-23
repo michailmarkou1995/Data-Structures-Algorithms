@@ -67,5 +67,5 @@ java -jar familytreeapp.jar
 java -jar familytreeapp.jar -p c:\path\to\family_duck.csv
 java -jar familytreeapp.jar -p family_got.csv
 java -jar familytreeapp.jar -p c:\path\to\family_duck.csv -l duck -o 5
-java -jar familytreeapp.jar -p c:\path\to\family_duck.csv -l duck -o 3 Name1 Name2
+java -jar familytreeapp.jar -p c:\path\to\family_duck.csv -l duck -o 3 -f1 Name1 -f2 Name2
 ```
